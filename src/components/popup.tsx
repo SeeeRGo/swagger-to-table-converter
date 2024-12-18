@@ -64,10 +64,20 @@ function PopupContent() {
         throw new Error(t('invalidFileMessage'))
       }
 
+      const parsedJsonData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
+        name: key,
+        properties: Object.entries(value.properties).map(([valKey, valValue]) => ({
+          name: valKey,
+          type: valValue.type,
+          example: valValue.example,
+          description: valValue.description ?? 'no Desc'
+        }))
+      }))      
+
       const doc = new Document({
         sections: [{
           properties: {},
-          children: convertToDocxContent(data)
+          children: convertToDocxContent(parsedJsonData)
         }]
       })
 

@@ -1,6 +1,6 @@
-import { translations } from '../utils/translations'
-import { useLanguage } from '../contexts/language-context'
-import type { TranslationKey } from '../utils/translations'
+import { translations } from '@/utils/translations'
+import { useLanguage } from '@/contexts/language-context'
+import type { TranslationKey } from '@/utils/translations'
 
 export function useTranslations() {
   const { language } = useLanguage()
