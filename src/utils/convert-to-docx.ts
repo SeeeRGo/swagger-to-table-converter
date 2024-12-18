@@ -1,6 +1,6 @@
 import { Paragraph, TextRun } from 'docx'
 
-export function convertToDocxContent(data: any, depth: number = 0): Paragraph[] {
+export function convertToDocxContent(data: unknown, depth: number = 0): Paragraph[] {
   const paragraphs: Paragraph[] = []
   const indent = depth * 40 // 40 points per level of indentation
 

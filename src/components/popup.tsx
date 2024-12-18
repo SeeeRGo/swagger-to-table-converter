@@ -12,18 +12,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useToast } from '@/components/ui/use-toast'
-import { convertToDocxContent } from './utils/convert-to-docx'
-import { LanguageProvider, useLanguage } from './contexts/language-context'
-import { useTranslations } from './hooks/use-translations'
-import type { Language } from './utils/translations'
+import { convertToDocxContent } from '../utils/convert-to-docx'
+import { LanguageProvider, useLanguage } from '../contexts/language-context'
+import { useTranslations } from '../hooks/use-translations'
+import type { Language } from '../utils/translations'
+import { useToast } from '@/hooks/use-toast'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const { toast } = useToast()
   const { t } = useTranslations()
-  const { language, setLanguage } = useLanguage()
+  const { setLanguage } = useLanguage()
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
