@@ -66,10 +66,14 @@ function PopupContent() {
 
       const parsedJsonData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
         name: key,
+        //@ts-expect-error typings are not for prototyping
         properties: Object.entries(value.properties).map(([valKey, valValue]) => ({
           name: valKey,
-          type: valValue.type,
+          //@ts-expect-error typings are not for prototyping
+          type: valValue.type, 
+          //@ts-expect-error typings are not for prototyping
           required: !!value.required?.some(reqField => reqField === valKey),
+          //@ts-expect-error typings are not for prototyping
           description: valValue.description ?? 'no Desc'
         }))
       }))      

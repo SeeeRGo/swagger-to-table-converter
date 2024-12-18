@@ -1,7 +1,7 @@
 import { Paragraph, Table, TableCell, TableRow, TextRun, WidthType } from 'docx'
 
 export function convertToDocxContent(data: unknown, depth: number = 0): Paragraph[] {
-  const paragraphs: any[] = []
+  const paragraphs: unknown[] = []
   const indent = depth * 40 // 40 points per level of indentation
 
   if (Array.isArray(data)) {
@@ -72,6 +72,7 @@ export function convertToDocxContent(data: unknown, depth: number = 0): Paragrap
                   }),
                 ],
               }),
+              //@ts-expect-error typings are not for prototyping
               ...item.properties.map(prop => new TableRow({
                 children: [
                   new TableCell({
@@ -151,6 +152,6 @@ export function convertToDocxContent(data: unknown, depth: number = 0): Paragrap
     )
   }
 
-  return paragraphs
+  return paragraphs as Paragraph[]
 }
 
