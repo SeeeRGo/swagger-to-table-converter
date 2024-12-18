@@ -69,7 +69,7 @@ function PopupContent() {
         properties: Object.entries(value.properties).map(([valKey, valValue]) => ({
           name: valKey,
           type: valValue.type,
-          example: valValue.example,
+          required: !!value.required?.some(reqField => reqField === valKey),
           description: valValue.description ?? 'no Desc'
         }))
       }))      

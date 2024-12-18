@@ -101,7 +101,7 @@ export function convertToDocxContent(data: unknown, depth: number = 0): Paragrap
                   new TableCell({
                     children: [
                       new Paragraph({
-                        text: 'No'
+                        text: prop.required ? 'Да' : 'Нет'
                       })
                     ],
                     width: { size: 2500, type: WidthType.DXA },
