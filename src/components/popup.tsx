@@ -59,12 +59,11 @@ function PopupContent() {
       if (selectedFile.name.endsWith('.json')) {
         data = JSON.parse(content)
       } else if (selectedFile.name.endsWith('.yaml') || selectedFile.name.endsWith('.yml')) {
-        data = yaml.load(content)
+        data = yaml.load(content)     
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-
-      const parsedJsonData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
+      const parsedData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
         name: key,
         //@ts-expect-error typings are not for prototyping
         properties: Object.entries(value.properties).map(([valKey, valValue]) => ({
@@ -76,12 +75,13 @@ function PopupContent() {
           //@ts-expect-error typings are not for prototyping
           description: valValue.description ?? 'no Desc'
         }))
-      }))      
+      }))
+     
 
       const doc = new Document({
         sections: [{
           properties: {},
-          children: convertToDocxContent(parsedJsonData)
+          children: convertToDocxContent(parsedData)
         }]
       })
 
