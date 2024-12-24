@@ -1,0 +1,2526 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "730.adsd-clientdata-s-rest-v1",
+    "description": "730 ЦДС: Сервис клиентских данных",
+    "contact": {
+      "name": "Корнеев Роман Сергеевич",
+      "url": "https://vtb.ru",
+      "email": "rskorneev@vtb.ru"
+    },
+    "license": {
+      "name": "VTB API License",
+      "url": "https://vtb.ru"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://adsd-clients-data.dk1-adsd01.dv.adsd.innodev.local/ui-api-web/kib/adsd/clientdata/v1",
+      "description": "DSO"
+    },
+    {
+      "url": "https://adsd-clients-data.oslb-synt01.test.vtb.ru/ui-api-web/kib/adsd/clientdata/v1",
+      "description": "IFT"
+    },
+    {
+      "url": "https://adsd-clients-data.oslb-app01.test.vtb.ru/ui-api-web/kib/adsd/clientdata/v1",
+      "description": "PREPROD"
+    },
+    {
+      "url": "https://adsd-clients-data.adsd-lbc.region.vtb.ru/ui-api-web/kib/adsd/clientdata/v1",
+      "description": "PROD"
+    }
+  ],
+  "paths": {
+    "/dictionaries/{name}": {
+      "get": {
+        "tags": [
+          "Управление словарями"
+        ],
+        "summary": "Получить словарь по названию",
+        "description": "Получить словарь по названию",
+        "operationId": "dictionary-getdictionary",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Название словаря",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DictionaryName"
+            }
+          },
+          {
+            "name": "Fields",
+            "in": "query",
+            "description": "Возвращаемые поля через запятую (все, если пусто)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Filters",
+            "in": "query",
+            "description": "Фильтрация по значениям по правилам SQL (имя_поля1=числовое_значение AND (имя_поля2='строковое_значение' OR имя_поля3 LIKE 'значение') ...)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Ограничение на количество возвращаемых записей (по умолчанию все записи)",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Словарь",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StringStringKeyValuePair"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Словарь не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/dictionaries/{name}/{key}": {
+      "get": {
+        "tags": [
+          "Управление словарями"
+        ],
+        "summary": "Получить значение по названию и ключу",
+        "description": "Получить значение по названию и ключу",
+        "operationId": "dictionary-getvalue",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Название словаря",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DictionaryName"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "Ключ",
+            "required": true,
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Значение",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxLength": 255,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Значение не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "tags": [
+          "Управление сущностями ФЛ/ЮЛ"
+        ],
+        "summary": "Получение сущности ФЛ/ЮЛ по id",
+        "description": "Получение сущности ФЛ/ЮЛ по id",
+        "operationId": "client-getclient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Сущность ФЛ/ЮЛ найдена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Сущность ФЛ/ЮЛ не найдена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/trustee-persons/{id}": {
+      "get": {
+        "tags": [
+          "Управление уполномоченными лицами ФЛ"
+        ],
+        "summary": "Получение уполномоченного лица ФЛ по id",
+        "description": "Получение уполномоченного лица ФЛ по id",
+        "operationId": "trusteeperson-gettrusteeperson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Уполномоченное лицо ФЛ найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonReadModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Уполномоченное лицо ЮЛ не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/trustee-persons": {
+      "get": {
+        "tags": [
+          "Управление уполномоченными лицами ФЛ"
+        ],
+        "summary": "Поиск уполномоченных лиц ФЛ",
+        "description": "Поиск уполномоченных лиц ФЛ",
+        "operationId": "trusteeperson-gettrusteepersons",
+        "parameters": [
+          {
+            "name": "IncludeRelations",
+            "in": "query",
+            "description": "Загружать связанные данные (по умолчанию false)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "Номер страницы",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Количество записей на странице",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "Выражение для сортировки (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "FilterBy",
+            "in": "query",
+            "description": "Выражение для фильтрации (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Уполномоченные лица ФЛ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonReadModelPagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Уполномоченный лица ФЛ не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/trustee-organizations/{id}": {
+      "get": {
+        "tags": [
+          "Управление уполномоченными лицами ЮЛ"
+        ],
+        "summary": "Получение уполномоченного лица ЮЛ по id",
+        "description": "Получение уполномоченного лица ЮЛ по id",
+        "operationId": "trusteeorganization-gettrusteeorganization",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Уполномоченное лицо ЮЛ найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationReadModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Уполномоченное лицо ЮЛ не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/trustee-organizations": {
+      "get": {
+        "tags": [
+          "Управление уполномоченными лицами ЮЛ"
+        ],
+        "summary": "Поиск уполномоченных лиц ЮЛ",
+        "description": "Поиск уполномоченных лиц ЮЛ",
+        "operationId": "trusteeorganization-gettrusteeorganizations",
+        "parameters": [
+          {
+            "name": "IncludeRelations",
+            "in": "query",
+            "description": "Загружать связанные данные (по умолчанию false)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "Номер страницы",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Количество записей на странице",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "Выражение для сортировки (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "FilterBy",
+            "in": "query",
+            "description": "Выражение для фильтрации (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Уполномоченные лица ЮЛ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationReadModelPagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Уполномоченные лица ЮЛ не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/persons/{id}": {
+      "get": {
+        "tags": [
+          "Управление физическими лицами"
+        ],
+        "summary": "Получение ФЛ по id",
+        "description": "Получение ФЛ по id",
+        "operationId": "person-getperson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Физическое лицо",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonReadModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/persons": {
+      "get": {
+        "tags": [
+          "Управление физическими лицами"
+        ],
+        "summary": "Поиск ФЛ",
+        "description": "Поиск ФЛ",
+        "operationId": "person-getpersons",
+        "parameters": [
+          {
+            "name": "IncludeRelations",
+            "in": "query",
+            "description": "Загружать связанные данные (по умолчанию false)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "Номер страницы",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Количество записей на странице",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "Выражение для сортировки (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "FilterBy",
+            "in": "query",
+            "description": "Выражение для фильтрации (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Физические лица",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonReadModelPagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/organizations/{id}": {
+      "get": {
+        "tags": [
+          "Управление юридическими лицами"
+        ],
+        "summary": "Получение ЮЛ по id",
+        "description": "Получение ЮЛ по id",
+        "operationId": "organization-getorganization",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ЮЛ найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationReadModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ЮЛ не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    },
+    "/organizations": {
+      "get": {
+        "tags": [
+          "Управление юридическими лицами"
+        ],
+        "summary": "Поиск ЮЛ",
+        "description": "Поиск ЮЛ",
+        "operationId": "organization-getorganizations",
+        "parameters": [
+          {
+            "name": "IncludeRelations",
+            "in": "query",
+            "description": "Загружать связанные данные (по умолчанию false)",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "description": "Номер страницы",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Количество записей на странице",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "description": "Выражение для сортировки (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          },
+          {
+            "name": "FilterBy",
+            "in": "query",
+            "description": "Выражение для фильтрации (field1=value1;field2=value2;)",
+            "schema": {
+              "maxLength": 255,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Юридические лица",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationReadModelPagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ЮЛ с указанным идентификатором не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Необработанная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "openid"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ClientModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientTypes"
+            },
+            "description": "Отношения сущности",
+            "nullable": true
+          },
+          "data": {
+            "description": "Данные сущности",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Модель сущности"
+      },
+      "ClientRestriction": {
+        "type": "object",
+        "properties": {
+          "restrictionId": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Код ограничения",
+            "nullable": true
+          },
+          "startDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата начала действия ограничения",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "endDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата окончания действия ограничения",
+            "nullable": true,
+            "example": "2024-04-10"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ограничение на клиента"
+      },
+      "ClientType": {
+        "maxLength": 255,
+        "enum": [
+          "Broker",
+          "Depository",
+          "BrokerAndDepository",
+          "Proprietary"
+        ],
+        "type": "string",
+        "description": "Тип клиента"
+      },
+      "ClientTypes": {
+        "maxLength": 255,
+        "enum": [
+          "ClientPerson",
+          "ClientOrganization",
+          "TrusteePerson",
+          "TrusteeOrganization"
+        ],
+        "type": "string",
+        "description": "Типы сущностей ФЛ/ЮЛ"
+      },
+      "DictionaryName": {
+        "maxLength": 255,
+        "enum": [
+          "Okopf",
+          "MdmOpf",
+          "LegalStatuses",
+          "DataTransferChannels",
+          "EconomicSectors",
+          "MdmCompanyType",
+          "MdmClientType",
+          "Initiators",
+          "PersonIdentityDocumentTypes",
+          "PersonIdentityDocumentInvalidStatuses",
+          "AddressTypes",
+          "AvailableSecurities",
+          "ClientClass",
+          "Opf",
+          "OrganizationRiskLevelTypes",
+          "PersonRiskLevelTypes",
+          "SubaccountClassTypes",
+          "SubaccountSubclassTypes",
+          "SubaccountCodeTypes",
+          "SubaccountAffiliationTypes",
+          "ReserveAccountParameters",
+          "ActiveAccountParameters",
+          "AccountParameters",
+          "TrusteeConfirmationDocumentTypes",
+          "ExternalSourceSystems",
+          "Countries",
+          "Bics",
+          "BicsPlus",
+          "CurrencyCodes",
+          "DocumentsFoundation",
+          "AdminOrderSources",
+          "IdentityDocumentTypes",
+          "EconomicSectorCodeCbr",
+          "OrganizationRestrictionTypes",
+          "PersonRestrictionTypes"
+        ],
+        "type": "string",
+        "description": "Справочники"
+      },
+      "DocumentSubTypeCode": {
+        "maxLength": 255,
+        "enum": [
+          "License",
+          "TaxInfo",
+          "RegistrationInfo",
+          "IdentityPersonality",
+          "Other"
+        ],
+        "type": "string",
+        "description": "Тип документа о регистрации"
+      },
+      "ErrorDTO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "description": "Код ошибки",
+            "format": "int32"
+          },
+          "message": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Текст ошибки",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ошибка"
+      },
+      "GenderCode": {
+        "maxLength": 255,
+        "enum": [
+          "Male",
+          "Female"
+        ],
+        "type": "string",
+        "description": "Пол"
+      },
+      "IdentityDocument": {
+        "required": [
+          "typeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "description": "Тип документа",
+            "format": "int32"
+          },
+          "typeName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Наименование типа документа",
+            "nullable": true
+          },
+          "groupName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Наименование группы документа",
+            "nullable": true
+          },
+          "series": {
+            "maxLength": 10,
+            "type": "string",
+            "description": "Серия",
+            "nullable": true
+          },
+          "number": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "Номер",
+            "nullable": true
+          },
+          "issueDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Когда выдан",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "issueName": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "Орган, выдавший документ",
+            "nullable": true
+          },
+          "issueCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Код подразделения",
+            "nullable": true
+          },
+          "startOfRightToStay": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата выдачи",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "endOfRightToStay": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата окончания",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "startDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата начала действия",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "endDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата окончания действия",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "invalidStatus": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Актуальность документа",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "ДУЛ"
+      },
+      "InvestorQualificationMethod": {
+        "maxLength": 255,
+        "enum": [
+          "InLowQI",
+          "AssignedQI"
+        ],
+        "type": "string",
+        "description": "КИ по закону или присвоенная"
+      },
+      "InvestorQualificationType": {
+        "maxLength": 255,
+        "enum": [
+          "NonQualified",
+          "Qualified"
+        ],
+        "type": "string",
+        "description": "Тип инвестора"
+      },
+      "MdmLegalStatusCode": {
+        "maxLength": 255,
+        "enum": [
+          "Undefined",
+          "Citizen",
+          "Businessman",
+          "Enterprise",
+          "Finance",
+          "Lawyer",
+          "Notary",
+          "Farmer",
+          "Holding"
+        ],
+        "type": "string",
+        "description": "Юридический статус"
+      },
+      "OrganizationAddress": {
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "Тип адреса (Справочные данные)",
+            "nullable": true
+          },
+          "country": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Страна",
+            "nullable": true
+          },
+          "fullAddress": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "Полный адрес",
+            "nullable": true
+          },
+          "okato": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "ОКАТО (Общероссийский классификатор объектов административно-территориального деления)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Адреса ЮЛ"
+      },
+      "OrganizationContactInformation": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Email",
+            "nullable": true
+          },
+          "brokerEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Брокерский email",
+            "nullable": true
+          },
+          "depositoryEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Депозитарный email",
+            "nullable": true
+          },
+          "fax": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Факс",
+            "nullable": true
+          },
+          "brokerPhone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона (для брокерских операций)",
+            "nullable": true
+          },
+          "depoPhone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона (для депозитарных операций)",
+            "nullable": true
+          },
+          "depositoryFax": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер факса (для депозитарных операций)",
+            "nullable": true
+          },
+          "corpActEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "E-mail (для КД Депозитария)",
+            "nullable": true
+          },
+          "personActingOnCharter": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Лицо, действующее по уставу",
+            "nullable": true
+          },
+          "positionPerson": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Должность лица",
+            "nullable": true
+          },
+          "contactPersons": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationContactPerson"
+            },
+            "description": "Контактные лица",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Контактная информация ЮЛ"
+      },
+      "OrganizationContactPerson": {
+        "required": [
+          "contactBankCard",
+          "contactBankCardSave"
+        ],
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Контактное лицо (ФИО)",
+            "nullable": true
+          },
+          "jobTitle": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Должность",
+            "nullable": true
+          },
+          "contactPhone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона",
+            "nullable": true
+          },
+          "contactEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Email",
+            "nullable": true
+          },
+          "contactFax": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Факс",
+            "nullable": true
+          },
+          "contactBankCard": {
+            "type": "boolean",
+            "description": "Контакт из банковской карточки"
+          },
+          "contactBankCardSave": {
+            "type": "boolean",
+            "description": "Сохранять изменение банк-й карточки контакта в будущем"
+          },
+          "comment": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Комментарий",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Контактное лицо организации"
+      },
+      "OrganizationDocument": {
+        "required": [
+          "issueName",
+          "typeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "documentTypeCode": {
+            "$ref": "#/components/schemas/OrganizationDocumentType"
+          },
+          "documentSubTypeCode": {
+            "$ref": "#/components/schemas/DocumentSubTypeCode"
+          },
+          "typeCode": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "description": "Тип документа",
+            "format": "int32"
+          },
+          "typeName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Наименование типа документа",
+            "nullable": true
+          },
+          "groupName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Наименование группы документа",
+            "nullable": true
+          },
+          "docSeries": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Серия",
+            "nullable": true
+          },
+          "docNumber": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер",
+            "nullable": true
+          },
+          "issueName": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "Орган, выдавший документ о регистрации"
+          },
+          "issueCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Код подразделения",
+            "nullable": true
+          },
+          "issueDate": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Дата выдачи",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validDate": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Срок действия",
+            "format": "date-time",
+            "nullable": true
+          },
+          "licenseProfessionalSecurities": {
+            "type": "boolean",
+            "description": "Лицензия Профессионального участника",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Документ ЮЛ"
+      },
+      "OrganizationDocumentType": {
+        "maxLength": 255,
+        "enum": [
+          "License",
+          "RegistrationInfo"
+        ],
+        "type": "string",
+        "description": "Тип документа."
+      },
+      "OrganizationReadModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer",
+            "description": "ID клиента в ЦДС",
+            "format": "int64"
+          },
+          "mdmCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "MDM CODE",
+            "nullable": true
+          },
+          "createdAt": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Дата создания Клиента в БД Витрины ЦДС",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Дата изменения Клиента в БД Витрины ЦДС с помощью последнего исполненного АП (тип Анкета клиента)",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fullName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Полное наименование (рус)",
+            "nullable": true
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Краткое наименование (рус)",
+            "nullable": true
+          },
+          "fullNameEn": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Полное наименование (лат)",
+            "nullable": true
+          },
+          "nameEn": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Краткое наименование (лат)",
+            "nullable": true
+          },
+          "adsId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "ID клиента в АДС",
+            "format": "int64",
+            "nullable": true
+          },
+          "zFrontId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "ID клиента в ZF",
+            "format": "int64",
+            "nullable": true
+          },
+          "registrationDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата регистрации",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "tin": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Идентификационный номер налогоплательщика - иностранной организации (или его аналог) в стране регистрации",
+            "nullable": true
+          },
+          "inn": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ИНН",
+            "nullable": true
+          },
+          "lei": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Международный код идентификации юридического лица",
+            "nullable": true
+          },
+          "registryNumber": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОГРН / Регистрационный номер",
+            "nullable": true
+          },
+          "bic": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "БИК",
+            "nullable": true
+          },
+          "mdmLegalStatusCode": {
+            "$ref": "#/components/schemas/MdmLegalStatusCode"
+          },
+          "kpp": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "КПП",
+            "nullable": true
+          },
+          "swift": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "SWIFT организации (из карточки)",
+            "nullable": true
+          },
+          "spfc": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "СПФС организации",
+            "nullable": true
+          },
+          "kpmv": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "КПМВ организации",
+            "nullable": true
+          },
+          "depoSwift": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "SWIFT (Депозитария)",
+            "nullable": true
+          },
+          "smb": {
+            "$ref": "#/components/schemas/Smb"
+          },
+          "kik": {
+            "type": "boolean",
+            "description": "Подконтрольный нерезидент (КИК)",
+            "nullable": true
+          },
+          "isResident": {
+            "type": "boolean",
+            "description": "Валютный резидент РФ",
+            "nullable": true
+          },
+          "isTaxResident": {
+            "type": "boolean",
+            "description": "Налоговый резидент РФ",
+            "nullable": true
+          },
+          "economicSectorCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Сектор экономики",
+            "nullable": true
+          },
+          "mdmOpfCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Форма",
+            "nullable": true
+          },
+          "adminOrders": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Связанные поручения",
+            "nullable": true
+          },
+          "adminOrderId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "Id последнего АП",
+            "format": "int64",
+            "nullable": true,
+            "deprecated": true
+          },
+          "clientTypeCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Тип клиента MDM",
+            "nullable": true
+          },
+          "clientClass": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Класс клиента",
+            "nullable": true
+          },
+          "opf": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОПФ",
+            "nullable": true
+          },
+          "kio": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "КИО",
+            "nullable": true
+          },
+          "countryCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Страна регистрации (ISO A2)",
+            "nullable": true
+          },
+          "isBranch": {
+            "type": "boolean",
+            "description": "Признак филиала",
+            "nullable": true
+          },
+          "okpo": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОКПО (Общероссийский классификатор предприятий и организаций)",
+            "nullable": true
+          },
+          "okogu": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОКОГУ (Общероссийский классификатор органов государственной власти и управления)",
+            "nullable": true
+          },
+          "okved": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОКВЭД (Общероссийский классификатор видов экономической деятельности)",
+            "nullable": true
+          },
+          "additionalOkvedCodes": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "КВЭДы (Общероссийский классификатор видов экономической деятельности)",
+            "nullable": true
+          },
+          "okfs": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОКФС (Общероссийский классификатор форм собственности)",
+            "nullable": true
+          },
+          "okopf": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "description": "ОКОПФ (Общероссийский классификатор организационно-правовых форм)",
+            "format": "int32",
+            "nullable": true
+          },
+          "oktmo": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ОКТМО (Общероссийский классификатор территорий муниципальных образований)",
+            "nullable": true
+          },
+          "largeKpp": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "КПП (Код причины постановки на учет) крупнейшего налогоплательщика",
+            "nullable": true
+          },
+          "addresses": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationAddress"
+            },
+            "description": "Адреса",
+            "nullable": true
+          },
+          "contactInformation": {
+            "$ref": "#/components/schemas/OrganizationContactInformation"
+          },
+          "documents": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationDocument"
+            },
+            "description": "Документы ЮЛ",
+            "nullable": true
+          },
+          "clientType": {
+            "$ref": "#/components/schemas/ClientType"
+          },
+          "qualifiedInvestor": {
+            "$ref": "#/components/schemas/QualifiedInvestor"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OrganizationRisk"
+          },
+          "restrictions": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientRestriction"
+            },
+            "description": "Ограничения",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Модель юридического лица"
+      },
+      "OrganizationReadModelPagedResult": {
+        "type": "object",
+        "properties": {
+          "queryable": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationReadModel"
+            },
+            "nullable": true
+          },
+          "currentPage": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageCount": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "rowCount": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationRisk": {
+        "type": "object",
+        "properties": {
+          "riskLevelCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Уровень риска",
+            "nullable": true
+          },
+          "riskNotes": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Оценка уровня риска",
+            "nullable": true
+          },
+          "dateRisk": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата оценки риска",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "dateNextRisk": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата план. пересмотра уровня риска",
+            "nullable": true,
+            "example": "2024-04-10"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Риски"
+      },
+      "PersonAddress": {
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "Тип адреса (Справочные данные)",
+            "nullable": true
+          },
+          "country": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Страна",
+            "nullable": true
+          },
+          "fullAddress": {
+            "maxLength": 1000,
+            "type": "string",
+            "description": "Полный адрес",
+            "nullable": true
+          },
+          "okato": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "ОКАТО (Общероссийский классификатор объектов административно-территориального деления)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Адреса ФЛ"
+      },
+      "PersonContactInformation": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Email",
+            "nullable": true
+          },
+          "brokerEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Брокерский email",
+            "nullable": true
+          },
+          "depositoryEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Депозитарный email",
+            "nullable": true
+          },
+          "fax": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Факс",
+            "nullable": true
+          },
+          "brokerPhone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона (для брокерских операций)",
+            "nullable": true
+          },
+          "depoPhone": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер телефона (для депозитарных операций)",
+            "nullable": true
+          },
+          "depositoryFax": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Номер факса (для депозитарных операций)",
+            "nullable": true
+          },
+          "corpActEmail": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "E-mail (для КД Депозитария)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Контактная информация ФЛ"
+      },
+      "PersonReadModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Id",
+            "format": "int64"
+          },
+          "createdAt": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Дата создания",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Дата обновления",
+            "format": "date-time",
+            "nullable": true
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Имя",
+            "nullable": true
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Фамилия",
+            "nullable": true
+          },
+          "middleName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Отчество",
+            "nullable": true
+          },
+          "fullName": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ФИО",
+            "nullable": true
+          },
+          "firstNameLat": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Имя (латинскими буквами)",
+            "nullable": true
+          },
+          "middleNameLat": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Отчество (латинскими буквами)",
+            "nullable": true
+          },
+          "lastNameLat": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Фамилия (латинскими буквами)",
+            "nullable": true
+          },
+          "fullNameLat": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ИОФ полностью (латинскими буквами)",
+            "nullable": true
+          },
+          "birthDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "дата рождения",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "tin": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Идентификационный номер налогоплательщика",
+            "nullable": true
+          },
+          "inn": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "ИНН",
+            "nullable": true
+          },
+          "taxResidencyCountry": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Государство (территория) налогового резидентства физического лица",
+            "nullable": true
+          },
+          "nationalityCountryCode": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Страна",
+            "nullable": true
+          },
+          "mdmId": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "МДМ код клиента",
+            "nullable": true
+          },
+          "adsId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "АДС Id",
+            "format": "int64",
+            "nullable": true
+          },
+          "zFrontId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "ZFront Id",
+            "format": "int64",
+            "nullable": true
+          },
+          "adminOrders": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Связанные поручения",
+            "nullable": true
+          },
+          "adminOrderId": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer",
+            "description": "Id последнего АП",
+            "format": "int64",
+            "nullable": true,
+            "deprecated": true
+          },
+          "mdmType": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Типы клиентов по отношению к Банку",
+            "nullable": true
+          },
+          "genderCode": {
+            "$ref": "#/components/schemas/GenderCode"
+          },
+          "isResident": {
+            "type": "boolean",
+            "description": "Валютный резидент РФ",
+            "nullable": true
+          },
+          "isTaxResident": {
+            "type": "boolean",
+            "description": "Налоговый резидент РФ",
+            "nullable": true
+          },
+          "addresses": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonAddress"
+            },
+            "description": "Адреса",
+            "nullable": true
+          },
+          "contactInformation": {
+            "$ref": "#/components/schemas/PersonContactInformation"
+          },
+          "identityDocuments": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityDocument"
+            },
+            "description": "ДУЛ",
+            "nullable": true
+          },
+          "clientType": {
+            "$ref": "#/components/schemas/ClientType"
+          },
+          "qualifiedInvestor": {
+            "$ref": "#/components/schemas/QualifiedInvestor"
+          },
+          "numberSnils": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "СНИЛС",
+            "nullable": true
+          },
+          "risk": {
+            "$ref": "#/components/schemas/PersonRisk"
+          },
+          "isBankEmployee": {
+            "type": "boolean",
+            "description": "Признак сотрудника банка",
+            "nullable": true
+          },
+          "deathDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата смерти",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "restrictions": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientRestriction"
+            },
+            "description": "Ограничения",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Модель физического лица"
+      },
+      "PersonReadModelPagedResult": {
+        "type": "object",
+        "properties": {
+          "queryable": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonReadModel"
+            },
+            "nullable": true
+          },
+          "currentPage": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageCount": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          },
+          "rowCount": {
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonRisk": {
+        "type": "object",
+        "properties": {
+          "riskLevelJustification": {
+            "maxItems": 2147483647,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RiskLevelJustification"
+            },
+            "description": "RiskLevelJustification",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Риски"
+      },
+      "QualifiedInvestor": {
+        "required": [
+          "investorQualificationType"
+        ],
+        "type": "object",
+        "properties": {
+          "investorQualificationType": {
+            "$ref": "#/components/schemas/InvestorQualificationType"
+          },
+          "investorQualificationDate": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата присвоения статуса",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "investorQualificationDateOut": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата снятия статуса",
+            "nullable": true,
+            "example": "2024-04-10"
+          },
+          "investorQualificationMethod": {
+            "$ref": "#/components/schemas/InvestorQualificationMethod"
+          },
+          "investorQualificationDocumentNumber": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Номер документа предоставления статуса КИ",
+            "nullable": true
+          },
+          "availableSecurities": {
+            "maxLength": 20,
+            "type": "string",
+            "description": "Доступные ценные бумаги",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Квал инвестор"
+      },
+      "RiskLevelJustification": {
+        "type": "object",
+        "properties": {
+          "riskLevelCodePerson": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "Уровень риска",
+            "nullable": true
+          },
+          "dateRisk": {
+            "maxLength": 10,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": "string",
+            "description": "Дата оценки риска",
+            "nullable": true,
+            "example": "2024-04-10"
+          }
+        },
+        "additionalProperties": false,
+        "description": "RiskLevelJustification"
+      },
+      "Smb": {
+        "maxLength": 255,
+        "enum": [
+          "SMB",
+          "KIB"
+        ],
+        "type": "string",
+        "description": "СМБ/КИБ"
+      },
+      "StringStringKeyValuePair": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://adsd-access-control-tis.dk1-adsd01.dv.adsd.innodev.local/connect/authorize",
+            "tokenUrl": "https://adsd-access-control.dk1-adsd01.dv.adsd.innodev.local/token",
+            "scopes": {
+              "openid": "Subject",
+              "profile": "Profile"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Управление словарями"
+    },
+    {
+      "name": "Управление сущностями ФЛ/ЮЛ"
+    },
+    {
+      "name": "Управление уполномоченными лицами ФЛ"
+    },
+    {
+      "name": "Управление уполномоченными лицами ЮЛ"
+    },
+    {
+      "name": "Управление физическими лицами"
+    },
+    {
+      "name": "Управление юридическими лицами"
+    }
+  ]
+}

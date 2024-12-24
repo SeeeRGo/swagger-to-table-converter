@@ -54,6 +54,7 @@ function PopupContent() {
     setIsProcessing(true)
     try {
       const content = await selectedFile.text()
+      
       let data
 
       if (selectedFile.name.endsWith('.json')) {
@@ -66,17 +67,16 @@ function PopupContent() {
       const parsedData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
         name: key,
         //@ts-expect-error typings are not for prototyping
-        properties: Object.entries(value.properties).map(([valKey, valValue]) => ({
+        properties: Object.entries(value?.properties ?? {}).map(([valKey, valValue]) => ({
           name: valKey,
           //@ts-expect-error typings are not for prototyping
-          type: valValue.type, 
+          type: valValue?.type, 
           //@ts-expect-error typings are not for prototyping
-          required: !!value.required?.some(reqField => reqField === valKey),
+          required: Array.isArray(value.required) ? !!value.required?.some(reqField => reqField === valKey) : false,
           //@ts-expect-error typings are not for prototyping
-          description: valValue.description ?? 'no Desc'
+          description: valValue?.description ?? 'no Desc'
         }))
       }))
-     
 
       const doc = new Document({
         sections: [{
