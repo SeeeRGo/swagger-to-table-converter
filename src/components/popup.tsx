@@ -17,6 +17,7 @@ import { LanguageProvider, useLanguage } from '../contexts/language-context'
 import { useTranslations } from '../hooks/use-translations'
 import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
+import { parseData } from '@/lib/utils'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -64,19 +65,7 @@ function PopupContent() {
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-      const parsedData = Object.entries(data?.components?.schemas).map(([key, value]) => ({
-        name: key,
-        //@ts-expect-error typings are not for prototyping
-        properties: Object.entries(value?.properties ?? {}).map(([valKey, valValue]) => ({
-          name: valKey,
-          //@ts-expect-error typings are not for prototyping
-          type: valValue?.type, 
-          //@ts-expect-error typings are not for prototyping
-          required: Array.isArray(value.required) ? !!value.required?.some(reqField => reqField === valKey) : false,
-          //@ts-expect-error typings are not for prototyping
-          description: valValue?.description ?? 'no Desc'
-        }))
-      }))
+      const parsedData = parseData(data)
 
       const doc = new Document({
         sections: [{
