@@ -30,9 +30,13 @@ const getPropetiesFromValueType = (data: OpenAPIV3_1.Document, value: Exclude<Op
     return parseParameters(paramsArray)
   }
 }
-
+type NonMixedSchema =  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject
 const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject): string => `${schema.type}${schema.format ? `($${schema.format})` : ''}`
-const parsePrimitiveArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject): string => `Array(${parsePrimitiveSchema(schema.items)})`
+const parseSchemaWithReference = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject) => '$ref' in schema ? `${schema.$ref}` : parsePrimitiveSchema(schema)
+const parseSchemaWithReferencendMixedObjects = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject) => 'items' in schema ? parsePrimitiveMixedSchema(schema) : parseSchemaWithReference(schema as NonMixedSchema)
+const parsePrimitiveArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject): string => typeof schema === 'boolean' ? 'Array of something' :  `Array(${parseSchemaWithReferenceAndArrays(schema.items)})`
+const parsePrimitiveMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): string => `Array of Mixed types`
+const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ArraySchemaObject) => typeof schema === 'boolean' ? 'Some Schema' : 'items' in schema && schema.type === 'array' ? parsePrimitiveArraySchema(schema) : parseSchemaWithReferencendMixedObjects(schema)
 
 const parseSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject) => {
   if (typeof schema !== 'object') return undefined
