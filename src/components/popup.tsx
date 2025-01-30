@@ -66,6 +66,8 @@ function PopupContent() {
         throw new Error(t('invalidFileMessage'))
       }
       const parsedData = parseData(data)
+      console.log('parsed data', parsedData);
+      
 
       const doc = new Document({
         sections: [{
