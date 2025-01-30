@@ -1,9 +1,137 @@
 import { parseData } from '@/lib/utils'
-import { Paragraph, Table, TableCell, TableRow, TextRun, WidthType } from 'docx'
+import { Paragraph, Table, TableCell, TableRow, WidthType } from 'docx'
+type ElementType<T extends ReadonlyArray<unknown>> = T extends ReadonlyArray<infer ElementType> ? ElementType : never;
+type ParsedData = ReturnType<typeof parseData>
+type InputParams =  ElementType<ParsedData>['inputParams']
+type ParsedResponses =  ElementType<ParsedData>['responses']
+const parseParamsToTable = (params: InputParams) => params?.flatMap(param => typeof param.schema === 'string' ? [new TableRow({
+  children: [
+    new TableCell({
+      children: [
+        new Paragraph({
+          text: param.paramName
+        })
+      ],
+      width: { size: 1500, type: WidthType.DXA },
+    }),
+    new TableCell({
+      children: [
+        new Paragraph({
+          text: param.description
+        })
+      ],
+      width: { size: 5000, type: WidthType.DXA },
+    }),                  
+    new TableCell({
+      children: [
+        new Paragraph({
+          text: param.schema
+        })
+      ],
+      width: { size: 2000, type: WidthType.DXA },
+    }),                  
+    new TableCell({
+      children: [
+        new Paragraph({
+          text: param.paramType
+        })
+      ],
+      width: { size: 1000, type: WidthType.DXA },
+    }),                  
+    new TableCell({
+      children: [
+        new Paragraph({
+          text: param.required ? 'Да' : 'Нет'
+        })
+      ],
+      width: { size: 500, type: WidthType.DXA },
+    }),
+  ],
+})] : [
 
-export function convertToDocxContent(data: ReturnType<typeof parseData>, depth: number = 0): Paragraph[] {
+]) ?? []
+const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], string>): TableRow[] => parsedParams.flatMap(param => !param.schema || typeof param.schema === 'string' ? [
+  new TableRow({
+    children: [
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: param.paramName
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: param.description
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),                  
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: param.schema ?? 'Нет схемы'
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),                  
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: param.required ? 'Да' : 'Нет'
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),
+    ],
+  })
+] : parseParams(param.schema))
+const parseResponses = (responses: ParsedResponses): TableRow[] => typeof responses.schema === 'string' ? [
+  new TableRow({
+    children: [
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: 'prop.name'
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: 'description' in responses ? responses.description : 'Нет описания'
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),                  
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: responses.schema
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),                  
+      new TableCell({
+        children: [
+          new Paragraph({
+            text: 'prop.required'
+          })
+        ],
+        width: { size: 2500, type: WidthType.DXA },
+      }),
+    ],
+  })
+] : parseParams(responses.schema)
+export function convertToDocxContent(
+  data: ParsedData, 
+  // depth: number = 0
+): Paragraph[] {
   const paragraphs: unknown[] = []
-  const indent = depth * 40 // 40 points per level of indentation
+  // const indent = depth * 40 // 40 points per level of indentation
 
   if (Array.isArray(data)) {
     // data.forEach((item, index) => {
@@ -150,51 +278,7 @@ export function convertToDocxContent(data: ReturnType<typeof parseData>, depth: 
                   }),
                 ],
               }),
-              //@ts-expect-error typings are not for prototyping
-              ...item.inputParams.map(param => new TableRow({
-                children: [
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: param.paramName
-                      })
-                    ],
-                    width: { size: 1500, type: WidthType.DXA },
-                  }),
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: param.description
-                      })
-                    ],
-                    width: { size: 5000, type: WidthType.DXA },
-                  }),                  
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: param.schema
-                      })
-                    ],
-                    width: { size: 2000, type: WidthType.DXA },
-                  }),                  
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: param.paramType
-                      })
-                    ],
-                    width: { size: 1000, type: WidthType.DXA },
-                  }),                  
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: param.required ? 'Да' : param.required === false ? 'Нет' : 'Нет данных'
-                      })
-                    ],
-                    width: { size: 500, type: WidthType.DXA },
-                  }),
-                ],
-              }))
+              ...parseParamsToTable(item.inputParams)
             ],
           }),
         )
@@ -242,42 +326,7 @@ export function convertToDocxContent(data: ReturnType<typeof parseData>, depth: 
                   }),
                 ],
               }),
-              new TableRow({
-                children: [
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: 'prop.name'
-                      })
-                    ],
-                    width: { size: 2500, type: WidthType.DXA },
-                  }),
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: 'prop.description'
-                      })
-                    ],
-                    width: { size: 2500, type: WidthType.DXA },
-                  }),                  
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: item.responses.schema
-                      })
-                    ],
-                    width: { size: 2500, type: WidthType.DXA },
-                  }),                  
-                  new TableCell({
-                    children: [
-                      new Paragraph({
-                        text: 'prop.required'
-                      })
-                    ],
-                    width: { size: 2500, type: WidthType.DXA },
-                  }),
-                ],
-              })
+              ...parseResponses(item.responses),
               // ...item.responses.map(prop => new TableRow({
               //   children: [
               //     new TableCell({

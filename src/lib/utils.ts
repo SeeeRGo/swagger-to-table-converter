@@ -35,9 +35,9 @@ const parseObjectSchema = (schema:  OpenAPIV3_1.NonArraySchemaObject, data: Open
 }
 const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): string | ParsedParam[] => schema.type === 'object' ? parseObjectSchema(schema, data) : `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}`
 const parseSchemaWithReference = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document) => '$ref' in schema ? parseReferenceSchema(data, schema) : parsePrimitiveSchema(schema, data)
-const parseSchemaWithReferencendMixedObjects = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject, data: OpenAPIV3_1.Document) => 'items' in schema ? parsePrimitiveMixedSchema(schema) : parseSchemaWithReference(schema as NonMixedSchema, data)
+const parseSchemaWithReferencendMixedObjects = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject, data: OpenAPIV3_1.Document) => 'items' in schema ? parsePrimitiveMixedSchema() : parseSchemaWithReference(schema as NonMixedSchema, data)
 const parsePrimitiveArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject, data: OpenAPIV3_1.Document): string => typeof schema === 'boolean' ? 'Array of something' :  `Array(${parseSchemaWithReferenceAndArrays(schema.items, data)})`
-const parsePrimitiveMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): string => `Array of Mixed types`
+const parsePrimitiveMixedSchema = (): string => `Array of Mixed types`
 const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ArraySchemaObject, data: OpenAPIV3_1.Document): string | ParsedParam[] => typeof schema === 'boolean' ? 'Some Schema' : 'items' in schema && schema.type === 'array' ? parsePrimitiveArraySchema(schema, data) : parseSchemaWithReferencendMixedObjects(schema, data)
 
 const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.ReferenceObject) => {

@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-namespace */
 /* tslint:disable:no-namespace no-empty-interface */
   // OpenAPI extensions can be declared using generics
   // e.g.:
   // OpenAPI.Document<{
   //   'x-amazon-apigateway-integration': AWSAPITGatewayDefinition
   // }>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-nocheck
   export type Document<T extends {} = {}> =
     | OpenAPIV2.Document<T>
     | OpenAPIV3.Document<T>
@@ -912,4 +917,5 @@ export interface IJsonSchema {
   oneOf?: IJsonSchema[];
   not?: IJsonSchema;
   $ref?: string;
+}
 }
