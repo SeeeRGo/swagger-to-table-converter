@@ -32,14 +32,20 @@ export type ParsedParam = {
 const parseObjectSchema = (schema:  OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam[] => {
   console.log('parseObjectSchema - schema', schema);
   
-  const paramsArray = Object.entries(schema.properties ?? {}).map(([key, value]) => ({
+  const paramsArray = Object.entries(schema.properties ?? {}).map(([key, value]) => typeof value === 'boolean' ? {
     name: key,
-    // @ts-expect-error types are not for prototyping
+    in: 'unknown param type',
+    description: 'Нет описания',
+  } : '$ref' in value ? {
+    name: key,
+    ...parseReferenceSchema(data, value)
+  } : {
+    name: key,
     in: value.type,
-    required: !!schema.required?.find(reqKey => reqKey === key), // @ts-expect-error types are not for prototyping
+    required: !!schema.required?.find(reqKey => reqKey === key),
     description: value.description ?? 'Нет описания',
     ...(false ? { $ref: '' } : {})
-  }))
+  })
   console.log('parseObjectSchema - paramsArray', paramsArray);
     // @ts-expect-error types are not for prototyping
 
@@ -47,13 +53,23 @@ const parseObjectSchema = (schema:  OpenAPIV3_1.NonArraySchemaObject, data: Open
 }
 const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam | ParsedParam[] => {
   return schema.type === 'object' ? parseObjectSchema(schema, data) : {
-    description: 'Primitive param description',
+    description: schema.description ?? 'Primitive param description',
     paramName: 'primitive param name',
-    paramType: `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}` 
+    paramType: `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}`, 
+    schema: {
+      description: schema.description ?? 'Primitive param description',
+      paramName: 'primitive param name in schema',
+      paramType: `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}`, 
+    }
   }
 }
 const parseSchemaWithReference = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document) => {
-  return '$ref' in schema ? parseReferenceSchema(data, schema) : parsePrimitiveSchema(schema, data)
+  if('$ref' in schema) {
+    return parseReferenceSchema(data, schema)
+  } else {
+    // console.log('primitive schema to be parsed', schema);
+    return parsePrimitiveSchema(schema, data)
+  }
 }
 const parseSchemaWithReferencendMixedObjects = (schema:  OpenAPIV3_1.NonArraySchemaObject |  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject, data: OpenAPIV3_1.Document) => {
   return 'items' in schema ? parsePrimitiveMixedSchema() : parseSchemaWithReference(schema as NonMixedSchema, data)
@@ -76,16 +92,27 @@ const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSc
   // console.log('parseSchemaWithReferenceAndArrays - array', parsedArraySchema);
   // const parsedReferenceSchema = typeof schema === 'boolean' || ('items' in schema && schema.type === 'array') ? '' : parseSchemaWithReferencendMixedObjects(schema, data)
   // console.log('parseSchemaWithReferenceAndArrays - reference', parsedReferenceSchema);
+  if(typeof schema === 'boolean') {
+    return []
+  } else if ('items' in schema && schema.type === 'array') {
+    return parsePrimitiveArraySchema(schema, data)
+  } else {
+    return parseSchemaWithReferencendMixedObjects(schema, data)
+  }
 
-  return typeof schema === 'boolean' ? [] : 'items' in schema && schema.type === 'array' ? parsePrimitiveArraySchema(schema, data) : parseSchemaWithReferencendMixedObjects(schema, data)
 }
 
 const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.ReferenceObject) => {
+  console.log('parseReferenceSchema', schema);
+  
   const referenceSchema = findSchema(data, getSchemaNameFromRef(schema.$ref))
-  return referenceSchema ? parseSchemaWithReferenceAndArrays(referenceSchema, data) : {
+  const res = referenceSchema ? parseSchemaWithReferenceAndArrays(referenceSchema, data) : {
     description: 'Some reference type',
     paramName: 'Unknown reference type param'
   }
+  console.log('parsedRef', res);
+  
+  return res
 }
 
 const getSchemaNameFromRef = (ref: string) => ref.split('/').at(-1)

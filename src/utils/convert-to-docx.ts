@@ -51,7 +51,7 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => !Ar
 
 ]) ?? []
 const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedParam>): TableRow[] => parsedParams.flatMap(param => {
-  console.log('param to parse into doc', param);
+  // console.log('param to parse into doc', param);
   if(!param.schema || !Array.isArray(param.schema)) {
     return [
       new TableRow({
@@ -98,7 +98,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
 
 const parseResponses = (responses: ParsedResponses): TableRow[] => {
   if(!Array.isArray(responses.schema)) {
-    console.log('responeses', responses);
+    // console.log('responeses', responses);
     
     return [
       new TableRow({
