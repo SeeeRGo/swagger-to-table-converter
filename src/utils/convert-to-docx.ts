@@ -1,10 +1,10 @@
-import { parseData } from '@/lib/utils'
+import { parseData, ParsedParam } from '@/lib/utils'
 import { Paragraph, Table, TableCell, TableRow, WidthType } from 'docx'
 type ElementType<T extends ReadonlyArray<unknown>> = T extends ReadonlyArray<infer ElementType> ? ElementType : never;
 type ParsedData = ReturnType<typeof parseData>
 type InputParams =  ElementType<ParsedData>['inputParams']
 type ParsedResponses =  ElementType<ParsedData>['responses']
-const parseParamsToTable = (params: InputParams) => params?.flatMap(param => typeof param.schema === 'string' ? [new TableRow({
+const parseParamsToTable = (params: InputParams) => params?.flatMap(param => !Array.isArray(param.schema) ? [new TableRow({
   children: [
     new TableCell({
       children: [
@@ -25,7 +25,7 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => typ
     new TableCell({
       children: [
         new Paragraph({
-          text: param.schema
+          text: param.schema?.paramType
         })
       ],
       width: { size: 2000, type: WidthType.DXA },
@@ -50,82 +50,98 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => typ
 })] : [
 
 ]) ?? []
-const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], string>): TableRow[] => parsedParams.flatMap(param => !param.schema || typeof param.schema === 'string' ? [
-  new TableRow({
-    children: [
-      new TableCell({
+const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedParam>): TableRow[] => parsedParams.flatMap(param => {
+  console.log('param to parse into doc', param);
+  if(!param.schema || !Array.isArray(param.schema)) {
+    return [
+      new TableRow({
         children: [
-          new Paragraph({
-            text: param.paramName
-          })
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: param.paramName
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: param.description
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: param.paramType ?? 'Нет схемы'
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: param.required ? 'Да' : 'Нет'
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
         ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),
-      new TableCell({
+      })
+    ]
+  } else {
+    return parseParams(param.schema);
+  }
+})
+
+const parseResponses = (responses: ParsedResponses): TableRow[] => {
+  if(!Array.isArray(responses.schema)) {
+    console.log('responeses', responses);
+    
+    return [
+      new TableRow({
         children: [
-          new Paragraph({
-            text: param.description
-          })
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: responses.paramName
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: 'description' in responses ? responses.description : 'Нет описания'
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: responses.paramType
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: responses.required ? 'Да' : 'Нет'
+              })
+            ],
+            width: { size: 2500, type: WidthType.DXA },
+          }),
         ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),                  
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: param.schema ?? 'Нет схемы'
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),                  
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: param.required ? 'Да' : 'Нет'
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),
-    ],
-  })
-] : parseParams(param.schema))
-const parseResponses = (responses: ParsedResponses): TableRow[] => typeof responses.schema === 'string' ? [
-  new TableRow({
-    children: [
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: 'prop.name'
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: 'description' in responses ? responses.description : 'Нет описания'
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),                  
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: responses.schema
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),                  
-      new TableCell({
-        children: [
-          new Paragraph({
-            text: 'prop.required'
-          })
-        ],
-        width: { size: 2500, type: WidthType.DXA },
-      }),
-    ],
-  })
-] : parseParams(responses.schema)
+      })
+    ]
+  } else {
+    return parseParams(responses.schema);
+  }
+}
 export function convertToDocxContent(
   data: ParsedData, 
   // depth: number = 0
