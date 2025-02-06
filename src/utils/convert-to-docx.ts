@@ -98,7 +98,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
 
 const parseResponses = (responses: ParsedResponses): TableRow[] => {
   if(!Array.isArray(responses.schema)) {
-    // console.log('responeses', responses);
+    console.log('responeses', responses);
     
     return [
       new TableRow({
