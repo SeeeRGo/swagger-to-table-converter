@@ -51,7 +51,6 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => !Ar
 
 ]) ?? []
 const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedParam>): TableRow[] => parsedParams.flatMap(param => {
-  // console.log('param to parse into doc', param);
   if(!param.schema || !Array.isArray(param.schema)) {
     return [
       new TableRow({
@@ -62,7 +61,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
                 text: param.paramName
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 4000, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
@@ -70,7 +69,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
                 text: param.description
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 4500, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
@@ -78,7 +77,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
                 text: param.paramType ?? 'Нет схемы'
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 1000, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
@@ -86,7 +85,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
                 text: param.required ? 'Да' : 'Нет'
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 500, type: WidthType.DXA },
           }),
         ],
       })
@@ -97,9 +96,7 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
 })
 
 const parseResponses = (responses: ParsedResponses): TableRow[] => {
-  if(!Array.isArray(responses.schema)) {
-    console.log('responeses', responses);
-    
+  if(!Array.isArray(responses.schema)) {    
     return [
       new TableRow({
         children: [
@@ -109,7 +106,7 @@ const parseResponses = (responses: ParsedResponses): TableRow[] => {
                 text: responses.paramName
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 3500, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
@@ -117,15 +114,15 @@ const parseResponses = (responses: ParsedResponses): TableRow[] => {
                 text: 'description' in responses ? responses.description : 'Нет описания'
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 3500, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
               new Paragraph({
-                text: responses.paramType
+                text: responses.paramType ?? responses.schema.paramType
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 2000, type: WidthType.DXA },
           }),
           new TableCell({
             children: [
@@ -133,12 +130,14 @@ const parseResponses = (responses: ParsedResponses): TableRow[] => {
                 text: responses.required ? 'Да' : 'Нет'
               })
             ],
-            width: { size: 2500, type: WidthType.DXA },
+            width: { size: 1000, type: WidthType.DXA },
           }),
         ],
       })
     ]
   } else {
+    // console.log('responses', responses);
+
     return parseParams(responses.schema);
   }
 }
@@ -171,14 +170,20 @@ export function convertToDocxContent(
     data.forEach((item, index) => {
       if (typeof item === 'object' && item !== null) {
         paragraphs.push(
-          new Paragraph(`${index + 1} - ${item.path}`)
+          new Paragraph({
+            text: `${index + 1} - ${item.path}`,
+            heading: 'Heading3'
+          })
         )
         paragraphs.push(
-          new Paragraph('Основные сведения')
+          new Paragraph({
+            text: 'Основные сведения',
+            heading: 'Heading5'
+          })
         )
         paragraphs.push(
           new Table({
-            columnWidths: [2500, 5000],
+            columnWidths: [3000, 7000],
             rows: [
               new TableRow({
                 children: [
@@ -188,7 +193,7 @@ export function convertToDocxContent(
                         text: 'Назначение'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 3000, type: WidthType.DXA },
                   }),
                   new TableCell({
                     children: [
@@ -196,7 +201,7 @@ export function convertToDocxContent(
                         text: item.methodDesc ?? 'Нет описания метода'
                       })
                     ],
-                    width: { size: 5000, type: WidthType.DXA },
+                    width: { size: 7000, type: WidthType.DXA },
                   }),                  
                 ],
               }),
@@ -208,7 +213,7 @@ export function convertToDocxContent(
                         text: 'Метод'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 3000, type: WidthType.DXA },
                   }),
                   new TableCell({
                     children: [
@@ -216,7 +221,7 @@ export function convertToDocxContent(
                         text: item.method ?? 'Неизвестный метод'
                       })
                     ],
-                    width: { size: 5000, type: WidthType.DXA },
+                    width: { size: 7000, type: WidthType.DXA },
                   }),                  
                 ],
               }),
@@ -228,7 +233,7 @@ export function convertToDocxContent(
                         text: 'Адрес'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 3000, type: WidthType.DXA },
                   }),
                   new TableCell({
                     children: [
@@ -236,19 +241,23 @@ export function convertToDocxContent(
                         text: item.path ?? 'Неизвестный адрес'
                       })
                     ],
-                    width: { size: 5000, type: WidthType.DXA },
+                    width: { size: 7000, type: WidthType.DXA },
                   }),                  
                 ],
               }),
             ],
           })
         )
+        paragraphs.push(new Paragraph({}))
         paragraphs.push(
-          new Paragraph('Входные параметры')
+          new Paragraph({
+            text: 'Входные параметры',
+            heading: 'Heading5'
+          })
         )
         paragraphs.push(
           new Table({
-            columnWidths: [1500, 5000, 2000, 1000, 500],
+            columnWidths: [3000, 2500, 2500, 1000, 1000],
             rows: [
               new TableRow({
                 children: [
@@ -258,7 +267,7 @@ export function convertToDocxContent(
                         text: 'Параметр'
                       })
                     ],
-                    width: { size: 1500, type: WidthType.DXA },
+                    width: { size: 3000, type: WidthType.DXA },
                   }),
                   new TableCell({
                     children: [
@@ -266,7 +275,7 @@ export function convertToDocxContent(
                         text: 'Описание'
                       })
                     ],
-                    width: { size: 5000, type: WidthType.DXA },
+                    width: { size: 2500, type: WidthType.DXA },
                   }),                  
                   new TableCell({
                     children: [
@@ -274,7 +283,7 @@ export function convertToDocxContent(
                         text: 'Тип данных'
                       })
                     ],
-                    width: { size: 2000, type: WidthType.DXA },
+                    width: { size: 2500, type: WidthType.DXA },
                   }),                  
                   new TableCell({
                     children: [
@@ -290,7 +299,7 @@ export function convertToDocxContent(
                         text: 'Обязательность'
                       })
                     ],
-                    width: { size: 500, type: WidthType.DXA },
+                    width: { size: 1000, type: WidthType.DXA },
                   }),
                 ],
               }),
@@ -298,13 +307,17 @@ export function convertToDocxContent(
             ],
           }),
         )
+        paragraphs.push(new Paragraph({}))
         paragraphs.push(
-          new Paragraph('Описание объекта')
+          new Paragraph({
+            text: 'Описание ответа',
+            heading: 'Heading5'
+          })
         )
         // paragraphs.push(...convertToDocxContent(item, depth + 1))
         paragraphs.push(
           new Table({
-            columnWidths: [2500, 2500, 2500, 2500],
+            columnWidths: [3500, 3500, 2000, 1000],
             rows: [
               new TableRow({
                 children: [
@@ -314,7 +327,7 @@ export function convertToDocxContent(
                         text: 'Параметр'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 3500, type: WidthType.DXA },
                   }),
                   new TableCell({
                     children: [
@@ -322,7 +335,7 @@ export function convertToDocxContent(
                         text: 'Описание'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 3500, type: WidthType.DXA },
                   }),                  
                   new TableCell({
                     children: [
@@ -330,7 +343,7 @@ export function convertToDocxContent(
                         text: 'Тип данных'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 2000, type: WidthType.DXA },
                   }),                  
                   new TableCell({
                     children: [
@@ -338,50 +351,15 @@ export function convertToDocxContent(
                         text: 'Обязательность'
                       })
                     ],
-                    width: { size: 2500, type: WidthType.DXA },
+                    width: { size: 1000, type: WidthType.DXA },
                   }),
                 ],
               }),
               ...parseResponses(item.responses),
-              // ...item.responses.map(prop => new TableRow({
-              //   children: [
-              //     new TableCell({
-              //       children: [
-              //         new Paragraph({
-              //           text: 'prop.name'
-              //         })
-              //       ],
-              //       width: { size: 2500, type: WidthType.DXA },
-              //     }),
-              //     new TableCell({
-              //       children: [
-              //         new Paragraph({
-              //           text: 'prop.description'
-              //         })
-              //       ],
-              //       width: { size: 2500, type: WidthType.DXA },
-              //     }),                  
-              //     new TableCell({
-              //       children: [
-              //         new Paragraph({
-              //           text: prop.type
-              //         })
-              //       ],
-              //       width: { size: 2500, type: WidthType.DXA },
-              //     }),                  
-              //     new TableCell({
-              //       children: [
-              //         new Paragraph({
-              //           text: prop.required ? 'Да' : 'Нет'
-              //         })
-              //       ],
-              //       width: { size: 2500, type: WidthType.DXA },
-              //     }),
-              //   ],
-              // }))
             ],
           }),
         )
+        paragraphs.push(new Paragraph({}))
       } else {
         // paragraphs.push(
         //   new Paragraph({

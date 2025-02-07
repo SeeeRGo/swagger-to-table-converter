@@ -41,23 +41,43 @@ const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenA
     } else if ('$ref' in value) {
       const parsedReferenceParam = {
         name: key,
+        description: value.description ?? '', 
+        // @ts-expect-error tyypes are not for prototyping
+        required: value.required || !!schema.required?.find(reqKey => reqKey === key),
+        // type: 'object',
         ...parseReferenceSchema(data, value)
       }
       // console.log('parsedReferenceParam', parsedReferenceParam);
       
       return parsedReferenceParam
-      //@ts-expect-error types are not for prototyping
-    } else if ('items' in value && '$ref' in value.items) {
+    } 
+    //@ts-expect-error types are not for prototyping
+    else if ('items' in value && '$ref' in value.items) {
       const parsedReferenceParam = {
         name: `${key}[index]`,
+        paramType: 'array',
+        required: value.required || !!schema.required?.find(reqKey => reqKey === key),
+        description: value.description ?? '',
         ...parseReferenceSchema(data, value.items)
       }
       // console.log('parsedReferenceParam', parsedReferenceParam);
       
       return parsedReferenceParam
+    } else if ('paramType' in value && value.paramType === 'array') {
+      return {
+        name: key,
+        in: value.paramType,
+        ...value,
+      }
+    } else if ('paramType' in value && value.paramType === 'object') {
+      return {
+        name: key,
+        in: value.paramType,
+        ...value,
+      }
     }
      else if ('type' in value && value.type === 'array') {
-      console.log('primitive array to parse', value);
+      // console.log('primitive array to parse', value);
       const parsedArrSchema = parsePrimitiveArraySchema({
         //@ts-expect-error types are not for prototyping
         name: key,
@@ -68,27 +88,28 @@ const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenA
       return {
       name: key,
       in: value.type,
-      required: !!schema.required?.find(reqKey => reqKey === key),
+      required: value.required || !!schema.required?.find(reqKey => reqKey === key),
       description: value.description ?? 'Нет описания',
       ...(false ? { $ref: '' } : {})
     }
     }
   })
-  console.log('properties', schema.properties, 'paramsArray', paramsArray);
+  // console.log('properties', schema.properties, 'paramsArray', paramsArray);
 
   // @ts-expect-error types are not for prototyping
   return parseParameters(paramsArray, data)
 }
 const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam | ParsedParam[] => {
-  //@ts-expect-error types are not for prototyping
-  return schema.type === 'object' ? parseObjectSchema(schema, data) : {
-    description: schema.description ?? 'Primitive param description',
-    paramName: 'primitive param name',
-    paramType: 'paramType' in schema ? schema.paramType : `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}`,
-    schema: {
+  if (schema.type === 'object') {
+    return parseObjectSchema(schema, data)
+  } else {
+    // console.log('schema primitive', schema);
+    const paramType = 'paramType' in schema ? schema.paramType : `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}` 
+    // console.log('schema primitive paramType', paramType);
+    return {
       description: schema.description ?? 'Primitive param description',
-      paramName: 'primitive param name in schema',
-      paramType: `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}`,
+      paramName: 'primitive param name', //@ts-expect-error types are not for prototyping
+      paramType,
     }
   }
 }
@@ -99,13 +120,17 @@ const parseSchemaWithReference = (schema: OpenAPIV3_1.NonArraySchemaObject | Ope
     // console.log('nested schema to be parsed', schema);
     //@ts-expect-error types are not for prototyping
     const parentParamName = schema.name ?? 'parentParam'
-
-    const parsedFields = Object.entries(schema).filter(([key]) => key !== 'name').map(([key, value]) => [`${parentParamName}.${value.paramName}`, {
+    const parsedFields = Object.entries(schema).filter(([key]) => key !== 'name' && key !== 'paramType' && key !== 'description' && key !== 'required').map(([key, value]) => [`${parentParamName}.${value.paramName}`, {
       ...value,
       type: value.paramType,
       name: `${parentParamName}.${value.paramName}`
     }])
-    const properties = Object.fromEntries(parsedFields)
+    const properties = Object.fromEntries([[parentParamName, {
+      //@ts-expect-error types are not for prototyping
+      paramType: schema.paramType ?? 'object',
+      name: parentParamName,
+      description: schema.description ?? ''
+    }], ...parsedFields])
     // console.log('properties', properties);
 
     return parseObjectSchema({
@@ -166,9 +191,9 @@ const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSc
     return []
   } 
   // else if ('type' in schema && schema.type === 'refArray') {
-  //   console.log('primitive ref array to parse', schema);
-  //   const parsedArrSchema = parsePrimitiveArraySchema(schema.items, data)
-  //   console.log('parsedArrSchema', parsedArrSchema);
+  // console.log('primitive ref array to parse', schema);
+  // const parsedArrSchema = parsePrimitiveArraySchema(schema.items, data)
+  // console.log('parsedArrSchema', parsedArrSchema);
 
   //   return parsedArrSchema
   // }
@@ -187,6 +212,8 @@ const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.Re
   // console.log('parseReferenceSchema', schema);
 
   const referenceSchema = findSchema(data, getSchemaNameFromRef(schema.$ref))
+  // console.log('referenceSchema', referenceSchema);
+  
   const res = referenceSchema ? parseSchemaWithReferenceAndArrays(referenceSchema, data) : {
     description: 'Some reference type',
     paramName: 'Unknown reference type param'
@@ -216,10 +243,10 @@ const parseParameters = (params: (OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.No
       schema: parseReferenceSchema(data, param)
     }]
   } else if ('items' in param && typeof param.items !== 'boolean' && param.items && '$ref' in param.items) {
-    console.log('param with items', param);
+    // console.log('param with items', param);
     
     const parsedItemsSchema = parseReferenceSchema(data, param.items)
-    console.log('parsed param with items', parsedItemsSchema);
+    // console.log('parsed param with items', parsedItemsSchema);
     
     return []
   }
