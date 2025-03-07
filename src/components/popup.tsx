@@ -18,6 +18,7 @@ import { useTranslations } from '../hooks/use-translations'
 import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
 import { parseData } from '@/lib/utils'
+import axios from 'axios'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -99,6 +100,46 @@ function PopupContent() {
       setIsProcessing(false)
     }
   }
+
+  // const handleConvert = async () => {
+
+  //   setIsProcessing(true)
+  //   try {
+  //     const { data } = await axios('/api/swagger')
+  //     const parsedData = parseData(data)      
+
+  //     const doc = new Document({
+  //       sections: [{
+  //         properties: {},
+  //         children: convertToDocxContent(parsedData)
+  //       }]
+  //     })
+
+  //     const buffer = await Packer.toBuffer(doc)
+  //     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+  //     const url = window.URL.createObjectURL(blob)
+  //     const a = document.createElement('a')
+  //     a.href = url
+  //     a.download = `${selectedFile.name.split('.')[0]}.docx`
+  //     document.body.appendChild(a)
+  //     a.click()
+  //     document.body.removeChild(a)
+  //     window.URL.revokeObjectURL(url)
+
+  //     toast({
+  //       title: t('success'),
+  //       description: t('successMessage'),
+  //     })
+  //   } catch (error) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: t('error'),
+  //       description: error instanceof Error ? error.message : t('invalidFileMessage'),
+  //     })
+  //   } finally {
+  //     setIsProcessing(false)
+  //   }
+  // }
 
   const clearFile = () => {
     setSelectedFile(null)
