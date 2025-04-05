@@ -17,8 +17,10 @@ export async function POST(request: Request) {
   // @ts-expect-error idc
   const aggregatedRes = res.reduce((acc, schema) => {
     acc.components = {
-      ...(acc.components ?? {}),
-      ...(schema.components ?? {})
+      schemas: {
+        ...(acc.components.schemas ?? {}),
+        ...(schema.components.schemas ?? {})
+      }
     }
     acc.paths = {
       ...(acc.paths ?? {}),
