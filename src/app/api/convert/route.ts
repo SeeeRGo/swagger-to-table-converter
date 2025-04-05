@@ -6,7 +6,8 @@ import yaml from 'js-yaml'
 export async function POST(request: Request) {
   const { text, type } = await request.json()
   let data
-
+  console.log('text', text);
+  
   if (type === 'json') {
     data = JSON.parse(text)
   } else if (type === 'yaml') {
