@@ -8,9 +8,9 @@ export async function POST(request: Request) {
   
   const res = body.map((data: { type: string, text: string }) => {
     if (data.type === 'json') {
-      return parseData(JSON.parse(data.text))
-    } else if (data.type === 'yaml') { // @ts-expect-error idk
-      return parseData(yaml.load(data.text))     
+      return JSON.parse(data.text)
+    } else if (data.type === 'yaml') {
+      return yaml.load(data.text)  
     }
     return ''
     
