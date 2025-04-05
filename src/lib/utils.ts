@@ -29,6 +29,8 @@ export type ParsedParam = {
   required?: boolean
   schema?: ParsedParam | ParsedParam[]
 }
+
+const sanitizeRef = (ref: string) => ref.substring(ref.indexOf('#'))
 const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam[] => {
 
   const paramsArray = Object.entries(schema.properties ?? {}).map(([key, value]) => {
@@ -211,7 +213,7 @@ const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSc
 const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.ReferenceObject) => {
   // console.log('parseReferenceSchema', schema);
 
-  const referenceSchema = findSchema(data, getSchemaNameFromRef(schema.$ref))
+  const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(schema.$ref)))
   // console.log('referenceSchema', referenceSchema);
   
   const res = referenceSchema ? parseSchemaWithReferenceAndArrays(referenceSchema, data) : {
@@ -308,7 +310,7 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
     responses: parseResponseEntry(methodDesc, data),
     inputParams: 'parameters' in methodDesc ? methodDesc?.parameters?.map((param: (OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)): ParsedParam => '$ref' in param ? {
       description: param.description ?? 'Нет описания',
-      paramName: param.$ref ?? 'Нет имени параметра'
+      paramName: param.$ref ? sanitizeRef(param.$ref) : 'Нет имени параметра'
     } : {
       paramName: param.name ?? 'Нет имени параметра',
       paramType: param.in,
