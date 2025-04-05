@@ -31,7 +31,7 @@ export type ParsedParam = {
 }
 
 const sanitizeRef = (ref: string) => ref.substring(ref.indexOf('#'))
-const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam[] => {
+const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document, depth = 0): ParsedParam[] => {
 
   const paramsArray = Object.entries(schema.properties ?? {}).map(([key, value]) => {
     if (typeof value === 'boolean' ) {
@@ -47,7 +47,7 @@ const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenA
         // @ts-expect-error tyypes are not for prototyping
         required: value.required || !!schema.required?.find(reqKey => reqKey === key),
         // type: 'object',
-        ...parseReferenceSchema(data, value)
+        ...parseReferenceSchema(data, value, depth)
       }
       // console.log('parsedReferenceParam', parsedReferenceParam);
       
@@ -60,7 +60,7 @@ const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenA
         paramType: 'array',
         required: value.required || !!schema.required?.find(reqKey => reqKey === key),
         description: value.description ?? '',
-        ...parseReferenceSchema(data, value.items)
+        ...parseReferenceSchema(data, value.items, depth)
       }
       // console.log('parsedReferenceParam', parsedReferenceParam);
       
@@ -101,9 +101,9 @@ const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenA
   // @ts-expect-error types are not for prototyping
   return parseParameters(paramsArray, data)
 }
-const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam | ParsedParam[] => {
+const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document, depth = 0): ParsedParam | ParsedParam[] => {
   if (schema.type === 'object') {
-    return parseObjectSchema(schema, data)
+    return parseObjectSchema(schema, data, depth)
   } else {
     // console.log('schema primitive', schema);
     const paramType = 'paramType' in schema ? schema.paramType : `${schema.type}${schema.format ? `($${schema.format})` : ''}${schema.enum ? `[\n${schema.enum.join(',\n')}\n]` : ''}` 
@@ -115,9 +115,13 @@ const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: Op
     }
   }
 }
-const parseSchemaWithReference = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document) => {
+const parseSchemaWithReference = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document, depth = 0) => {
   if ('$ref' in schema) {
-    return parseReferenceSchema(data, schema)
+    return depth < 5 ? parseReferenceSchema(data, schema, depth + 1) : {
+      description: schema.description ?? 'Recursive param description',
+      paramName: schema.$ref,
+      paramType: 'Deeply nested schema',
+    }
   } else if ('0' in schema) {
     // console.log('nested schema to be parsed', schema);
     //@ts-expect-error types are not for prototyping
@@ -137,15 +141,15 @@ const parseSchemaWithReference = (schema: OpenAPIV3_1.NonArraySchemaObject | Ope
 
     return parseObjectSchema({
       properties
-    }, data)
+    }, data, depth)
   } else {
     // console.log('primitive schema to be parsed', schema);
-    return parsePrimitiveSchema(schema, data)
+    return parsePrimitiveSchema(schema, data, depth)
   }
 }
 
-const parseSchemaWithReferencendMixedObjects = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject, data: OpenAPIV3_1.Document) => {
-  return 'items' in schema ? parsePrimitiveMixedSchema() : parseSchemaWithReference(schema as NonMixedSchema, data)
+const parseSchemaWithReferencendMixedObjects = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.MixedSchemaObject, data: OpenAPIV3_1.Document, depth = 0) => {
+  return 'items' in schema ? parsePrimitiveMixedSchema() : parseSchemaWithReference(schema as NonMixedSchema, data, depth)
 }
 const parsePrimitiveArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam | ParsedParam[] => {
   if(typeof schema === 'boolean') {
@@ -184,7 +188,7 @@ const parsePrimitiveMixedSchema = (): ParsedParam => ({
   description: 'Array of mixed types',
   paramName: 'Unknown mixed type param'
 })
-const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.ParameterObject, data: OpenAPIV3_1.Document): ParsedParam | ParsedParam[] => {
+const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.ParameterObject, data: OpenAPIV3_1.Document, depth = 0): ParsedParam | ParsedParam[] => {
   // const parsedArraySchema = typeof schema !== 'boolean' && 'items' in schema && schema.type === 'array' ? parsePrimitiveArraySchema(schema, data) : ''
   // console.log('parseSchemaWithReferenceAndArrays - array', parsedArraySchema);
   // const parsedReferenceSchema = typeof schema === 'boolean' || ('items' in schema && schema.type === 'array') ? '' : parseSchemaWithReferencendMixedObjects(schema, data)
@@ -208,18 +212,18 @@ const parseSchemaWithReferenceAndArrays = (schema: boolean | OpenAPIV3_1.MixedSc
     return parsedArrSchema
   } else {
     // console.log('non array to parse', schema);
-    return parseSchemaWithReferencendMixedObjects(schema, data)
+    return parseSchemaWithReferencendMixedObjects(schema, data, depth)
   }
 
 }
 
-const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.ReferenceObject) => {
+const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.ReferenceObject, depth = 0) => {
   // console.log('parseReferenceSchema', schema);
 
   const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(schema.$ref)))
   // console.log('referenceSchema', referenceSchema);
   
-  const res = referenceSchema && referenceSchema !== true ? parseSchemaWithReferenceAndArrays(referenceSchema, data) : {
+  const res = referenceSchema && referenceSchema !== true ? parseSchemaWithReferenceAndArrays(referenceSchema, data, depth) : {
     description: 'Some reference type',
     paramName: 'Unknown reference type param'
   }
@@ -240,27 +244,27 @@ const findSchema = (data: OpenAPIV3_1.Document, schemaName?: string) => {
   return schemaKey && schemas ? schemas[schemaKey] : undefined
 }
 
-const parseParameters = (params: (OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)[], data: OpenAPIV3_1.Document): ParsedParam[] => params.flatMap((param) => {
+const parseParameters = (params: (OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)[], data: OpenAPIV3_1.Document, depth = 0): ParsedParam[] => params.flatMap((param) => {
   // console.log('param pre parsing', param);
   if ('$ref' in param) {
-    const parsedSchema = parseReferenceSchema(data, param)
+    const parsedSchema = parseReferenceSchema(data, param, depth)
     // console.log('parsedSchema with ref', parsedSchema);
     
     return parsedSchema instanceof Array ? parsedSchema : [{
       description: param.description ?? 'Нет описания',
       paramName: 'name' in param ? param.name as string : 'array',
-      schema: parseReferenceSchema(data, param)
+      schema: parseReferenceSchema(data, param, depth)
     }]
   } else if ('items' in param && typeof param.items !== 'boolean' && param.items && '$ref' in param.items) {
     // console.log('param with items', param);
     
-    const parsedItemsSchema = parseReferenceSchema(data, param.items)
+    const parsedItemsSchema = parseReferenceSchema(data, param.items, depth)
     // console.log('parsed param with items', parsedItemsSchema);
     
     return []
   }
   else {
-    const schema = parseSchemaWithReferenceAndArrays(param, data)
+    const schema = parseSchemaWithReferenceAndArrays(param, data, depth)
     // console.log('param', param, 'schema', schema);
     const paramParseResult = schema instanceof Array ? schema : [{
       paramName: 'name' in param ? param.name as string : 'array',
@@ -310,6 +314,7 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
   //   properties: []
   // }) : []
   // return parsedSchemas
+
   return data?.paths ? Object.entries(data?.paths).flatMap(([key, value]) => value ? Object.entries(value).map(([method, methodDesc]) => typeof methodDesc === 'object' ? {
     path: key,
     method,
