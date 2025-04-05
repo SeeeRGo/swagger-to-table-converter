@@ -117,7 +117,7 @@ const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: Op
 }
 const parseSchemaWithReference = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document, depth = 0) => {
   if ('$ref' in schema) {
-    return depth < 5 ? parseReferenceSchema(data, schema, depth + 1) : {
+    return depth < 2 ? parseReferenceSchema(data, schema, depth + 1) : {
       description: schema.description ?? 'Recursive param description',
       paramName: schema.$ref,
       paramType: 'Deeply nested schema',
