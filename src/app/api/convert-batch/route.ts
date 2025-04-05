@@ -20,7 +20,11 @@ export async function POST(request: Request) {
       schemas: {
         ...(acc.components?.schemas ?? {}),
         ...(schema.components?.schemas ?? {})
-      }
+      },
+      parameters: {
+        ...(acc.components?.parameters ?? {}),
+        ...(schema.components?.parameters ?? {})
+      },
     }
     acc.paths = {
       ...(acc.paths ?? {}),
