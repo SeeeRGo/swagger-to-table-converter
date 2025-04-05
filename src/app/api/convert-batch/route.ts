@@ -18,8 +18,8 @@ export async function POST(request: Request) {
   const aggregatedRes = res.reduce((acc, schema) => {
     acc.components = {
       schemas: {
-        ...(acc.components.schemas ?? {}),
-        ...(schema.components.schemas ?? {})
+        ...(acc.components?.schemas ?? {}),
+        ...(schema.components?.schemas ?? {})
       }
     }
     acc.paths = {
