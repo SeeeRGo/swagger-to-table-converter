@@ -26,6 +26,7 @@ export type ParsedParam = {
   description: string
   paramName: string
   paramType?: string
+  paramIn?: string // 'query' | 'path'
   required?: boolean
   schema?: ParsedParam | ParsedParam[]
 }
@@ -125,12 +126,12 @@ const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPI
     return {
       description: schema.description ?? 'Нет описания', // @ts-expect-error just for build
       paramName: schema.name ?? 'Нет имени', // @ts-expect-error just for build
-      paramType: schema.in ?? '',
+      paramIn: schema.in ?? '',
       required: typeof schema.required === 'boolean' ? schema.required : undefined,
       schema: {
         description: schema.description ?? 'Нет описания', // @ts-expect-error just for build
         paramName: schema.name ?? 'Нет имени', // @ts-expect-error just for build
-        paramType: schema.in ?? '',
+        paramIn: schema.in ?? '',
         required: typeof schema.required === 'boolean' ? schema.required : undefined,
 
       }
@@ -325,7 +326,8 @@ const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.Re
       const parsedSchema = referenceSchema.schema && !specialCases(referenceSchema.schema) ? parsePrimitiveSchema(referenceSchema.schema, data) : parseCustomSchema(data, referenceSchema.schema)
       return {
         paramName: 'name' in referenceSchema ? referenceSchema.name as string : 'array',
-        paramType: referenceSchema.in as string,
+        paramIn: referenceSchema.in as string, // @ts-expect-error just for build
+        paramType: Array.isArray(parsedSchema) ? parsedSchema.at(0)?.paramType ?? parsedSchema.at(0)?.schema?.paramType : parsedSchema?.paramType ?? 'Не найден тип',
         description: referenceSchema.description ?? 'Нет описания',
         required: !!referenceSchema.required, // TS is bugging about this. Or my types are wrong
         schema: Array.isArray(parsedSchema) ? {
@@ -337,8 +339,9 @@ const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.Re
       // @ts-expect-error just for build
       const parsedSchema = !specialCases(referenceSchema) ? parsePrimitiveSchema(referenceSchema, data) : parseCustomSchema(data, referenceSchema)
       return {
-        paramName: 'name' in referenceSchema ? referenceSchema.name as string : 'array', // @ts-expect-error just for build
-        paramType: referenceSchema.in ?? parsedSchema.paramType,
+        paramName: 'name' in referenceSchema ? referenceSchema.name as string : 'array', 
+        paramIn: referenceSchema.in, // @ts-expect-error just for build
+        paramType: parsedSchema.paramType ?? 'Не найден тип',
         description: referenceSchema.description ?? 'Нет описания',
         required: !!referenceSchema.required, // @ts-expect-error just for build
         schema: parsedSchema
@@ -350,8 +353,8 @@ const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.Re
     const parsedSchema = parseCustomSchema(data, referenceSchema)
     return {
       paramName: 'name' in referenceSchema ? referenceSchema.name as string : 'array', // @ts-expect-error just for build
-      paramType: referenceSchema.in as string,
-      description: referenceSchema.description ?? 'Нет описания', // @ts-expect-error just for build
+      paramIn: referenceSchema.in, // @ts-expect-error just for build
+      paramType: parsedSchema.paramType ?? 'Не найден тип',      description: referenceSchema.description ?? 'Нет описания', // @ts-expect-error just for build
       required: !!referenceSchema.required, // @ts-expect-error just for build
       schema: parsedSchema
     }
@@ -403,12 +406,13 @@ const parseParameters = (params: (OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.No
     // console.log('param', param, 'schema', schema);
     const paramParseResult = schema instanceof Array ? schema : [{
       paramName: 'name' in param ? param.name as string : 'array',
-      paramType: 'in' in param ? param.in as string : !Array.isArray(schema) && schema.paramType ? schema.paramType : 'unknown param type',
+      paramIn: 'in' in param ? param.in as string : undefined,
+      paramType: !Array.isArray(schema) && schema.paramType ? schema.paramType : 'unknown param type',
       description: param.description ?? 'Нет описания',
       required: !!param.required,
       schema: schema.paramType === 'undefined' ? {
         paramName: 'name' in param ? param.name as string : 'array',
-        paramType: 'in' in param ? param.in as string : !Array.isArray(schema) && schema.paramType ? schema.paramType : 'unknown param type',
+        paramType: !Array.isArray(schema) && schema.paramType ? schema.paramType : 'unknown param type',
         description: param.description ?? 'Нет описания',
         required: !!param.required, 
       } : schema
@@ -513,12 +517,14 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
               // console.log('param parsedSchema', parsedSchema);            
               return Array.isArray(parsedSchema) ? parsedSchema : [parsedSchema]
             } else {
+              const parsedSchema = param.schema ? parseSchemaWithReferenceAndArrays(param.schema, data) : []
               return [{
                 paramName: param.name ?? 'Нет имени параметра',
-                paramType: param.in,
+                paramIn: param.in,
+                paramType: Array.isArray(parsedSchema) ? parsedSchema.at(0)?.paramType : parsedSchema.paramType,
                 description: param.description ?? 'Нет описания',
                 required: param.required,
-                schema: param.schema ? parseSchemaWithReferenceAndArrays(param.schema, data) : []
+                schema: parsedSchema
               }]
             }
             }) : []         

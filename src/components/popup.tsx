@@ -18,7 +18,6 @@ import { useTranslations } from '../hooks/use-translations'
 import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
 import { parseData } from '@/lib/utils'
-import { mockData } from '@/mocks'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -66,8 +65,9 @@ function PopupContent() {
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-      // // @ts-expect-error just for build
-      // const parsedData = parseData(mockData)      
+      // const parsedData = parseData(mockData)  
+      // console.log('parsed', parsedData);
+          
       const parsedData = parseData(data)      
 
       const doc = new Document({
