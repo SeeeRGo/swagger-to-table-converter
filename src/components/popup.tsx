@@ -18,7 +18,7 @@ import { useTranslations } from '../hooks/use-translations'
 import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
 import { parseData } from '@/lib/utils'
-import axios from 'axios'
+import { mockData } from '@/mocks'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -55,18 +55,19 @@ function PopupContent() {
 
     setIsProcessing(true)
     try {
-      const content = await selectedFile.text()
+      // const content = await selectedFile.text()
       
-      let data
+      // let data
 
-      if (selectedFile.name.endsWith('.json')) {
-        data = JSON.parse(content)
-      } else if (selectedFile.name.endsWith('.yaml') || selectedFile.name.endsWith('.yml')) {
-        data = yaml.load(content)     
-      } else {
-        throw new Error(t('invalidFileMessage'))
-      }
-      const parsedData = parseData(data)      
+      // if (selectedFile.name.endsWith('.json')) {
+      //   data = JSON.parse(content)
+      // } else if (selectedFile.name.endsWith('.yaml') || selectedFile.name.endsWith('.yml')) {
+      //   data = yaml.load(content)     
+      // } else {
+      //   throw new Error(t('invalidFileMessage'))
+      // }
+      // @ts-expect-error just for build
+      const parsedData = parseData(mockData)      
 
       const doc = new Document({
         sections: [{
@@ -91,6 +92,8 @@ function PopupContent() {
         description: t('successMessage'),
       })
     } catch (error) {
+      console.log('error', error);
+      
       toast({
         variant: "destructive",
         title: t('error'),

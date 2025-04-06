@@ -36,17 +36,17 @@ export async function POST(request: Request) {
   }, {
 
   })
-  return Response.json(aggregatedRes)
-  // const parsedData = parseData(aggregatedRes)      
+  // return Response.json(aggregatedRes)
+  const parsedData = parseData(aggregatedRes)      
   
-  // const doc = new Document({
-  //   sections: [{
-  //     properties: {},
-  //     children: convertToDocxContent(parsedData)
-  //   }]
-  // })
+  const doc = new Document({
+    sections: [{
+      properties: {},
+      children: convertToDocxContent(parsedData)
+    }]
+  })
 
-  // const buffer = await Packer.toBuffer(doc)
-  // const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-  // return new Response(blob)
+  const buffer = await Packer.toBuffer(doc)
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+  return new Response(blob)
 }
