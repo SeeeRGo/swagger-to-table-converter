@@ -18,6 +18,7 @@ import { useTranslations } from '../hooks/use-translations'
 import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
 import { parseData } from '@/lib/utils'
+import { mockData } from '@/__tests__/mockInput'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -65,10 +66,10 @@ function PopupContent() {
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-      // const parsedData = parseData(mockData)  
-      // console.log('parsed', parsedData);
+      const parsedData = parseData(mockData)  
+      console.log('parsed', parsedData);
           
-      const parsedData = parseData(data)      
+      // const parsedData = parseData(data)      
 
       const doc = new Document({
         sections: [{

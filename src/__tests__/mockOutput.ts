@@ -38,11 +38,6 @@ export const expectedParsedData = [
               "paramType": "integer($int32)",
               "description": "Количество возвращаемых каталогов (от `1` до `1000`).",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
           },
           {
               "paramName": "offset",
@@ -50,11 +45,6 @@ export const expectedParsedData = [
               "paramType": "integer($int32)",
               "description": "Позиция (индекс), с которой необходимо возвращать элементы из БД (не меньше `0`).\n\nПо умолчанию `0`.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
           },
           {
               "paramName": "search",
@@ -62,11 +52,6 @@ export const expectedParsedData = [
               "paramType": "string",
               "description": "Текстовый поисковый запрос в списке каталогов.\nПоиск производится по атрибутам идентификатору и полному наименованию каталога.\n\nЗапрос со значением `12` вернет все каталоги, идентификатор или наименование которых содержит подстроку `12`.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "string"
-              }
           },
           {
               "paramName": "sortBy",
@@ -74,31 +59,13 @@ export const expectedParsedData = [
               "paramType": "string[\nid,\nfullName,\nresponsiblePerson,\ncountActiveObjects,\ncountUnsignedObjects,\ncountObjects,\ndateLastSign,\ndateNextUpdate,\nstatusSignObjects,\nstatusSignMetadata\n]",
               "description": "Поле, по которому производится сортировка.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "string[\nid,\nfullName,\nresponsiblePerson,\ncountActiveObjects,\ncountUnsignedObjects,\ncountObjects,\ndateLastSign,\ndateNextUpdate,\nstatusSignObjects,\nstatusSignMetadata\n]"
-              }
           },
           {
               "paramName": "orderBy",
               "paramIn": "query",
-              "paramType": "Не найден тип",
+              "paramType": "string[\nasc,\ndesc\n]",
               "description": "Порядок сортировки. Допустимые значения:\n  - `asc` - по возрастанию;\n  - `desc` - по убыванию.\n\nПо умолчанию: `asc`.",
-              "required": false,
-              "schema": {
-                  "paramName": "array",
-                  "paramType": "Не найден тип",
-                  "description": "Техническое название порядка сортировки:\n  - `asc` - по возрастанию;\n  - `desc` - по убыванию.",
-                  "required": false,
-                  "schema": [
-                      {
-                          "description": "Primitive param description",
-                          "paramName": "primitive param name",
-                          "paramType": "string[\nasc,\ndesc\n]"
-                      }
-                  ]
-              }
+              "required": false
           },
           {
               "paramName": "statusSigning",
@@ -106,11 +73,6 @@ export const expectedParsedData = [
               "paramType": "string[\nsigned,\nneverSigned,\nhasChange,\narchive\n]",
               "description": "Статус подписания каталога. Может принимать следующие значения:\n  - `signed` - подписанный, изменения отсутствуют. Каталог имеет этот статус при выполнении условия:\n    statusSignObjects = signed И statusSignMetadata = signed\n  - `neverSigned` - ни разу не подписан. Каталог имеет этот статус при выполнении условия:\n    dateLastSign=null И statusSignObjects != archive\n  - `hasChange` - подписанный, имеются изменения. Каталог имеет этот статус при выполнении условия:\n    dateLastSign = {value} И (statusSignObjects = unsigned ИЛИ statusSignMetadata = unsigned)\n  - `archive` - в архиве. Каталог имеет этот статус при выполнении условия:\n    statusSignObjects = archive И statusSignMetadata = archive",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "string[\nsigned,\nneverSigned,\nhasChange,\narchive\n]"
-              }
           },
           {
               "paramName": "planSigning",
@@ -118,11 +80,6 @@ export const expectedParsedData = [
               "paramType": "string[\nok,\nless3Day,\nexpired\n]",
               "description": "Статус просрочки подписания каталога. Может принимать следующие значения:\n  - `ok` - срок планового подписания не нарушен. Включает каталоги, для которых dateNextUpdate строго больше текущей даты ИЛИ является null.\n  - `less3Day` - до планового подписания менее 3-х дней. Вклячает каталоги, у которых dateNextUpdate меньше или равна текущей даты + 3 дня.\n  - `expired` - плановое подписание просрочено. Включает каталоги, для которых dateNextUpdate строго меньше текущей даты.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "string[\nok,\nless3Day,\nexpired\n]"
-              }
           }
       ]
   },
@@ -135,41 +92,15 @@ export const expectedParsedData = [
           "schema": [
               {
                   "paramName": "id",
-                  "paramIn": "integer",
-                  "paramType": "unknown param type",
+                  "paramType": "integer",
                   "description": "Идентификатор каталога",
                   "required": true,
-                  "schema": {
-                      "description": "Идентификатор каталога",
-                      "paramName": "id",
-                      "paramIn": "integer",
-                      "required": true,
-                      "schema": {
-                          "description": "Идентификатор каталога",
-                          "paramName": "id",
-                          "paramIn": "integer",
-                          "required": true
-                      }
-                  }
               },
               {
                   "paramName": "name",
-                  "paramIn": "string",
-                  "paramType": "unknown param type",
+                  "paramType": "string",
                   "description": "Полное наименование каталога",
                   "required": true,
-                  "schema": {
-                      "description": "Полное наименование каталога",
-                      "paramName": "name",
-                      "paramIn": "string",
-                      "required": true,
-                      "schema": {
-                          "description": "Полное наименование каталога",
-                          "paramName": "name",
-                          "paramIn": "string",
-                          "required": true
-                      }
-                  }
               }
           ]
       },
@@ -187,11 +118,6 @@ export const expectedParsedData = [
               "paramType": "integer",
               "description": "Количество возвращаемых каталогов (от `1` до `1000`).",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer"
-              }
           },
           {
               "paramName": "offset",
@@ -199,11 +125,6 @@ export const expectedParsedData = [
               "paramType": "integer($int32)",
               "description": "Позиция (индекс), с которой необходимо возвращать элементы из БД (не меньше `0`).\n\nПо умолчанию `0`.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
           },
           {
               "paramName": "search",
@@ -211,11 +132,6 @@ export const expectedParsedData = [
               "paramType": "string",
               "description": "Текстовый поисковый запрос в списке каталогов.\nПоиск производится по полному наименованию каталога и является регистронезависимым.\nЗапрос со значением `тест` вернет все каталоги, полное наименование которых содержит подстроку `тест` независимо от регистра.",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "string"
-              }
           },
           {
               "paramName": "forLinks",
@@ -223,11 +139,6 @@ export const expectedParsedData = [
               "paramType": "boolean",
               "description": "Указывает, что необходимо получить каталоги, которые можно указать в качестве ссылочных.\nДанные каталоги имеют атрибут с отмеченным свойством \"Главный\".",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "boolean"
-              }
           },
           {
               "paramName": "catalogGroupId",
@@ -235,11 +146,6 @@ export const expectedParsedData = [
               "paramType": "integer($int32)",
               "description": "Идентификатор группы каталогов. Необязательный параметр. Если указан, следует исключать из выборки все каталоги, имеющие связи с группой каталогов",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
           },
           {
               "paramName": "userId",
@@ -247,23 +153,13 @@ export const expectedParsedData = [
               "paramType": "integer($int32)",
               "description": "Идентификатор пользователя. Необязательный параметр. Если указан, следует исключать из выборки все группы каталогов, имеющие связи с пользователем",
               "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
           },
           {
               "paramName": "subscriptionId",
               "paramIn": "query",
               "paramType": "integer($int32)",
               "description": "Идентификатор подписки на push-уведомления. Необязательный параметр. Если указан, следует исключать из выборки все каталоги, имеющие связи с подпиской.",
-              "required": false,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "integer($int32)"
-              }
+              "required": false
           }
       ]
   },
@@ -279,283 +175,129 @@ export const expectedParsedData = [
           "schema": [
               {
                   "paramName": "generalInfo",
-                  "paramIn": "object",
-                  "paramType": "unknown param type",
+                  "paramType": "object",
                   "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
                   "required": true,
-                  "schema": {
-                      "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
-                      "paramName": "generalInfo",
-                      "paramIn": "object",
-                      "required": true,
-                      "schema": {
-                          "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
-                          "paramName": "generalInfo",
-                          "paramIn": "object",
-                          "required": true
-                      }
-                  }
               },
               {
                   "paramName": "attributes[index]",
-                  "paramType": "unknown param type",
+                  "paramType": "array[StringFillingCatalogAttribute,IntegerFillingCatalogAttribute,FloatFillingCatalogAttribute,DateFillingCatalogAttribute,BooleanFillingCatalogAttribute,FileFillingCatalogAttribute,DictFillingCatalogAttribute,LinkFillingCatalogAttribute,TableFillingCatalogAttribute]",
                   "description": "Атрибут каталога заполнения",
                   "required": false,
-                  "schema": {
-                      "description": "Атрибут каталога заполнения",
-                      "paramName": "attributes[index]",
-                      "paramIn": "",
-                      "required": false,
-                      "schema": {
-                          "description": "Атрибут каталога заполнения",
-                          "paramName": "attributes[index]",
-                          "paramIn": "",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "meta",
-                  "paramIn": "object",
-                  "paramType": "unknown param type",
+                  "paramType": "object",
                   "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
                   "required": false,
-                  "schema": {
-                      "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
-                      "paramName": "meta",
-                      "paramIn": "object",
-                      "required": false,
-                      "schema": {
-                          "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
-                          "paramName": "meta",
-                          "paramIn": "object",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "constructor[index]",
-                  "paramIn": "array",
-                  "paramType": "unknown param type",
+                  "paramType": "array[ConstructorPackageData]",
                   "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
                   "required": false,
-                  "schema": {
-                      "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
-                      "paramName": "constructor[index]",
-                      "paramIn": "array",
-                      "schema": {
-                          "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
-                          "paramName": "constructor[index]",
-                          "paramIn": "array"
-                      }
-                  }
               },
               {
                   "paramName": "constructor[index].tomlFormat",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "string",
                   "description": "Настройка одного пакета конструктора процессов, описанная пользователем в формате TOML.\nПередаётся в качестве строки с экранированием символов.",
                   "required": true,
-                  "schema": {
-                      "description": "Настройка одного пакета конструктора процессов, описанная пользователем в формате TOML.\nПередаётся в качестве строки с экранированием символов.",
-                      "paramName": "constructor[index].tomlFormat",
-                      "paramIn": "unknown param type",
-                      "required": true,
-                      "schema": {
-                          "description": "Настройка одного пакета конструктора процессов, описанная пользователем в формате TOML.\nПередаётся в качестве строки с экранированием символов.",
-                          "paramName": "constructor[index].tomlFormat",
-                          "paramIn": "unknown param type",
-                          "required": true
-                      }
-                  }
               },
               {
                   "paramName": "constructor[index].jsonFormat",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "object",
                   "description": "Настройка одного пакета конструктора процессов, преобразованная из формата TOML в JSON.\nНеобходима для обработки на стороне клиента для реализации доп. функций, помогающих пользователю при создании настройки.",
                   "required": true,
-                  "schema": {
-                      "description": "Настройка одного пакета конструктора процессов, преобразованная из формата TOML в JSON.\nНеобходима для обработки на стороне клиента для реализации доп. функций, помогающих пользователю при создании настройки.",
-                      "paramName": "constructor[index].jsonFormat",
-                      "paramIn": "unknown param type",
-                      "required": true,
-                      "schema": {
-                          "description": "Настройка одного пакета конструктора процессов, преобразованная из формата TOML в JSON.\nНеобходима для обработки на стороне клиента для реализации доп. функций, помогающих пользователю при создании настройки.",
-                          "paramName": "constructor[index].jsonFormat",
-                          "paramIn": "unknown param type",
-                          "required": true
-                      }
-                  }
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index]",
+                  "paramType": "array[object]",
+                  "description": "Массив групп атрибутов",
+                  "required": true,
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index].groupTechName",
+                  "paramType": "string[^[a-zA-Z][_a-zA-Z0-9]*$]",
+                  "description": "Технологическое наименование группы атрибутов. Должно быть уникально в рамках групп одного каталога.",
+                  "required": true,
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index].groupName",
+                  "paramType": "string",
+                  "description": "Пользовательское наименование группы атрибутов.",
+                  "required": false,
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index].applyTableAttr",
+                  "paramType": "string",
+                  "description": "Группа атрибутов настраивается из табличного атрибута и применяется ко всему вложенному каталогу. Указывается табличный атрибут в формате attr.{TableTechName1}.{TableTechName11}.{TableTechName111}.{и т.д.}. То есть указывается вся последовательность табличных атрибутов от корня до того, для которого настраивается группа.\n\nЕсли передано данное поле, то в описании блоков могут использоваться только атрибуты внутри указанной таблицы.",
+                  "required": false,
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index].attributes",
+                  "paramType": "array[string]",
+                  "description":  "Массив атрибутов, входящих в группу. Указываются в формате attr.{techNameAttr}",
+                  "required": true,
+              },
+              {
+                  "paramName": "constructor[index].jsonFormat.groups[index].condition",
+                  "paramType": "string",
+                  "description": "Условие, описанное в синтаксисе условий конструктора проверок. Доступны все типы атрибутов каталога, включая системные.",
+                  "required": false,
               },
               {
                   "paramName": "conditionalUniq",
-                  "paramIn": "string",
-                  "paramType": "unknown param type",
+                  "paramType": "string",
                   "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
                   "required": false,
-                  "schema": {
-                      "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
-                      "paramName": "conditionalUniq",
-                      "paramIn": "string",
-                      "required": false,
-                      "schema": {
-                          "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
-                          "paramName": "conditionalUniq",
-                          "paramIn": "string",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "groupUniq",
-                  "paramIn": "string",
-                  "paramType": "unknown param type",
+                  "paramType": "string",
                   "description": "Настройка групповой уникальности, описанная пользователем в формате TOML. Передаётся в качестве строки с экранированием символов.",
                   "required": false,
-                  "schema": {
-                      "description": "Настройка групповой уникальности, описанная пользователем в формате TOML. Передаётся в качестве строки с экранированием символов.",
-                      "paramName": "groupUniq",
-                      "paramIn": "string",
-                      "required": false,
-                      "schema": {
-                          "description": "Настройка групповой уникальности, описанная пользователем в формате TOML. Передаётся в качестве строки с экранированием символов.",
-                          "paramName": "groupUniq",
-                          "paramIn": "string",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "map",
-                  "paramIn": "object",
-                  "paramType": "unknown param type",
+                  "paramType": "object",
                   "description": "",
                   "required": false,
-                  "schema": {
-                      "description": "",
-                      "paramName": "map",
-                      "paramIn": "object",
-                      "schema": {
-                          "description": "",
-                          "paramName": "map",
-                          "paramIn": "object"
-                      }
-                  }
               },
               {
                   "paramName": "map.hasGeo",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "boolean",
                   "description": "Наличие геопривязки в каталоге",
                   "required": true,
-                  "schema": {
-                      "description": "Наличие геопривязки в каталоге",
-                      "paramName": "map.hasGeo",
-                      "paramIn": "unknown param type",
-                      "required": true,
-                      "schema": {
-                          "description": "Наличие геопривязки в каталоге",
-                          "paramName": "map.hasGeo",
-                          "paramIn": "unknown param type",
-                          "required": true
-                      }
-                  }
               },
               {
-                  "paramName": "map.typeGeoTagIds[index]",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
-                  "description": "Типы геометрии в geojson",
+                  "paramName": "map.typeGeoTagIds",
+                  "paramType": "array[string[MultiPoint,MultiLineString,MultiPolygon]]",
+                  "description": "Массив строковых идентификаторов типов геометрии",
                   "required": false,
-                  "schema": {
-                      "description": "Типы геометрии в geojson",
-                      "paramName": "map.typeGeoTagIds[index]",
-                      "paramIn": "unknown param type",
-                      "required": false,
-                      "schema": {
-                          "description": "Типы геометрии в geojson",
-                          "paramName": "map.typeGeoTagIds[index]",
-                          "paramIn": "unknown param type",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "map.isWGS84",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "boolean",
                   "description": "Система координат (СК), в которой хранятся геоданные объектов каталога. Если принимает значение\n  - true, то СК - WGS84\n  - false, то СК - MSK77",
                   "required": false,
-                  "schema": {
-                      "description": "Система координат (СК), в которой хранятся геоданные объектов каталога. Если принимает значение\n  - true, то СК - WGS84\n  - false, то СК - MSK77",
-                      "paramName": "map.isWGS84",
-                      "paramIn": "unknown param type",
-                      "required": false,
-                      "schema": {
-                          "description": "Система координат (СК), в которой хранятся геоданные объектов каталога. Если принимает значение\n  - true, то СК - WGS84\n  - false, то СК - MSK77",
-                          "paramName": "map.isWGS84",
-                          "paramIn": "unknown param type",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "map.isReq",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "boolean",
                   "description": "Обязательность геопривязки",
                   "required": false,
-                  "schema": {
-                      "description": "Обязательность геопривязки",
-                      "paramName": "map.isReq",
-                      "paramIn": "unknown param type",
-                      "required": false,
-                      "schema": {
-                          "description": "Обязательность геопривязки",
-                          "paramName": "map.isReq",
-                          "paramIn": "unknown param type",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "map.isOneTypeGeoForObj",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "boolean",
                   "description": "Признак, указывающий, что объект может иметь только один тип геометрии",
                   "required": false,
-                  "schema": {
-                      "description": "Признак, указывающий, что объект может иметь только один тип геометрии",
-                      "paramName": "map.isOneTypeGeoForObj",
-                      "paramIn": "unknown param type",
-                      "required": false,
-                      "schema": {
-                          "description": "Признак, указывающий, что объект может иметь только один тип геометрии",
-                          "paramName": "map.isOneTypeGeoForObj",
-                          "paramIn": "unknown param type",
-                          "required": false
-                      }
-                  }
               },
               {
                   "paramName": "map.isNotReqGeoForService",
-                  "paramIn": "unknown param type",
-                  "paramType": "unknown param type",
+                  "paramType": "boolean",
                   "description": "Необязательность геометрии при загрузке через сервис",
                   "required": false,
-                  "schema": {
-                      "description": "Необязательность геометрии при загрузке через сервис",
-                      "paramName": "map.isNotReqGeoForService",
-                      "paramIn": "unknown param type",
-                      "required": false,
-                      "schema": {
-                          "description": "Необязательность геометрии при загрузке через сервис",
-                          "paramName": "map.isNotReqGeoForService",
-                          "paramIn": "unknown param type",
-                          "required": false
-                      }
-                  }
               }
           ]
       },
@@ -580,17 +322,221 @@ export const expectedParsedData = [
           {
               "paramName": "catalogIds",
               "paramIn": "query",
-              "paramType": "array",
+              "paramType": "array[integer]",
               "description": "Массив идентификаторов каталогов.\n\nЧисло элементов в списке от `1` до `100`.",
               "required": true,
-              "schema": {
-                  "description": "Primitive param description",
-                  "paramName": "primitive param name",
-                  "paramType": "array"
-              }
           }
       ]
   },
+//   {
+//     "properties": {
+//         "code": {
+//             "enum": [
+//                 200
+//             ]
+//         },
+//         "messageType": {
+//             "enum": [
+//                 "Ok"
+//             ]
+//         }
+//     }
+// }
+// "requestBody": {
+//   "content": {
+//       "application/json": {
+//           "schema": {
+//               "$ref": "#/components/schemas/FillingCatalogSettings"
+//           },
+//           "examples": {
+//               "Пример": {
+//                   "$ref": "#/components/examples/FillingCatalogSettingsRequest"
+//               }
+//           }
+//       }
+//   }
+// },
+// "parameters": [
+//   {
+//       "$ref": "#/components/parameters/catalogIdPathParam"
+//   }
+// ],
+// "FillingCatalogSettings": {
+//   "description": "Настройки каталога заполнения",
+//   "type": "object",
+//   "properties": {
+//       "generalInfo": {
+//           "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
+//           "type": "object",
+//           "allOf": [
+//               {
+//                   "$ref": "#/components/schemas/FillingCatalogGeneralInfo"
+//               }
+//           ]
+//       },
+//       "attributes": {
+//           "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
+//           "type": "array",
+//           "items": {
+//               "$ref": "#/components/schemas/FillingCatalogAttribute"
+//           },
+//           "minItems": 1
+//       },
+//       "meta": {
+//           "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
+//           "type": "object",
+//           "allOf": [
+//               {
+//                   "$ref": "#/components/schemas/FillingCatalogMetadata"
+//               }
+//           ]
+//       },
+//       "constructor": {
+//           "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
+//           "type": "array",
+//           "items": {
+//               "$ref": "#/components/schemas/ConstructorPackageData"
+//           }
+//       },
+//       "conditionalUniq": {
+//           "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
+//           "type": "string"
+//       },
+//       "groupUniq": {
+//           "description": "Настройка групповой уникальности, описанная пользователем в формате TOML. Передаётся в качестве строки с экранированием символов.",
+//           "type": "string"
+//       },
+//       "map": {
+//           "$ref": "#/components/schemas/FillingCatalogMap"
+//       }
+//   },
+//   "required": [
+//       "generalInfo",
+//       "attributes",
+//       "map"
+//   ]
+// },
+// "FillingCatalogGeneralInfo": {
+//   "description": "Общая информация каталога заполнения",
+//   "type": "object",
+//   "allOf": [
+//       {
+//           "$ref": "#/components/schemas/CommonCatalogGeneralInfo"
+//       }
+//   ],
+//   "properties": {
+//       "periodUpdate": {
+//           "$ref": "#/components/schemas/FillingCatalogUpdatePeriodicity"
+//       },
+//       "systemsSuppliers": {
+//           "description": "Системы-поставщики данных в каталог заполнения",
+//           "type": "array",
+//           "items": {
+//               "$ref": "systems.yaml#/components/schemas/CommonSystemInfo"
+//           },
+//           "readOnly": true
+//       },
+//       "systemsSuppliersIds": {
+//           "description": "Список идентификаторов систем поставщиков данных",
+//           "type": "array",
+//           "items": {
+//               "type": "integer"
+//           },
+//           "writeOnly": true
+//       },
+//       "hasBackgroundCheck": {
+//           "description": "Признак наличия в каталоге периодической фоновой проверки",
+//           "type": "boolean"
+//       },
+//       "backgroundCheckPeriodTagId": {
+//           "description": "Строковый идентификатор периода фоновой проверки",
+//           "allOf": [
+//               {
+//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateTagIdEnum"
+//               }
+//           ],
+//           "writeOnly": true
+//       },
+//       "backgroundCheckPeriod": {
+//           "description": "Период фоновой проверки в каталоге",
+//           "type": "object",
+//           "properties": {
+//               "name": {
+//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateNameEnum"
+//               },
+//               "tagId": {
+//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateTagIdEnum"
+//               }
+//           },
+//           "readOnly": true
+//       },
+//       "backgroundCheckEmails": {
+//           "description": "Список электронных почт получателей результатов фоновой проверки, перечисленные через запятую БЕЗ пробела",
+//           "type": "string"
+//       },
+//       "isDeleteAllObjects": {
+//           "description": "Признак \"Возможно одновременное удаление всех объектов\"",
+//           "type": "boolean"
+//       },
+//       "isPriorityProcess": {
+//           "description": "Признак \"Установить приоритет подписания данных\"",
+//           "type": "boolean"
+//       },
+//       "outOivsBlockEditObjectsGUI": {
+//           "description": "Поставщики информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
+//           "type": "array",
+//           "items": {
+//               "$ref": "oivs.yaml#/components/schemas/CommonOivInfo"
+//           },
+//           "readOnly": true
+//       },
+//       "outOivsIdsBlockEditObjectsGUI": {
+//           "description": "Список идентификаторов поставщиков информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
+//           "type": "array",
+//           "items": {
+//               "type": "integer"
+//           },
+//           "writeOnly": true
+//       },
+//       "isBlockEditObjectsService": {
+//           "description": "Признак \"Заблокировать подписание данных (сервис)\"",
+//           "type": "boolean"
+//       },
+//       "isBlockRestoreObjects": {
+//           "description": "Признак \"Заблокировать восстановление данных\"",
+//           "type": "boolean"
+//       },
+//       "isBlockSignObjectsGUI": {
+//           "description": "Признак \"Заблокировать подписание данных (веб)\"",
+//           "type": "boolean"
+//       },
+//       "isCopyObjects": {
+//           "description": "Признак \"Возможно копирование объектов\"",
+//           "type": "boolean"
+//       },
+//       "isBlockEditObjectsGUI": {
+//           "description": "Признак \"Заблокировать редактирование данных (веб)\"",
+//           "type": "boolean"
+//       }
+//   },
+//   "required": [
+//       "periodUpdate",
+//       "hasBackgroundCheck",
+//       "isDeleteAllObjects",
+//       "isPriorityProcess",
+//       "isBlockEditObjectsService",
+//       "isBlockRestoreObjects",
+//       "isBlockSignObjectsGUI",
+//       "accountingObject",
+//       "thematicCategoryId",
+//       "typeCatalogId",
+//       "oivsIds",
+//       "keywords",
+//       "isCopyObjects",
+//       "isBlockEditObjectsGUI"
+//   ]
+// },
+
   {
       "path": "/catalogs/{catalogId}",
       "method": "put",
@@ -603,41 +549,247 @@ export const expectedParsedData = [
           "schema": [
               {
                   "paramName": "generalInfo",
-                  "paramIn": "object",
-                  "paramType": "unknown param type",
+                  "paramType": "object",
                   "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
                   "required": true,
-                  "schema": {
-                      "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
-                      "paramName": "generalInfo",
-                      "paramIn": "object",
-                      "required": true,
-                      "schema": {
-                          "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
-                          "paramName": "generalInfo",
-                          "paramIn": "object",
-                          "required": true
-                      }
-                  }
+              },
+              {
+                  "paramName": "generalInfo.id",
+                  "paramType": "integer",
+                  "description": "Идентификатор каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.fullName",
+                  "paramType": "string",
+                  "description": "Полное наименование каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.technicalName",
+                  "paramType": "string",
+                  "description": "Технологическое наименование каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.shortName",
+                  "paramType": "string",
+                  "description": "Краткое наименование каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.kindCatalog",
+                  "paramType": "object",
+                  "description": "Вид каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.kindCatalog.id",
+                  "paramType": "integer(int32)",
+                  "description": "Идентификатор вида каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.kindCatalog.name",
+                  "paramType": "string",
+                  "description": "Название вида каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.kindCatalogId",
+                  "paramType": "integer",
+                  "description": "Идентификатор вида каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.typeCatalog",
+                  "paramType": "object",
+                  "description": "Тип каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.typeCatalog",
+                  "paramType": "object",
+                  "description": "Тип каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.typeCatalog.id",
+                  "paramType": "integer(int32)",
+                  "description": "Идентификатор типа каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.typeCatalog.name",
+                  "paramType": "string",
+                  "description": "Название типа каталога",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.typeCatalogId",
+                  "paramType": "integer",
+                  "description": "Идентификатор типа каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.thematicCategory",
+                  "paramType": "object",
+                  "description": "Тематическая категория каталога",
+                  "required": true,
+              },
+              {
+                "paramName": "generalInfo.thematicCategory.id",
+                "paramType": "integer(int32)",
+                "description": "Идентификатор тематической категории",
+                "required": true,
+              },
+              {
+                  "paramName": "generalInfo.thematicCategory.name",
+                  "paramType": "string",
+                  "description": "Русскоязычное наименование тематической категории",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.thematicCategoryId",
+                  "paramType": "integer",
+                  "description": "Идентификатор тематической категории каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.objectCategories[index]",
+                  "paramType": "array[object]",
+                  "description": "Категории объекта",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.objectCategories[index].id",
+                  "paramType": "integer(int32)",
+                  "description": "Идентификатор категории объектов",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.objectCategories[index].rusName",
+                  "paramType": "string",
+                  "description": "Русскоязычное наименование категории объектов, должно быть уникальным",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.objectCategories[index].enName",
+                  "paramType": "string",
+                  "description": "Англоязычное наименование категории объектов",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.oivs[index]",
+                  "paramType": "array[object]",
+                  "description": "Поставщики информации каталога (ответственные ОИВы)",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.oivs[index].id",
+                  "paramType": "integer(int32)",
+                  "description": "Идентификатор ОИВа",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.oivs[index].name",
+                  "paramType": "string",
+                  "description": "Наименование ОИВа",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.oivsIds",
+                  "paramType": "array[integer]",
+                  "description": "Список идентификаторов поставщиков информации каталога (ответственные ОИВы)",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.accountingObject",
+                  "paramType": "string",
+                  "description": "Объект учёта",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.keywords",
+                  "paramType": "string",
+                  "description": "Ключевые слова",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.systemsConsumers[index]",
+                  "paramType": "array[object]",
+                  "description": "Системы потребители данных каталога",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.systemsConsumers[index].id",
+                  "paramType": "integer(int32)",
+                  "description": "Идентификатор информационной системы",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.systemsConsumers[index].name",
+                  "paramType": "string",
+                  "description": "Название информационной системы",
+                  "required": true,
+              },
+              {
+                  "paramName": "generalInfo.systemsConsumersIds",
+                  "paramType": "array[integer]",
+                  "description": "Список идентификаторов систем потребителей данных",
+                  "required": false,
+              },
+              {
+                  "paramName": "generalInfo.isShowDeleteObjects",
+                  "paramType": "boolean",
+                  "description": "Признак \"Показывать удалённые объекты\"",
+                  "required": true,
               },
               {
                   "paramName": "attributes[index]",
-                  "paramType": "unknown param type",
-                  "description": "Атрибут каталога заполнения",
+                  "paramType": "array[object]",
+                  "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
                   "required": false,
-                  "schema": {
-                      "description": "Атрибут каталога заполнения",
-                      "paramName": "attributes[index]",
-                      "paramIn": "",
-                      "required": false,
-                      "schema": {
-                          "description": "Атрибут каталога заполнения",
-                          "paramName": "attributes[index]",
-                          "paramIn": "",
-                          "required": false
-                      }
-                  }
               },
+              {
+                  "paramName": "attributes[index]",
+                  "paramType": "array[object]",
+                  "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
+                  "required": false,
+              },
+              "FillingCatalogAttribute": {
+                "description": "Атрибут каталога заполнения",
+                "type": "object",
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/StringFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/IntegerFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/FloatFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/DateFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/BooleanFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/FileFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/DictFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/LinkFillingCatalogAttribute"
+                    },
+                    {
+                        "$ref": "#/components/schemas/TableFillingCatalogAttribute"
+                    }
+                ]
+            },
               {
                   "paramName": "meta",
                   "paramIn": "object",
