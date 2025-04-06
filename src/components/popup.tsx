@@ -55,19 +55,20 @@ function PopupContent() {
 
     setIsProcessing(true)
     try {
-      // const content = await selectedFile.text()
+      const content = await selectedFile.text()
       
-      // let data
+      let data
 
-      // if (selectedFile.name.endsWith('.json')) {
-      //   data = JSON.parse(content)
-      // } else if (selectedFile.name.endsWith('.yaml') || selectedFile.name.endsWith('.yml')) {
-      //   data = yaml.load(content)     
-      // } else {
-      //   throw new Error(t('invalidFileMessage'))
-      // }
-      // @ts-expect-error just for build
-      const parsedData = parseData(mockData)      
+      if (selectedFile.name.endsWith('.json')) {
+        data = JSON.parse(content)
+      } else if (selectedFile.name.endsWith('.yaml') || selectedFile.name.endsWith('.yml')) {
+        data = yaml.load(content)     
+      } else {
+        throw new Error(t('invalidFileMessage'))
+      }
+      // // @ts-expect-error just for build
+      // const parsedData = parseData(mockData)      
+      const parsedData = parseData(data)      
 
       const doc = new Document({
         sections: [{
