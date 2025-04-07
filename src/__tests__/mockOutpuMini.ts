@@ -742,26 +742,50 @@ export const MockOutputMini = [
               "description": "Техническое наименование типа атрибута",
               "required": false,
           },
+          {
+              "paramName": "attributes[index].attribute.typeTag",
+              "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
+              "description": "Техническое наименование типа атрибута",
+              "required": false,
+          },
+          {
+              "paramName": "attributes[index].attribute.alterNames[index]",
+              "paramType": "array[object]",
+              "description": "Альтернативные названия атрибута",
+              "required": false,
+          },
+          "AttributeAlterName": {
+            "description": "Альтернативное наименование атрибута",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Идентификатор альтернативного наименования\n\nЕсли он передается в методе PUT, альтернативное наименование атрибута будет изменено в БД. Иначе - создается новое альтернативное название."
+                },
+                "rusAlterName": {
+                    "type": "string",
+                    "description": "Русскоязычное альтернативное наименование атрибута\n\n_Должно быть уникальным для каждого атрибута_"
+                },
+                "enAlterName": {
+                    "description": "Англоязычное альтернативное наименование атрибута",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "rusAlterName",
+                "enAlterName"
+            ],
+            "example": {
+                "id": 736,
+                "rusAlterName": "Муниципальный район",
+                "enAlterName": "District"
+            }
+        },
           "CommonAttribute": {
             "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
             "type": "object",
             "properties": {
-                "type": {
-                    "readOnly": true,
-                    "allOf": [
-                        {
-                            "$ref": "#/components/schemas/AttributeType"
-                        }
-                    ]
-                },
-                "typeTag": {
-                    "writeOnly": true,
-                    "allOf": [
-                        {
-                            "$ref": "#/components/schemas/AttributeTypeTagIdEnum"
-                        }
-                    ]
-                },
                 "alterNames": {
                     "description": "Альтернативные названия атрибута",
                     "type": "array",
