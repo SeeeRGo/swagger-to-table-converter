@@ -84,86 +84,6 @@ export const expectedParsedData = [
       ]
   },
   {
-      "path": "/catalogs/lite/search",
-      "method": "get",
-      "methodDesc": "Поиск по списку каталогов заполнения с минимальным набором свойств",
-      "responses": {
-          "description": "Успешный ответ",
-          "schema": [
-              {
-                  "paramName": "id",
-                  "paramType": "integer",
-                  "description": "Идентификатор каталога",
-                  "required": true,
-              },
-              {
-                  "paramName": "name",
-                  "paramType": "string",
-                  "description": "Полное наименование каталога",
-                  "required": true,
-              }
-          ]
-      },
-      "requests": {
-          "description": "No description",
-          "paramName": "No param name",
-          "paramType": "No param type",
-          "required": false,
-          "schema": []
-      },
-      "inputParams": [
-          {
-              "paramName": "limit",
-              "paramIn": "query",
-              "paramType": "integer",
-              "description": "Количество возвращаемых каталогов (от `1` до `1000`).",
-              "required": false,
-          },
-          {
-              "paramName": "offset",
-              "paramIn": "query",
-              "paramType": "integer($int32)",
-              "description": "Позиция (индекс), с которой необходимо возвращать элементы из БД (не меньше `0`).\n\nПо умолчанию `0`.",
-              "required": false,
-          },
-          {
-              "paramName": "search",
-              "paramIn": "query",
-              "paramType": "string",
-              "description": "Текстовый поисковый запрос в списке каталогов.\nПоиск производится по полному наименованию каталога и является регистронезависимым.\nЗапрос со значением `тест` вернет все каталоги, полное наименование которых содержит подстроку `тест` независимо от регистра.",
-              "required": false,
-          },
-          {
-              "paramName": "forLinks",
-              "paramIn": "query",
-              "paramType": "boolean",
-              "description": "Указывает, что необходимо получить каталоги, которые можно указать в качестве ссылочных.\nДанные каталоги имеют атрибут с отмеченным свойством \"Главный\".",
-              "required": false,
-          },
-          {
-              "paramName": "catalogGroupId",
-              "paramIn": "query",
-              "paramType": "integer($int32)",
-              "description": "Идентификатор группы каталогов. Необязательный параметр. Если указан, следует исключать из выборки все каталоги, имеющие связи с группой каталогов",
-              "required": false,
-          },
-          {
-              "paramName": "userId",
-              "paramIn": "query",
-              "paramType": "integer($int32)",
-              "description": "Идентификатор пользователя. Необязательный параметр. Если указан, следует исключать из выборки все группы каталогов, имеющие связи с пользователем",
-              "required": false,
-          },
-          {
-              "paramName": "subscriptionId",
-              "paramIn": "query",
-              "paramType": "integer($int32)",
-              "description": "Идентификатор подписки на push-уведомления. Необязательный параметр. Если указан, следует исключать из выборки все каталоги, имеющие связи с подпиской.",
-              "required": false
-          }
-      ]
-  },
-  {
       "path": "/catalogs",
       "method": "post",
       "methodDesc": "Первичное сохранение каталога",
@@ -328,215 +248,6 @@ export const expectedParsedData = [
           }
       ]
   },
-//   {
-//     "properties": {
-//         "code": {
-//             "enum": [
-//                 200
-//             ]
-//         },
-//         "messageType": {
-//             "enum": [
-//                 "Ok"
-//             ]
-//         }
-//     }
-// }
-// "requestBody": {
-//   "content": {
-//       "application/json": {
-//           "schema": {
-//               "$ref": "#/components/schemas/FillingCatalogSettings"
-//           },
-//           "examples": {
-//               "Пример": {
-//                   "$ref": "#/components/examples/FillingCatalogSettingsRequest"
-//               }
-//           }
-//       }
-//   }
-// },
-// "parameters": [
-//   {
-//       "$ref": "#/components/parameters/catalogIdPathParam"
-//   }
-// ],
-// "FillingCatalogSettings": {
-//   "description": "Настройки каталога заполнения",
-//   "type": "object",
-//   "properties": {
-//       "generalInfo": {
-//           "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
-//           "type": "object",
-//           "allOf": [
-//               {
-//                   "$ref": "#/components/schemas/FillingCatalogGeneralInfo"
-//               }
-//           ]
-//       },
-//       "attributes": {
-//           "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
-//           "type": "array",
-//           "items": {
-//               "$ref": "#/components/schemas/FillingCatalogAttribute"
-//           },
-//           "minItems": 1
-//       },
-//       "meta": {
-//           "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
-//           "type": "object",
-//           "allOf": [
-//               {
-//                   "$ref": "#/components/schemas/FillingCatalogMetadata"
-//               }
-//           ]
-//       },
-//       "constructor": {
-//           "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
-//           "type": "array",
-//           "items": {
-//               "$ref": "#/components/schemas/ConstructorPackageData"
-//           }
-//       },
-//       "conditionalUniq": {
-//           "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
-//           "type": "string"
-//       },
-//       "groupUniq": {
-//           "description": "Настройка групповой уникальности, описанная пользователем в формате TOML. Передаётся в качестве строки с экранированием символов.",
-//           "type": "string"
-//       },
-//       "map": {
-//           "$ref": "#/components/schemas/FillingCatalogMap"
-//       }
-//   },
-//   "required": [
-//       "generalInfo",
-//       "attributes",
-//       "map"
-//   ]
-// },
-// "FillingCatalogGeneralInfo": {
-//   "description": "Общая информация каталога заполнения",
-//   "type": "object",
-//   "allOf": [
-//       {
-//           "$ref": "#/components/schemas/CommonCatalogGeneralInfo"
-//       }
-//   ],
-//   "properties": {
-//       "periodUpdate": {
-//           "$ref": "#/components/schemas/FillingCatalogUpdatePeriodicity"
-//       },
-//       "systemsSuppliers": {
-//           "description": "Системы-поставщики данных в каталог заполнения",
-//           "type": "array",
-//           "items": {
-//               "$ref": "systems.yaml#/components/schemas/CommonSystemInfo"
-//           },
-//           "readOnly": true
-//       },
-//       "systemsSuppliersIds": {
-//           "description": "Список идентификаторов систем поставщиков данных",
-//           "type": "array",
-//           "items": {
-//               "type": "integer"
-//           },
-//           "writeOnly": true
-//       },
-//       "hasBackgroundCheck": {
-//           "description": "Признак наличия в каталоге периодической фоновой проверки",
-//           "type": "boolean"
-//       },
-//       "backgroundCheckPeriodTagId": {
-//           "description": "Строковый идентификатор периода фоновой проверки",
-//           "allOf": [
-//               {
-//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateTagIdEnum"
-//               }
-//           ],
-//           "writeOnly": true
-//       },
-//       "backgroundCheckPeriod": {
-//           "description": "Период фоновой проверки в каталоге",
-//           "type": "object",
-//           "properties": {
-//               "name": {
-//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateNameEnum"
-//               },
-//               "tagId": {
-//                   "$ref": "#/components/schemas/BasicCatalogPeriodUpdateTagIdEnum"
-//               }
-//           },
-//           "readOnly": true
-//       },
-//       "backgroundCheckEmails": {
-//           "description": "Список электронных почт получателей результатов фоновой проверки, перечисленные через запятую БЕЗ пробела",
-//           "type": "string"
-//       },
-//       "isDeleteAllObjects": {
-//           "description": "Признак \"Возможно одновременное удаление всех объектов\"",
-//           "type": "boolean"
-//       },
-//       "isPriorityProcess": {
-//           "description": "Признак \"Установить приоритет подписания данных\"",
-//           "type": "boolean"
-//       },
-//       "outOivsBlockEditObjectsGUI": {
-//           "description": "Поставщики информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
-//           "type": "array",
-//           "items": {
-//               "$ref": "oivs.yaml#/components/schemas/CommonOivInfo"
-//           },
-//           "readOnly": true
-//       },
-//       "outOivsIdsBlockEditObjectsGUI": {
-//           "description": "Список идентификаторов поставщиков информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
-//           "type": "array",
-//           "items": {
-//               "type": "integer"
-//           },
-//           "writeOnly": true
-//       },
-//       "isBlockEditObjectsService": {
-//           "description": "Признак \"Заблокировать подписание данных (сервис)\"",
-//           "type": "boolean"
-//       },
-//       "isBlockRestoreObjects": {
-//           "description": "Признак \"Заблокировать восстановление данных\"",
-//           "type": "boolean"
-//       },
-//       "isBlockSignObjectsGUI": {
-//           "description": "Признак \"Заблокировать подписание данных (веб)\"",
-//           "type": "boolean"
-//       },
-//       "isCopyObjects": {
-//           "description": "Признак \"Возможно копирование объектов\"",
-//           "type": "boolean"
-//       },
-//       "isBlockEditObjectsGUI": {
-//           "description": "Признак \"Заблокировать редактирование данных (веб)\"",
-//           "type": "boolean"
-//       }
-//   },
-//   "required": [
-//       "periodUpdate",
-//       "hasBackgroundCheck",
-//       "isDeleteAllObjects",
-//       "isPriorityProcess",
-//       "isBlockEditObjectsService",
-//       "isBlockRestoreObjects",
-//       "isBlockSignObjectsGUI",
-//       "accountingObject",
-//       "thematicCategoryId",
-//       "typeCatalogId",
-//       "oivsIds",
-//       "keywords",
-//       "isCopyObjects",
-//       "isBlockEditObjectsGUI"
-//   ]
-// },
-
   {
       "path": "/catalogs/{catalogId}",
       "method": "put",
@@ -753,43 +464,180 @@ export const expectedParsedData = [
               },
               {
                   "paramName": "attributes[index]",
-                  "paramType": "array[object]",
+                  "paramType": "array[object[Один из вариантов]]",
                   "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
                   "required": false,
               },
-              "FillingCatalogAttribute": {
-                "description": "Атрибут каталога заполнения",
-                "type": "object",
-                "oneOf": [
-                    {
-                        "$ref": "#/components/schemas/StringFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/IntegerFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/FloatFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/DateFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/BooleanFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/FileFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/DictFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/LinkFillingCatalogAttribute"
-                    },
-                    {
-                        "$ref": "#/components/schemas/TableFillingCatalogAttribute"
-                    }
-                ]
-            },
+              {
+                  "paramName": "attributes[index] Вариант 1",
+                  "paramType": "attributes[index] Вариант 1",
+                  "description": "attributes[index] Вариант 1",
+                  "required": false,
+              },
+            //   "StringFillingCatalogAttribute": {
+            //     "description": "Строковый атрибут каталога заполнения",
+            //     "type": "object",
+            //     "allOf": [
+            //         {
+            //             "$ref": "#/components/schemas/CommonFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/CommonCatalogAttributeWithDefaultValue"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/CommonCatalogAttributeWithFieldMask"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/CommonCatalogAttributeWithSearchIndex"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/CommonCatalogAttributeWithFieldRegex"
+            //         }
+            //     ],
+            //     "properties": {
+            //         "maxLength": {
+            //             "description": "Максимальная длина строкового значения",
+            //             "type": "integer"
+            //         }
+            //     },
+            //     "required": [
+            //         "maxLength"
+            //     ]
+            // },
+              {
+                  "paramName": "attributes[index] Вариант 1",
+                  "paramType": "attributes[index] Вариант 1",
+                  "description": "attributes[index] Вариант 1",
+                  "required": false,
+              },
+            //   "CommonFillingCatalogAttribute": {
+            //     "description": "Общая информация атрибута каталога заполнения",
+            //     "type": "object",
+            //     "allOf": [
+            //         {
+            //             "$ref": "#/components/schemas/CommonCatalogAttribute"
+            //         }
+            //     ],
+            //     "properties": {
+            //         "isReq": {
+            //             "description": "Свойство обязательности атрибута",
+            //             "type": "boolean"
+            //         },
+            //         "isUniq": {
+            //             "description": "Свойство уникальности значения атрибута",
+            //             "type": "boolean"
+            //         },
+            //         "isUniqWithinParent": {
+            //             "description": "Признак, что уникальность значений атрибутов внутри табличного атрибута будет проверятся в рамках объекта-родителя.",
+            //             "type": "boolean",
+            //             "default": false
+            //         },
+            //         "isBanEdit": {
+            //             "description": "Свойство запрета на редактирование",
+            //             "type": "boolean"
+            //         },
+            //         "isSystemModify": {
+            //             "description": "Свойство, что значение атрибута изменяется системой",
+            //             "type": "boolean"
+            //         },
+            //         "objOperatingMode": {
+            //             "$ref": "#/components/schemas/FillingCatalogOperatingModeTagIdEnum"
+            //         },
+            //         "oivs": {
+            //             "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+            //             "type": "array",
+            //             "items": {
+            //                 "$ref": "oivs.yaml#/components/schemas/CommonOivInfo"
+            //             },
+            //             "readOnly": true,
+            //             "minItems": 1
+            //         },
+            //         "oivsIds": {
+            //             "description": "Список идентификаторов ОИВ, ответственных за значение, содержащееся в атрибуте",
+            //             "type": "array",
+            //             "items": {
+            //                 "type": "integer"
+            //             },
+            //             "writeOnly": true,
+            //             "minItems": 1
+            //         },
+            //         "isManualInput": {
+            //             "description": "Настроено ли на этот атрибут заполнение значениями не из справочника (ручной ввод) в блоках Автозаполнения конструктора",
+            //             "type": "boolean",
+            //             "readOnly": true
+            //         },
+            //         "manualInputTargets": {
+            //             "description": "Массив атрибутов, значение которых зависит от заполнения данного атрибута при автозаполнении.\nОписываются в блоке `Автозаполнение` конструктора в массиве [[blocks.properties.mapping]].\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+            //             "readOnly": true,
+            //             "type": "array",
+            //             "items": {
+            //                 "type": "object",
+            //                 "properties": {
+            //                     "attrId": {
+            //                         "description": "Идентификатор атрибута в ЕХД",
+            //                         "type": "integer"
+            //                     },
+            //                     "isDependent": {
+            //                         "description": "Является ли атрибут зависимым в рамках ручного ввода",
+            //                         "type": "boolean"
+            //                     }
+            //                 }
+            //             }
+            //         },
+            //         "manualInputSources": {
+            //             "description": "Массив идентификаторов атрибутов, от значения которых зависит значение данного атрибута при Автозаполнении.\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+            //             "readOnly": true,
+            //             "type": "array",
+            //             "items": {
+            //                 "type": "integer",
+            //                 "format": "int32"
+            //             }
+            //         }
+            //     },
+            //     "required": [
+            //         "isReq",
+            //         "isUniq",
+            //         "isUniqWithinParent",
+            //         "isBanEdit",
+            //         "isSystemModify",
+            //         "objOperatingMode",
+            //         "oivs",
+            //         "oivsIds"
+            //     ]
+            // },
+            //   "FillingCatalogAttribute": {
+            //     "description": "Атрибут каталога заполнения",
+            //     "type": "object",
+            //     "oneOf": [
+            //         {
+            //             "$ref": "#/components/schemas/StringFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/IntegerFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/FloatFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/DateFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/BooleanFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/FileFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/DictFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/LinkFillingCatalogAttribute"
+            //         },
+            //         {
+            //             "$ref": "#/components/schemas/TableFillingCatalogAttribute"
+            //         }
+            //     ]
+            // },
               {
                   "paramName": "meta",
                   "paramIn": "object",

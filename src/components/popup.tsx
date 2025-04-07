@@ -19,6 +19,7 @@ import type { Language } from '../utils/translations'
 import { useToast } from '@/hooks/use-toast'
 import { parseData } from '@/lib/utils'
 import { mockData } from '@/__tests__/mockInput'
+import { mockDataMini } from '@/__tests__/mockInputMini'
 
 function PopupContent() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -66,7 +67,8 @@ function PopupContent() {
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-      const parsedData = parseData(mockData)  
+      // @ts-expect-error idk
+      const parsedData = parseData(mockDataMini)  
       console.log('parsed', parsedData);
           
       // const parsedData = parseData(data)      
