@@ -1802,15 +1802,6 @@ export const mockData = {
                   {
                       "$ref": "#/components/schemas/CommonCatalogAttributeWithDefaultValue"
                   },
-                  {
-                      "$ref": "#/components/schemas/CommonCatalogAttributeWithFieldMask"
-                  },
-                  {
-                      "$ref": "#/components/schemas/CommonCatalogAttributeWithSearchIndex"
-                  },
-                  {
-                      "$ref": "#/components/schemas/CommonCatalogAttributeWithFieldRegex"
-                  }
               ],
               "properties": {
                   "maxLength": {
@@ -2122,29 +2113,8 @@ export const mockData = {
                       "$ref": "#/components/schemas/StringFillingCatalogAttribute"
                   },
                   {
-                      "$ref": "#/components/schemas/IntegerFillingCatalogAttribute"
-                  },
-                  {
-                      "$ref": "#/components/schemas/FloatFillingCatalogAttribute"
-                  },
-                  {
-                      "$ref": "#/components/schemas/DateFillingCatalogAttribute"
-                  },
-                  {
-                      "$ref": "#/components/schemas/BooleanFillingCatalogAttribute"
-                  },
-                  {
-                      "$ref": "#/components/schemas/FileFillingCatalogAttribute"
-                  },
-                  {
                       "$ref": "#/components/schemas/DictFillingCatalogAttribute"
                   },
-                  {
-                      "$ref": "#/components/schemas/LinkFillingCatalogAttribute"
-                  },
-                  {
-                      "$ref": "#/components/schemas/TableFillingCatalogAttribute"
-                  }
               ]
           },
           "CommonFillingCatalogAttributeForValidation": {
