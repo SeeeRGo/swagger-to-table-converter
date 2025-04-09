@@ -2122,29 +2122,8 @@ export const mockDataMini = {
                     "$ref": "#/components/schemas/StringFillingCatalogAttribute"
                 },
                 {
-                    "$ref": "#/components/schemas/IntegerFillingCatalogAttribute"
-                },
-                {
-                    "$ref": "#/components/schemas/FloatFillingCatalogAttribute"
-                },
-                {
-                    "$ref": "#/components/schemas/DateFillingCatalogAttribute"
-                },
-                {
-                    "$ref": "#/components/schemas/BooleanFillingCatalogAttribute"
-                },
-                {
-                    "$ref": "#/components/schemas/FileFillingCatalogAttribute"
-                },
-                {
                     "$ref": "#/components/schemas/DictFillingCatalogAttribute"
                 },
-                {
-                    "$ref": "#/components/schemas/LinkFillingCatalogAttribute"
-                },
-                {
-                    "$ref": "#/components/schemas/TableFillingCatalogAttribute"
-                }
             ]
         },
         "CommonFillingCatalogAttributeForValidation": {
@@ -19557,4 +19536,11 @@ export const mockDataMini = {
       "description": "Описание методов для работы со сборными каталогами",
       "version": "1.0.0"
   }
+}
+
+export const mockDataPathForParams = {
+    components: mockDataMini.components,
+    paths: {
+        "/catalogs/search": mockDataMini.paths["/catalogs/search"]
+    }
 }

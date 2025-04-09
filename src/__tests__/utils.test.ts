@@ -1,9 +1,13 @@
-import { parseData } from '@/lib/utils'
+import { parseData, parseParam } from '@/lib/utils'
 import { expect, test } from 'vitest'
 import { expectedParsedData } from './mockOutput'
-import { mockData } from './mockInput'
-import { MockOutputMini } from './mockOutpuMini'
+import { mockDataMini, mockDataPathForParams } from './mockInputMini'
+import { MockOutputMini, mockOutputParam } from './mockOutpuMini'
 
 test('parsed yaml swagger specs correctly', () => {
   expect(parseData(mockDataMini)).toEqual(MockOutputMini)
+})
+
+test('parses input param correctly', () => {
+  expect(parseParam(mockDataPathForParams)).toEqual(mockOutputParam)
 })

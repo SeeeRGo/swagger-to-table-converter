@@ -484,7 +484,7 @@ const parseRequestBodyEntry = (methodDesc: OpenAPIV3_1.PathItemObject[keyof Open
   }
 }
 export const parseData = (data?: OpenAPIV3_1.Document) => {
-  console.log('data parsing');
+  // console.log('data parsing');
   
   // const parsedSchemas = data?.components?.schemas ? Object.entries(data.components.schemas).map(([key, value]) => typeof value === 'object' ? {
   //   name: key,
@@ -507,7 +507,7 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
   // return parsedSchemas
   // return []
     const parsedPaths = data?.paths ? Object.entries(data?.paths).flatMap(([key, value]) => {
-      console.log('value', value);
+      // console.log('value', value);
       if (value) {
         const parsedPath = Object.entries(value).map(([method, methodDesc]) => {
           const parsedInputParams = typeof methodDesc === 'object' && 'parameters' in methodDesc ? methodDesc?.parameters?.flatMap((param: (OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)): ParsedParam | ParsedParam[] => {
@@ -560,10 +560,17 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
                 }
               }
         })
-        console.log('parsedPath', parsedPath);
+        // console.log('parsedPath', parsedPath);
         
         return parsedPath
       } else return []
     }) : []
     return parsedPaths 
+}
+
+export const parseParam = (data: OpenAPIV3_1.PathItemObject['parameters']): ParsedParam[] => {
+  if (!data) {
+    return []
+  }
+  return []
 }

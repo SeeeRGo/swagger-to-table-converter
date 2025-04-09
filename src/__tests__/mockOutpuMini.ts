@@ -68,69 +68,52 @@ export const MockOutputMini = [
   "method": "post",
   "methodDesc": "Первичное сохранение каталога",
   "responses": {
-      "description": "Успешный ответ",
+      "description": "Успешное создание объекта.",
       "schema": [
         {
-            "paramName": "",
-            "paramType": "",
+            "paramName": "id",
+            "paramType": "integer[int32]",
+            "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            "required": false,
+        },
+        {
+            "paramName": "code",
+            "paramType": "integer[int32]",
+            "description": "HTTP-код ошибки",
+            "required": true,
+        },
+        {
+            "paramName": "messageType",
+            "paramType": "string",
+            "description": "Тип ответа",
+            "required": true,
+        },
+        {
+            "paramName": "message",
+            "paramType": "string",
+            "description": "Текст ответа",
+            "required": true,
+        },
+        {
+            "paramName": "message",
+            "paramType": "string",
+            "description": "Текст ответа",
+            "required": false,
+        },
+        {
+            "paramName": "code",
+            "paramType": "[201]",
+            "description": "",
+            "required": false,
+        },
+        {
+            "paramName": "messageType",
+            "paramType": "[Created]",
             "description": "",
             "required": false,
         },
       ]
   },
-  "ApiResponse": {
-    "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
-    "type": "object",
-    "readOnly": true,
-    "properties": {
-        "id": {
-            "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
-            "type": "integer",
-            "format": "int32"
-        },
-        "code": {
-            "description": "HTTP-код ошибки",
-            "type": "integer",
-            "format": "int32"
-        },
-        "messageType": {
-            "description": "Тип ответа",
-            "type": "string"
-        },
-        "message": {
-            "description": "Текст ответа",
-            "type": "string"
-        }
-    },
-    "required": [
-        "code",
-        "messageType",
-        "message"
-    ]
-},
-  "CreatedResponse": {
-    "type": "object",
-    "description": "Успешное создание объекта.",
-    "allOf": [
-        {
-            "$ref": "#/components/schemas/ApiResponse"
-        },
-        {
-            "properties": {
-                "code": {
-                    "enum": [
-                        201
-                    ]
-                },
-                "messageType": {
-                    "enum": [
-                        "Created"
-                    ]
-                }
-            }
-        }
-    ]
-},
   "requests": {
       "schema": [
           {
@@ -2977,12 +2960,9 @@ export const MockOutputMini = [
           "paramType": "integer",
           "description": "Идентификатор сборного каталога.",
           "required": true,
-          "schema": {
-              "description": "Primitive param description",
-              "paramName": "primitive param name",
-              "paramType": "integer"
-          }
       }
   ]
 },
-]
+] as const
+
+export const mockOutputParam = MockOutputMini.at(0)?.inputParams
