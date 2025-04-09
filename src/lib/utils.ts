@@ -127,13 +127,6 @@ const parsePrimitiveSchema = (schema: OpenAPIV3_1.NonArraySchemaObject | OpenAPI
       paramName: schema.name ?? 'Нет имени', // @ts-expect-error just for build
       paramIn: schema.in ?? '',
       required: typeof schema.required === 'boolean' ? schema.required : undefined,
-      schema: {
-        description: schema.description ?? 'Нет описания', // @ts-expect-error just for build
-        paramName: schema.name ?? 'Нет имени', // @ts-expect-error just for build
-        paramIn: schema.in ?? '',
-        required: typeof schema.required === 'boolean' ? schema.required : undefined,
-
-      }
     }
   }
 }
@@ -329,10 +322,6 @@ const parseReferenceSchema = (data: OpenAPIV3_1.Document, schema: OpenAPIV3_1.Re
         paramType: Array.isArray(parsedSchema) ? parsedSchema.at(0)?.paramType ?? parsedSchema.at(0)?.schema?.paramType : parsedSchema?.paramType ?? 'Не найден тип',
         description: referenceSchema.description ?? 'Нет описания',
         required: !!referenceSchema.required, // TS is bugging about this. Or my types are wrong
-        schema: Array.isArray(parsedSchema) ? {
-          ...parsedSchema.at(0),
-          paramType: parsedSchema.at(0)?.paramType ?? parsedSchema.at(0)?.schema?.paramType
-        } : parsedSchema
       }
     } else {
       // @ts-expect-error just for build
@@ -523,7 +512,6 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
                 paramType: Array.isArray(parsedSchema) ? parsedSchema.at(0)?.paramType : parsedSchema.paramType,
                 description: param.description ?? 'Нет описания',
                 required: param.required,
-                schema: parsedSchema
               }]
             }
             }) : []         
