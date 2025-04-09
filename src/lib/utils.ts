@@ -28,7 +28,6 @@ export type ParsedParam = {
   paramType?: string
   paramIn?: string // 'query' | 'path'
   required?: boolean
-  schema?: ParsedParam | ParsedParam[]
 }
 
 const sanitizeRef = (ref?: string) => ref ? ref.substring(ref.indexOf('#')) : ref
@@ -572,5 +571,19 @@ export const parseParam = (data: OpenAPIV3_1.PathItemObject['parameters']): Pars
   if (!data) {
     return []
   }
-  return []
+  return data.flatMap(param => {
+    if ('$ref' in param) {
+      return []
+    } else {
+      return [{
+        description: 'string',
+        paramName: 'string',
+        paramType: 'string',
+        paramIn: param.in,
+        required: param.required,
+      }]
+    }
+  })
 }
+
+export const parseSchema = () => {}
