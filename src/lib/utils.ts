@@ -597,27 +597,66 @@ export const parseSchema = (schema?: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.S
   if (schema === undefined) return 'Нет схемы - где-то ошибка логики парсинга'
   if (typeof schema === 'boolean') return `schema - ${schema}`
   if ('$ref' in schema) return parseRefSchema(schema.$ref)
-  if (schema.properties) return parseProperties(schema.properties)
-  if (schema.enum) return parseProperties(schema.properties)
-  return ''
+  if (schema.properties) return parseProperties(schema.properties, schema.required)
+  if ('items' in schema) {
+    if (schema.type === 'array') return parseArraySchema(schema)
+    else return parseMixedSchema(schema)
+  }
+  if (schema.enum) return parseProperties(schema.properties, schema.required)
+  return 'Какой-то непонятный необработанный кейс - ошибка логики парсинга' + String(schema)
 }
 
 export const parseRefSchema = (ref: string): string | ParsedNestedSchema => {
   return ''
 }
-
-export const parseProperties = (properties: OpenAPIV3_1.NonArraySchemaObject['properties']): string | ParsedNestedSchema => {
+export const parseArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject): string | ParsedNestedSchema => {
+  if (schema === undefined) return 'Нет массива и/или его элементов - где-то ошибка логики парсинга'
+  if (typeof schema === 'boolean') return `schema - ${schema}`
+  const itemsSchema = parseSchema(schema.items)
+  const itemsNestedSchema: ParsedNestedSchema = typeof itemsSchema !== 'string' ? itemsSchema : {
+    parentType:  itemsSchema,
+    nestedParams: []
+  }
+  return {
+    parentType: `${schema.type}[${itemsNestedSchema.parentType}]`,
+    nestedParams: itemsNestedSchema.nestedParams
+  }
+}
+export const parseMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): string | ParsedNestedSchema => {
   return ''
 }
 
+export const parseProperties = (properties: OpenAPIV3_1.NonArraySchemaObject['properties'], required:  OpenAPIV3_1.NonArraySchemaObject['required']): string | ParsedNestedSchema => {
+  if (!properties) return 'Нет пропертей схемы типа объект - где-то ошибка логики парсинга'
+  return {
+    parentType: 'object',
+    nestedParams: Object.entries(properties).flatMap(([name, property]): ParsedParam[] => {
+      if (property === undefined) return 'Нет отдельного свойства - где-то ошибка логики парсинга'
+      if (typeof property === 'boolean') return `property - ${property}`
+      if ('$ref' in property) return parseRefSchema(property.$ref)
+      return [{
+        paramName: name,
+        paramType: parsePropertyType(property),
+        description: property.description ?? 'Нет описания параметра',
+        required: required ? required.some(prop => prop === name) : false
+      }]
+    })
+  }
+}
+export const parseAllOf = (): string | ParsedNestedSchema => ''
+export const parseOneOf = (): string | ParsedNestedSchema => ''
 
 type PropertiesRecord = OpenAPIV3_1.NonArraySchemaObject['properties']
-export const parseEnumProperty = (property: NonNullable<PropertiesRecord>[string]): string => {
+export const parsePropertyType = (property: NonNullable<PropertiesRecord>[string]): string => {
   if (typeof property === 'boolean') return `schema - ${property}`
   if ('$ref' in property) {
     const parsedRef = parseRefSchema(property.$ref)
     if (typeof parsedRef === 'string') return parsedRef
     return parsedRef.parentType
   }
-  return property.enum ? `${property.type ?? typeof property.enum.at(0)}${property.format ? `[${property.format}]` : ''}[\n${property.enum.join(',\n')}\n]` : ''
+  const parsedType = property.type ?? typeof property.enum?.at(0) ?? ''
+  const parsedFormat = property.format ? `[${property.format}]` : ''
+  const parsedPattern = property.pattern ? `[${property.pattern}]` : ''
+  const parsedEnum = property.enum ? `[\n${property.enum.join(',\n')}\n]` : ''
+  return `${parsedType}${parsedFormat}${parsedPattern}${parsedEnum}`
 } 
