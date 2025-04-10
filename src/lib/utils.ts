@@ -30,6 +30,11 @@ export type ParsedParam = {
   required?: boolean
 }
 
+export type ParsedNestedSchema = {
+  parentType: string
+  nestedParams: ParsedParam[]
+}
+
 const sanitizeRef = (ref?: string) => ref ? ref.substring(ref.indexOf('#')) : ref
 const parseObjectSchema = (schema: OpenAPIV3_1.NonArraySchemaObject, data: OpenAPIV3_1.Document): ParsedParam[] => {
   
@@ -563,15 +568,56 @@ export const parseParam = (data: OpenAPIV3_1.PathItemObject['parameters']): Pars
     if ('$ref' in param) {
       return []
     } else {
-      return [{
-        description: 'string',
-        paramName: 'string',
-        paramType: 'string',
-        paramIn: param.in,
-        required: param.required,
-      }]
+      const parsedType = parseSchema(param.schema)
+      if (typeof parsedType === 'string') {
+        return [{
+          description: param.description,
+          paramName: param.in,
+          paramType: parsedType,
+          paramIn: param.in,
+          required: param.required,
+        }]
+      } else {
+        return [
+          {
+            description: param.description,
+            paramName: param.in,
+            paramType: parsedType.parentType,
+            paramIn: param.in,
+            required: param.required,
+          },
+          ...parsedType.nestedParams
+        ]
+      }
     }
   })
 }
 
-export const parseSchema = () => {}
+export const parseSchema = (schema?: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject): string | ParsedNestedSchema => {
+  if (schema === undefined) return 'Нет схемы - где-то ошибка логики парсинга'
+  if (typeof schema === 'boolean') return `schema - ${schema}`
+  if ('$ref' in schema) return parseRefSchema(schema.$ref)
+  if (schema.properties) return parseProperties(schema.properties)
+  if (schema.enum) return parseProperties(schema.properties)
+  return ''
+}
+
+export const parseRefSchema = (ref: string): string | ParsedNestedSchema => {
+  return ''
+}
+
+export const parseProperties = (properties: OpenAPIV3_1.NonArraySchemaObject['properties']): string | ParsedNestedSchema => {
+  return ''
+}
+
+
+type PropertiesRecord = OpenAPIV3_1.NonArraySchemaObject['properties']
+export const parseEnumProperty = (property: NonNullable<PropertiesRecord>[string]): string => {
+  if (typeof property === 'boolean') return `schema - ${property}`
+  if ('$ref' in property) {
+    const parsedRef = parseRefSchema(property.$ref)
+    if (typeof parsedRef === 'string') return parsedRef
+    return parsedRef.parentType
+  }
+  return property.enum ? `${property.type ?? typeof property.enum.at(0)}${property.format ? `[${property.format}]` : ''}[\n${property.enum.join(',\n')}\n]` : ''
+} 
