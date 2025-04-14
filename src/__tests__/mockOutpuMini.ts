@@ -15,14 +15,14 @@ export const MockOutputMini = [
         {
             "paramName": "limit",
             "paramIn": "query",
-            "paramType": "integer($int32)",
+            "paramType": "integer[int32]",
             "description": "Количество возвращаемых каталогов (от `1` до `1000`).",
             "required": false,
         },
         {
             "paramName": "offset",
             "paramIn": "query",
-            "paramType": "integer($int32)",
+            "paramType": "integer[int32]",
             "description": "Позиция (индекс), с которой необходимо возвращать элементы из БД (не меньше `0`).\n\nПо умолчанию `0`.",
             "required": false,
         },
@@ -154,7 +154,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.kindCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор вида каталога",
               "required": true,
           },
@@ -184,7 +184,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.typeCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор типа каталога",
               "required": true,
           },
@@ -208,7 +208,7 @@ export const MockOutputMini = [
           },
           {
             "paramName": "generalInfo.thematicCategory.id",
-            "paramType": "integer(int32)",
+            "paramType": "integer[int32]",
             "description": "Идентификатор тематической категории",
             "required": true,
           },
@@ -232,7 +232,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.objectCategories[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор категории объектов",
               "required": true,
           },
@@ -256,7 +256,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.oivs[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор ОИВа",
               "required": true,
           },
@@ -292,7 +292,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.systemsConsumers[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор информационной системы",
               "required": true,
           },
@@ -1591,7 +1591,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.kindCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор вида каталога",
               "required": true,
           },
@@ -1621,7 +1621,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.typeCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор типа каталога",
               "required": true,
           },
@@ -1645,7 +1645,7 @@ export const MockOutputMini = [
           },
           {
             "paramName": "generalInfo.thematicCategory.id",
-            "paramType": "integer(int32)",
+            "paramType": "integer[int32]",
             "description": "Идентификатор тематической категории",
             "required": true,
           },
@@ -1669,7 +1669,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.objectCategories[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор категории объектов",
               "required": true,
           },
@@ -1693,7 +1693,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.oivs[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор ОИВа",
               "required": true,
           },
@@ -1729,7 +1729,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.systemsConsumers[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор информационной системы",
               "required": true,
           },
