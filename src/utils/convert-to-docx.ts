@@ -4,7 +4,7 @@ type ElementType<T extends ReadonlyArray<unknown>> = T extends ReadonlyArray<inf
 type ParsedData = ReturnType<typeof parseData>
 type InputParams =  ElementType<ParsedData>['inputParams']
 type ParsedResponses =  ElementType<ParsedData>['responses']
-const parseParamsToTable = (params: InputParams) => params?.flatMap(param => !Array.isArray(param.schema) ? [new TableRow({
+const parseParamsToTable = (params: InputParams) => params?.flatMap(param => true ? [new TableRow({
   children: [
     new TableCell({
       children: [
@@ -25,7 +25,7 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => !Ar
     new TableCell({
       children: [
         new Paragraph({
-          text: param.schema?.paramType
+          text: param?.paramType
         })
       ],
       width: { size: 2000, type: WidthType.DXA },

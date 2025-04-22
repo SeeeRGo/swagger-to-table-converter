@@ -15,14 +15,14 @@ export const MockOutputMini = [
         {
             "paramName": "limit",
             "paramIn": "query",
-            "paramType": "integer($int32)",
+            "paramType": "integer[int32]",
             "description": "Количество возвращаемых каталогов (от `1` до `1000`).",
             "required": false,
         },
         {
             "paramName": "offset",
             "paramIn": "query",
-            "paramType": "integer($int32)",
+            "paramType": "integer[int32]",
             "description": "Позиция (индекс), с которой необходимо возвращать элементы из БД (не меньше `0`).\n\nПо умолчанию `0`.",
             "required": false,
         },
@@ -68,69 +68,52 @@ export const MockOutputMini = [
   "method": "post",
   "methodDesc": "Первичное сохранение каталога",
   "responses": {
-      "description": "Успешный ответ",
+      "description": "Успешное создание объекта.",
       "schema": [
         {
-            "paramName": "",
-            "paramType": "",
+            "paramName": "id",
+            "paramType": "integer[int32]",
+            "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            "required": false,
+        },
+        {
+            "paramName": "code",
+            "paramType": "integer[int32]",
+            "description": "HTTP-код ошибки",
+            "required": true,
+        },
+        {
+            "paramName": "messageType",
+            "paramType": "string",
+            "description": "Тип ответа",
+            "required": true,
+        },
+        {
+            "paramName": "message",
+            "paramType": "string",
+            "description": "Текст ответа",
+            "required": true,
+        },
+        {
+            "paramName": "message",
+            "paramType": "string",
+            "description": "Текст ответа",
+            "required": false,
+        },
+        {
+            "paramName": "code",
+            "paramType": "[201]",
+            "description": "",
+            "required": false,
+        },
+        {
+            "paramName": "messageType",
+            "paramType": "[Created]",
             "description": "",
             "required": false,
         },
       ]
   },
-  "ApiResponse": {
-    "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
-    "type": "object",
-    "readOnly": true,
-    "properties": {
-        "id": {
-            "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
-            "type": "integer",
-            "format": "int32"
-        },
-        "code": {
-            "description": "HTTP-код ошибки",
-            "type": "integer",
-            "format": "int32"
-        },
-        "messageType": {
-            "description": "Тип ответа",
-            "type": "string"
-        },
-        "message": {
-            "description": "Текст ответа",
-            "type": "string"
-        }
-    },
-    "required": [
-        "code",
-        "messageType",
-        "message"
-    ]
-},
-  "CreatedResponse": {
-    "type": "object",
-    "description": "Успешное создание объекта.",
-    "allOf": [
-        {
-            "$ref": "#/components/schemas/ApiResponse"
-        },
-        {
-            "properties": {
-                "code": {
-                    "enum": [
-                        201
-                    ]
-                },
-                "messageType": {
-                    "enum": [
-                        "Created"
-                    ]
-                }
-            }
-        }
-    ]
-},
   "requests": {
       "schema": [
           {
@@ -171,7 +154,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.kindCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор вида каталога",
               "required": true,
           },
@@ -201,7 +184,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.typeCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор типа каталога",
               "required": true,
           },
@@ -225,7 +208,7 @@ export const MockOutputMini = [
           },
           {
             "paramName": "generalInfo.thematicCategory.id",
-            "paramType": "integer(int32)",
+            "paramType": "integer[int32]",
             "description": "Идентификатор тематической категории",
             "required": true,
           },
@@ -249,7 +232,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.objectCategories[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор категории объектов",
               "required": true,
           },
@@ -273,7 +256,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.oivs[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор ОИВа",
               "required": true,
           },
@@ -309,7 +292,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.systemsConsumers[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор информационной системы",
               "required": true,
           },
@@ -1608,7 +1591,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.kindCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор вида каталога",
               "required": true,
           },
@@ -1638,7 +1621,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.typeCatalog.id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор типа каталога",
               "required": true,
           },
@@ -1662,7 +1645,7 @@ export const MockOutputMini = [
           },
           {
             "paramName": "generalInfo.thematicCategory.id",
-            "paramType": "integer(int32)",
+            "paramType": "integer[int32]",
             "description": "Идентификатор тематической категории",
             "required": true,
           },
@@ -1686,7 +1669,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.objectCategories[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор категории объектов",
               "required": true,
           },
@@ -1710,7 +1693,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.oivs[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор ОИВа",
               "required": true,
           },
@@ -1746,7 +1729,7 @@ export const MockOutputMini = [
           },
           {
               "paramName": "generalInfo.systemsConsumers[index].id",
-              "paramType": "integer(int32)",
+              "paramType": "integer[int32]",
               "description": "Идентификатор информационной системы",
               "required": true,
           },
@@ -2939,7 +2922,7 @@ export const MockOutputMini = [
             "required": true,
         },
         {
-            "paramName": "map.typeGeoTagIds[index]",
+            "paramName": "Вариант 1 map.typeGeoTagIds[index]",
             "paramType": "array[string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]]",
             "description": "Массив строковых идентификаторов типов геометрии",
             "required": false,
@@ -2977,12 +2960,9 @@ export const MockOutputMini = [
           "paramType": "integer",
           "description": "Идентификатор сборного каталога.",
           "required": true,
-          "schema": {
-              "description": "Primitive param description",
-              "paramName": "primitive param name",
-              "paramType": "integer"
-          }
       }
   ]
 },
-]
+] as const
+
+export const mockOutputParam = MockOutputMini.at(0)?.inputParams
