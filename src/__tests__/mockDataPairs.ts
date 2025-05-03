@@ -2208,20 +2208,14 @@ export const attributeOutput = [
 {
     "paramName": "attributes[index]",
     "paramType": "array[object[Один из вариантов]]",
-    "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
-    "required": false,
-},
-{
-    "paramName": " Вариант 1 attributes[index]",
-    "paramType": " Вариант 1 attributes[index]",
-    "description": " Вариант 1 attributes[index]",
-    "required": false,
+    "description": "Атрибут каталога заполнения",
+    "required": true,
 }, // StringFillingCatalogAttribute start
 {
-    "paramName": " Вариант 1 attributes[index]",
+    "paramName": "Вариант 1 attributes[index]",
     "paramType": "object",
     "description": "Строковый атрибут каталога заполнения",
-    "required": false,
+    "required": true,
 },
 {
     "paramName": " Вариант 1 attributes[index].attribute",
