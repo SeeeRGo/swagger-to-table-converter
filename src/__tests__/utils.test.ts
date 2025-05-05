@@ -29,7 +29,7 @@ test('parses schema with anyOf property with multiple entries corretly', () => {
   // const actual = parseSchema(attributeInput, mockDataInput)
   // console.log('actual', actual);
   
-  expect(parseSchema(attributeInput, mockDataInput).slice(0,5)).toEqual(attributeOutput.slice(0,5))
+  expect(parseSchema(attributeInput, mockDataInput).slice(10,30)).toEqual(attributeOutput.slice(10,30))
 })
 
 // test('parses plain input param correctly', () => {

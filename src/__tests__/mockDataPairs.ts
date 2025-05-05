@@ -2204,39 +2204,63 @@ export const attributeOutput = [
     "paramType": "array[object]",
     "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
     "required": true,
+},  
+{
+    "paramName": "attributes[index]",
+    "paramType": "array[object]",
+    "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
+    "required": true,
 },
 {
     "paramName": "attributes[index]",
-    "paramType": "array[object[Один из вариантов]]",
+    "paramType": "Один из вариантов",
     "description": "Атрибут каталога заполнения",
+    "required": true,
+},
+{
+    "paramName": "Вариант 1 attributes[index]",
+    "paramType": "array[object]",
+    "description": "Строковый атрибут каталога заполнения",
     "required": true,
 }, // StringFillingCatalogAttribute start
 {
     "paramName": "Вариант 1 attributes[index]",
     "paramType": "object",
-    "description": "Строковый атрибут каталога заполнения",
+    "description": "Общая информация атрибута каталога заполнения",
     "required": true,
 },
 {
-    "paramName": " Вариант 1 attributes[index].attribute",
+    "paramName": "Вариант 1 attributes[index]",
     "paramType": "object",
-    "description": "Информация об атрибуте ЕХД",
+    "description": "Общая информация об атрибуте каталога",
+    "required": true,
+},
+{
+    "paramName": "Вариант 1 attributes[index].attribute",
+    "paramType": "object",
+    "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
+    "required": true,
+},
+{
+    "paramName": "Вариант 1 attributes[index].attribute",
+    "paramType": "object",
+    "description": "Общая информация об атрибуте",
     "required": true,
 }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start
 {
-    "paramName": " Вариант 1 attributes[index].attribute.id",
+    "paramName": "Вариант 1 attributes[index].attribute.id",
     "paramType": "integer[int32]",
     "description": "Идентификатор атрибута",
     "required": true,
 },
 {
-    "paramName": " Вариант 1 attributes[index].attribute.techName",
+    "paramName": "Вариант 1 attributes[index].attribute.techName",
     "paramType": "string",
     "description": "Техническое наименование атрибута, не может иметь значение \"id\"",
     "required": true,
 },
 {
-    "paramName": " Вариант 1 attributes[index].attribute.rusName",
+    "paramName": "Вариант 1 attributes[index].attribute.rusName",
     "paramType": "string",
     "description": "Русскоязычное наименование атрибута, должно быть уникальным",
     "required": true,
@@ -2273,18 +2297,6 @@ export const attributeOutput = [
 },
 {
     "paramName": "Вариант 1 attributes[index].attribute.type.typeTag",
-    "paramType": "string",
-    "description": "Наименование типа атрибута",
-    "required": true,
-},
-{
-    "paramName": "Вариант 1 attributes[index].attribute.type.typeTag",
-    "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
-    "description": "Техническое наименование типа атрибута",
-    "required": false,
-},
-{
-    "paramName": "Вариант 1 attributes[index].attribute.typeTag",
     "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
     "description": "Техническое наименование типа атрибута",
     "required": true,
@@ -2398,7 +2410,7 @@ export const attributeOutput = [
     "required": true,
 }, // CommonOivInfo end
 {
-    "paramName": "Вариант 1 attributes[index].oivsIds",
+    "paramName": "Вариант 1 attributes[index].oivsIds[index]",
     "paramType": "array[integer]",
     "description": "Список идентификаторов ОИВ, ответственных за значение, содержащееся в атрибуте",
     "required": true,
@@ -2447,15 +2459,15 @@ export const attributeOutput = [
 }, // StringFillingCatalogAttribute end
 {
   "paramName": "Вариант 2 attributes[index]",
-  "paramType": "Вариант 2 attributes[index]",
-  "description": "Вариант 2 attributes[index]",
-  "required": false,
+  "paramType": "array[object]",
+  "description": "Справочный атрибут каталога заполнения",
+  "required": true,
 }, // DictFillingCatalogAttribute start
 {
   "paramName": "Вариант 2 attributes[index]",
-  "paramType": "Вариант 2 attributes[index]",
-  "description": "Вариант 2 attributes[index]",
-  "required": false,
+  "paramType": "object",
+  "description": "Общая информация атрибута каталога заполнения",
+  "required": true,
 },
 {
     "paramName": "Вариант 2 attributes[index].attribute",
@@ -2510,18 +2522,6 @@ export const attributeOutput = [
     "paramType": "string",
     "description": "Наименование типа атрибута",
     "required": true,
-},
-{
-    "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
-    "paramType": "string",
-    "description": "Наименование типа атрибута",
-    "required": true,
-},
-{
-    "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
-    "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
-    "description": "Техническое наименование типа атрибута",
-    "required": false,
 },
 {
     "paramName": "Вариант 2 attributes[index].attribute.typeTag",
