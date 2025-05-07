@@ -2794,3 +2794,84 @@ export const attributeOutput = [
   "required": true,
 },
 ]
+
+export const nestedRequiredInput = {
+    "description": "Настройки каталога заполнения",
+    "type": "object",
+    "properties": {
+        "conditionalUniq": {
+            "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
+            "type": "string"
+        },
+        "groupUniq": {
+            "description": "Required",
+            "type": "object",
+            "properties": {
+                "nestedOne": {
+                    "description": "Nested one",
+                    "type": "string"
+                },
+                "nestedTwo": {
+                    "description": "Nested two",
+                    "type": "string"
+                },
+            },
+            "required": [
+                "nestedTwo",
+            ]
+        },
+    },
+    "required": [
+        "groupUniq",
+    ]
+}
+
+export const nestedRequiredOutput = [
+    {
+      "paramName": "conditionalUniq",
+      "paramType": "string",
+      "description": "Настройки условной уникальности. Передаётся строка с условием, которое описано в формате условий, используемом в конструкторе процессов.",
+      "required": false,
+    },
+    {
+      "paramName": "groupUniq",
+      "paramType": "object",
+      "description": "Required",
+      "required": true,
+    },
+    {
+      "paramName": "groupUniq.nestedOne",
+      "paramType": "string",
+      "description": "Nested one",
+      "required": false,
+    },
+    {
+      "paramName": "groupUniq.nestedTwo",
+      "paramType": "string",
+      "description": "Nested two",
+      "required": true,
+    },
+  ]
+
+export const requiredInput = {
+    "description": "Столбец списка элементов справочников.\nДополнительный столбец справочника.",
+    "type": "object",
+    "properties": {
+        "rusName": {
+            "description": "Русскоязычное название столбца",
+            "type": "string"
+        }
+    },
+    "required": [
+        "rusName"
+    ]
+}
+
+export const requiredOutput = [
+    {
+      "paramName": "rusName",
+      "paramType": "string",
+      "description": "Русскоязычное название столбца",
+      "required": true,
+    },
+  ]

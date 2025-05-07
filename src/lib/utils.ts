@@ -66,7 +66,6 @@ const findSchema = (data: OpenAPIV3_1.Document, schemaName?: string) => {
 
 export const parseData = (data?: OpenAPIV3_1.Document) => {
     return Object.entries(data?.paths ?? {}).flatMap(([pathKey, pathObj]) => Object.entries(pathObj ?? {}).map(([method, methodDef]) => {
-      // console.log('methodDef', methodDef);
       
       return ({
         path: pathKey,
@@ -146,13 +145,14 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
   if ('$ref' in schema) return parseRefSchema(schema, data, parentParamName, parentParamType)
   if ('in' in schema) return parseParam(schema, data, parentParamName, parentParamType)
   if (schema.properties) {
-    const parsedProperties = parseProperties(schema.properties, schema.required, data, parentParamName, parentParamType)
-    console.log('parsedProperties', parsedProperties.filter(param => param.paramName.includes('.description')));
+    console.log('parentParamName', parentParamName, 'schema.required', schema.required);
     
-    return [
+    const res = [
       ...(parseAllOf(schema.allOf ?? [], data, parentParamName)),
       ...parseProperties(schema.properties, schema.required, data, parentParamName, parentParamType)
     ]
+    // console.log('res in parse schema', parseProperties(schema.properties, schema.required, data, parentParamName, parentParamType).filter(({ paramName }) => paramName.includes('rusName')))
+    return res
   }
   if ('items' in schema) {
     if (schema.type === 'array') {            
@@ -184,10 +184,8 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
 }
 
 export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document, parentparamName = '', parentParamType = ''): ParsedParam[] => {
-  // console.log('ref', ref,  'parentparamName', parentparamName);
   
   const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(ref.$ref) ?? ''))
-    // console.log('referenceSchema', referenceSchema,  'parentparamName', parentparamName);
   if (referenceSchema && typeof referenceSchema !== 'boolean' && 'content' in referenceSchema) return []
   if (typeof referenceSchema === 'object' && 'in' in referenceSchema) {
     return [
@@ -205,10 +203,7 @@ export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3
     paramType: parsePropertyType(referenceSchema, data, parentParamType),
     description: ref.description ?? referenceSchema.description ?? '',
   }] : []
-  if (parentparamName === 'attributes[index]') {
-    console.log('parentParamArr', parentParamArr, 'parentparamName', parentparamName);
-    console.log('parsePropertyType(referenceSchema, data, parentParamType)', parsePropertyType(referenceSchema, data, parentParamType));
-  }
+  console.log('ref.$ref', ref.$ref, 'referenceSchema', referenceSchema, parentparamName);
   
   return [
     ...parentParamArr,
@@ -267,35 +262,40 @@ export const parseArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject, data: Op
     paramName: parentParamName,
     description: `schema - ${schema}`
   }]
-  const items = typeof schema.items === 'object' ? { description: schema.description, ...schema.items } : schema.items
+  let items = typeof schema.items === 'object' ? { description: schema.description, ...schema.items } : schema.items
+  
   let itemsType = 'unknown'
   if (typeof schema.items === 'object') {
     if('$ref' in schema.items) {
       const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(schema.items.$ref) ?? ''))
-      if(typeof referenceSchema === 'object' && 'type' in referenceSchema && typeof referenceSchema.type === 'string') {
-        // console.log('reference type assign', 'parentParamName', parentParamName, 'referenceSchema', referenceSchema);
-        
+      if(typeof referenceSchema === 'object' && 'type' in referenceSchema && typeof referenceSchema.type === 'string') {        
         itemsType = referenceSchema.type
+        items = typeof items === 'boolean' ? items : {
+          ...items,
+          required: referenceSchema.required
+        }
+
       } 
     } else if ('type' in schema.items && typeof schema.items.type === 'string') {
-      // console.log('reference type items assign', 'parentParamName', parentParamName, 'referenceSchema', schema);
 
       itemsType = schema.items.type
+      
     }
   }
-  const itemsSchema = parseSchema(items, data, `${parentParamName}[index]`, parentParamType)
-  // console.log('itemsSchema', itemsSchema.slice(0, 3));
   
+  const itemsSchema = parseSchema(items, data, `${parentParamName}[index]`, parentParamType)
+
   const parentParam: ParsedParam[] = typeof schema.items === 'object' && (isObjectSchema(schema.items, data)) ? [{
     paramName: `${parentParamName}[index]`,
     description: schema.description ?? '',
     paramType: `array[${itemsType}]`,
-    required: required ? required.some(prop => prop === parentParamName) : false
+    required: required ? required.some(prop => {
+      return parentParamName.endsWith(prop)
+    }) : false
   }] : []
-  // console.log('parent param', parentParam, 'schema', schema);
+  const res = [...parentParam, ...itemsSchema]
   
-  
-  return [...parentParam, ...itemsSchema]
+  return res
 }
 export const parseMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): ParsedParam[] => {
   return [{
@@ -306,9 +306,10 @@ export const parseMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): ParsedP
 }
 
 export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject, required:  OpenAPIV3_1.NonArraySchemaObject['required'], data: OpenAPIV3_1.Document, parentParamName = '', parentParamType = ''): ParsedParam[] => {
-  // console.log('name', name, 'property', property);
-
-
+  // if (name.includes('rusName')) {
+  //   console.log('required', required, 'name', name, 'property', property);
+  // }
+  
   if (property === undefined) return [{
     paramName: name,
     paramType: 'Нет отдельного свойства - где-то ошибка логики парсинга',
@@ -323,12 +324,18 @@ export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceOb
   }]
   if ('$ref' in property) {
     const parsedRef = parseRefSchema(property, data, parentParamName + name)
-    
     return parsedRef.map((param, i) => {
       if (i === 0) {
         return {
           ...param,
-          required: required ? required.some(prop => prop === name) : false
+          required: required ? required.some(prop => {
+            // if (name.includes('rusName')) {
+            //   // console.log('required', required, 'name', name, 'property', property);
+            //   console.log('prop', prop, 'param.paramName', param.paramName, 'param.paramName.endsWith(prop)', param.paramName.endsWith(prop));    
+            // }
+
+            return param.paramName.endsWith(prop)
+          }) : false
         }
       }
       return param
@@ -336,16 +343,41 @@ export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceOb
   }
     if ('items' in property) {
       if (property.type === 'array') {        
-        // console.log('name', name, 'property', property);
         const parsedArray = parseArraySchema(property, data, required, parentParamName + name, parentParamType ? parentParamType : parentParamType + 'array')
-        // console.log('parsedArray', parsedArray.slice(0,2));
+        // TODO aggregate required array to include nested params' paths
+        // console.log('parsed array', parsedArray);
         
         return parsedArray.map(parsed => ({
           ...parsed,
-          required: required ? required.some(prop => prop === name) : false
+          required: required ? required.some(prop => {
+            if (parsed.paramName.includes('rusName')) {
+              // console.log('required', required, 'parsed', parsed, 'property', property, 'property.required', property.required);
+              // console.log('prop', prop, 'parsed.paramName', parsed.paramName, 'parsed.paramName.endsWith(prop)', parsed.paramName.endsWith(prop));    
+            }
+            return parsed.paramName.endsWith(prop)
+          }) : false
         }))
       } else return parseMixedSchema(property)
     }
+  if (property.properties) {
+    const result = [{
+      paramName: parentParamName + name,
+      paramType: parsePropertyType(property, data, parentParamType),
+      description: property.description ?? '',
+      required: required ? required.some(prop => {
+        // console.log('prop', prop, 'name', name, 'param.paramName.endsWith(prop)', name.endsWith(prop));  
+        return name.endsWith(prop)
+      }) : false
+    }]
+    const res = [
+      ...result,
+      ...(parseAllOf(property.allOf ?? [], data, parentParamName + name)),
+      ...parseProperties(property.properties, property.required, data, parentParamName + name, parentParamType)
+    ]
+    // console.log('res', res.filter(({ paramName }) => paramName.includes('rusNmae')));
+    
+    return res
+  }
   if (property.allOf) return parseAllOf(property.allOf, data, parentParamName + name)
   if (property.anyOf) return parseAnyOf({anyOf: property.anyOf, description: property.description}, data, parentParamName + name, parentParamType)
   if ('oneOf' in property) return parseOneOf({
@@ -354,34 +386,55 @@ export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceOb
   }, data, parentParamName + name, parentParamType).map((oneOf, i) => ({
     ...oneOf,
     description: i === 0 ? property.description ?? '' : oneOf.description,
-    required: required ? required.some(prop => prop === name) : false
+    required: required ? required.some(prop => {
+      // console.log('prop', prop, 'oneOf.paramName', oneOf.paramName, 'param.paramName.endsWith(prop)', oneOf.paramName.endsWith(prop));  
+      return oneOf.paramName.endsWith(prop)
+    }) : false
   }))
   const result = [{
     paramName: parentParamName + name,
     paramType: parsePropertyType(property, data, parentParamType),
     description: property.description ?? '',
-    required: required ? required.some(prop => prop === name) : false
+    required: required ? required.some(prop => {
+      // if (name.includes('rusName')) {
+      //   // console.log('required', required, 'name', name, 'property', property);
+      //   console.log('prop', prop, 'name', name, 'name.endsWith(prop)', name.endsWith(prop));    
+      // }
+      // console.log('prop', prop, 'name', name, 'name.endsWith(prop)', name.endsWith(prop));  
+      return name.endsWith(prop)
+    }) : false
   }]
-  // if (name === 'description') {
-  //   console.log('name', name, 'required', required, 'required.some(prop => prop === name)', required?.some(prop => prop === name));
-  //   console.log('result', result);
-  // }
+  if (name.includes('rusName')) {
+    // console.log('required', required, 'name', name, 'property', property);
+    console.log('result', result);    
+  }
   return result
 }
 
 export const parseProperties = (properties: OpenAPIV3_1.NonArraySchemaObject['properties'], required:  OpenAPIV3_1.NonArraySchemaObject['required'], data: OpenAPIV3_1.Document, parentParamName = '', parentParamType = ''): ParsedParam[] => {
-  // console.log('properties', properties);
-  
+  if(parentParamName.includes('refColDict')) {
+    console.log('required in parse p', required, 'properties', properties);
+  }
   if (!properties) return [{
     paramName: '',
     description: 'Нет пропертей схемы типа объект - где-то ошибка логики парсинга',
     paramType: 'Нет пропертей схемы типа объект - где-то ошибка логики парсинга'
   }]
   const parsedProperties = Object.entries(properties).flatMap(([name, property]): ParsedParam[] => {
-    return parseNestedParam(name, property, required, data, parentParamName ? `${parentParamName}.` : '')
+    // console.log('requred in parse properties', required);
+    
+    const parsed = parseNestedParam(name, property, required, data, parentParamName ? `${parentParamName}.` : '')
+    if (name.includes('rusName')) {
+      // console.log('required', required, 'name', name, 'property', property);
+      // console.log('parsed', parsed)  
+    }
+    return parsed
   })
-  // console.log('parsedProperties', parsedProperties);
-  
+  if(parentParamName.includes('refColDict')) {
+    console.log('parsedProperties in parse p', parsedProperties);
+  }
+  // console.log('parsedProperties', parsedProperties.filter(({ paramName }) => paramName.includes('rusName')));    
+
   return parsedProperties
 }
 export const parseAllOf = (allOfArr: NonNullable<OpenAPIV3_1.NonArraySchemaObject['allOf']>, data: OpenAPIV3_1.Document, parentParamName = ''): ParsedParam[] => {
@@ -389,7 +442,6 @@ export const parseAllOf = (allOfArr: NonNullable<OpenAPIV3_1.NonArraySchemaObjec
   const parsedAllOf = allOfArr.flatMap(schema => {
     return parseSchema(schema, data, parentParamName)
   })
-  // console.log('parentParamName', parentParamName, 'parsedAllOf', parsedAllOf)
   return parsedAllOf
 }
 export const parseAnyOf = ({ anyOf, description }: AnyOfParsingParam, data: OpenAPIV3_1.Document, parentParamName = '', parentParamType = ''): ParsedParam[] => {
@@ -438,9 +490,6 @@ export const parseOneOf = ({ oneOf, description }: OneOfParsingParam, data: Open
 
 type PropertiesRecord = OpenAPIV3_1.NonArraySchemaObject['properties'] 
 export const parsePropertyType = (property: NonNullable<PropertiesRecord>[string] | undefined, data: OpenAPIV3_1.Document, parentParamType = ''): string => {
-  // if (!parentParamType) {
-  //   console.log('property type to parse', property, 'parentParamType', parentParamType);
-  // }
   
   if (!property) return 'Не передано свойство - ошибка в логике парсинга'  
   if (typeof property === 'boolean') return `schema - ${property}`
