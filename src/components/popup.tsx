@@ -67,8 +67,9 @@ function PopupContent() {
       } else {
         throw new Error(t('invalidFileMessage'))
       }
-      // @ts-expect-error idk
-      const parsedData = parseData(mockDataMini)  
+      // // @ts-expect-error idk
+      // const parsedData = parseData(mockDataMini)  
+      const parsedData = parseData(data)  
       console.log('parsed', parsedData);
           
       // const parsedData = parseData(data)      
