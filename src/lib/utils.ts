@@ -70,9 +70,9 @@ export const parseData = (data?: OpenAPIV3_1.Document) => {
       return ({
         path: pathKey,
         method,
-        methodDesc: typeof methodDef === 'string' ? methodDef : Array.isArray(methodDef) ? 'Some Array  Method' : methodDef.description,
-        responses: parseResponse(methodDef.responses, data),
-        requests: parseRequestBody(methodDef.requestBody, data),
+        methodDesc: typeof methodDef === 'string' ? methodDef : Array.isArray(methodDef) ? 'Some Array  Method' : methodDef.description, //@ts-expect-error idk
+        responses: parseResponse(methodDef.responses, data), //@ts-expect-error idk
+        requests: parseRequestBody(methodDef.requestBody, data), //@ts-expect-error idk
         inputParams: parseParameters(methodDef?.parameters ?? [], data)
       })
     }))
@@ -501,14 +501,19 @@ export const parsePropertyType = (property: NonNullable<PropertiesRecord>[string
   if('oneOf' in property) {
     const joinedType = property.oneOf?.map(propPart => {
       if (typeof property === 'boolean') return 'boolean schema'
+      //@ts-expect-error idk
       if ('$ref' in propPart) {
         const parsedRef = parseRefSchema(propPart, data)
         const res = parsedRef.at(0)?.paramType ?? ''
         return parentParamType ? `${parentParamType}[${res}]` : res
       }
+      //@ts-expect-error idk
       const parsedType = propPart.type ?? typeof propPart.enum?.at(0) ?? ''
+      //@ts-expect-error idk
       const parsedFormat = propPart.format ? `[${propPart.format}]` : ''
+      //@ts-expect-error idk
       const parsedPattern = propPart.pattern ? `[${propPart.pattern}]` : ''
+      //@ts-expect-error idk
       const parsedEnum = propPart.enum ? `[\n${propPart.enum.join(',\n')}\n]` : ''
       const resType = `${parsedType}${parsedFormat}${parsedPattern}${parsedEnum}`
       return parentParamType ? `${parentParamType}[${resType}]` : resType

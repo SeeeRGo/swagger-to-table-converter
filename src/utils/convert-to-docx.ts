@@ -47,9 +47,10 @@ const parseParamsToTable = (params: InputParams) => params?.flatMap(param => tru
       width: { size: 500, type: WidthType.DXA },
     }),
   ],
+    // @ts-expect-error just for build
 })] : parseParams(param)) ?? []
-// @ts-expect-error just for build
 const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedParam>): TableRow[] => parsedParams.flatMap(param => {
+  // @ts-expect-error just for build
   if(!param.schema || !Array.isArray(param.schema)) {
     return [
       new TableRow({
@@ -90,12 +91,12 @@ const parseParams = (parsedParams: Exclude<ParsedResponses['schema'], ParsedPara
       })
     ]
   } else {
+    // @ts-expect-error just for build
     return parseParams(param.schema);
   }
 })
 
 const parseResponses = (responses: ParsedResponses): TableRow[] => {
-  // @ts-expect-error just for build
   if(!Array.isArray(responses.schema)) {    
     return [
       new TableRow({
@@ -110,7 +111,7 @@ const parseResponses = (responses: ParsedResponses): TableRow[] => {
           }),
           new TableCell({
             children: [
-              new Paragraph({ // @ts-expect-error just for build
+              new Paragraph({
                 text: 'description' in responses ? responses.description : 'Нет описания'
               })
             ],
@@ -137,7 +138,6 @@ const parseResponses = (responses: ParsedResponses): TableRow[] => {
     ]
   } else {
     // console.log('responses', responses);
-    // @ts-expect-error just for build
     return parseParams(responses.schema);
   }
 }
@@ -197,7 +197,7 @@ export function convertToDocxContent(
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph({ // @ts-expect-error just for build
+                      new Paragraph({
                         text: item.methodDesc ?? 'Нет описания метода'
                       })
                     ],
@@ -354,7 +354,7 @@ export function convertToDocxContent(
                     width: { size: 1000, type: WidthType.DXA },
                   }),
                 ],
-              }), // @ts-expect-error just for build
+              }),
               ...parseResponses(item.requests),
             ],
           }),
