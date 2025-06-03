@@ -2204,12 +2204,6 @@ export const attributeOutput = [
     "paramType": "array[object]",
     "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
     "required": true,
-},  
-{
-    "paramName": "attributes[index]",
-    "paramType": "array[object]",
-    "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
-    "required": true,
 },
 {
     "paramName": "attributes[index]",
@@ -2219,7 +2213,7 @@ export const attributeOutput = [
 },
 {
     "paramName": "Вариант 1 attributes[index]",
-    "paramType": "array[object]",
+    "paramType": "object",
     "description": "Строковый атрибут каталога заполнения",
     "required": true,
 }, // StringFillingCatalogAttribute start
@@ -2302,8 +2296,20 @@ export const attributeOutput = [
     "required": true,
 },
 {
+    "paramName": "Вариант 1 attributes[index].attribute.typeTag",
+    "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
+    "description": "Техническое наименование типа атрибута",
+    "required": true,
+},
+{
     "paramName": "Вариант 1 attributes[index].attribute.alterNames[index]",
     "paramType": "array[object]",
+    "description": "Альтернативные названия атрибута",
+    "required": true,
+},
+{
+    "paramName": "Вариант 1 attributes[index].attribute.alterNames[index]",
+    "paramType": "object",
     "description": "Альтернативные названия атрибута",
     "required": true,
 },
