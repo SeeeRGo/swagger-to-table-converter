@@ -2404,6 +2404,12 @@ export const attributeOutput = [
     "required": true,
 }, // CommonOivInfo start
 {
+    "paramName": "Вариант 1 attributes[index].oivs[index]",
+    "paramType": "object",
+    "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+    "required": true,
+},
+{
     "paramName": "Вариант 1 attributes[index].oivs[index].id",
     "paramType": "integer[int32]",
     "description": "Идентификатор ОИВа",
@@ -2446,7 +2452,7 @@ export const attributeOutput = [
     "required": false,
 },
 {
-    "paramName": "Вариант 1 attributes[index].manualInputTargets[index].manualInputSources[index]",
+    "paramName": "Вариант 1 attributes[index].manualInputSources[index]",
     "paramType": "array[integer[int32]]",
     "description": "Массив идентификаторов атрибутов, от значения которых зависит значение данного атрибута при Автозаполнении.\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
     "required": false,
