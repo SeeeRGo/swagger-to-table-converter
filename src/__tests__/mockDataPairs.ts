@@ -2471,7 +2471,7 @@ export const attributeOutput = [
 }, // StringFillingCatalogAttribute end
 {
   "paramName": "Вариант 2 attributes[index]",
-  "paramType": "array[object]",
+  "paramType": "object",
   "description": "Справочный атрибут каталога заполнения",
   "required": true,
 }, // DictFillingCatalogAttribute start
@@ -2482,11 +2482,23 @@ export const attributeOutput = [
   "required": true,
 },
 {
+  "paramName": "Вариант 2 attributes[index]",
+  "paramType": "object",
+  "description": "Общая информация об атрибуте каталога",
+  "required": true,
+},
+{
     "paramName": "Вариант 2 attributes[index].attribute",
     "paramType": "object",
-    "description": "Информация об атрибуте ЕХД",
+    "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
     "required": true,
 }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start CommonAttribute start DictionaryAttribute start
+{
+    "paramName": "Вариант 2 attributes[index].attribute",
+    "paramType": "object",
+    "description": "Общая информация об атрибуте",
+    "required": true,
+},
 {
     "paramName": "Вариант 2 attributes[index].attribute.id",
     "paramType": "integer[int32]",
@@ -2536,6 +2548,12 @@ export const attributeOutput = [
     "required": true,
 },
 {
+    "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
+    "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
+    "description": "Техническое наименование типа атрибута",
+    "required": true,
+},
+{
     "paramName": "Вариант 2 attributes[index].attribute.typeTag",
     "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
     "description": "Техническое наименование типа атрибута",
@@ -2544,6 +2562,12 @@ export const attributeOutput = [
 {
     "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
     "paramType": "array[object]",
+    "description": "Альтернативные названия атрибута",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
+    "paramType": "object",
     "description": "Альтернативные названия атрибута",
     "required": true,
 },
@@ -2596,6 +2620,102 @@ export const attributeOutput = [
     "required": true,
 }, // CommonFillingCatalogAttribute end // CommonCatalogAttribute end
 {
+    "paramName": "Вариант 2 attributes[index].isReq",
+    "paramType": "boolean",
+    "description": "Свойство обязательности атрибута",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].isUniq",
+    "paramType": "boolean",
+    "description": "Свойство уникальности значения атрибута",
+    "required": true,
+}, 
+{
+    "paramName": "Вариант 2 attributes[index].isUniqWithinParent",
+    "paramType": "boolean",
+    "description": "Признак, что уникальность значений атрибутов внутри табличного атрибута будет проверятся в рамках объекта-родителя.",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].isBanEdit",
+    "paramType": "boolean",
+    "description": "Свойство запрета на редактирование",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].isSystemModify",
+    "paramType": "boolean",
+    "description": "Свойство, что значение атрибута изменяется системой",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].objOperatingMode",
+    "paramType": "string[\ncreateObj,\nupdateObj,\ndeleteObj\n]",
+    "description": "Режим работы с объектом, при котором доступно изменение значений атрибута:\n  - `createObj` - только при создании,\n  - `updateObj` - при редактировании (в т.ч. создании),\n  - `deleteObj` - при удалении.",
+    "required": true,
+}, // FillingCatalogOperatingModeTagIdEnum full
+{
+    "paramName": "Вариант 2 attributes[index].oivs[index]",
+    "paramType": "array[object]",
+    "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+    "required": true,
+}, // CommonOivInfo start
+{
+    "paramName": "Вариант 2 attributes[index].oivs[index]",
+    "paramType": "object",
+    "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].oivs[index].id",
+    "paramType": "integer[int32]",
+    "description": "Идентификатор ОИВа",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].oivs[index].name",
+    "paramType": "string",
+    "description": "Наименование ОИВа",
+    "required": true,
+}, // CommonOivInfo end
+{
+    "paramName": "Вариант 2 attributes[index].oivsIds[index]",
+    "paramType": "array[integer]",
+    "description": "Список идентификаторов ОИВ, ответственных за значение, содержащееся в атрибуте",
+    "required": true,
+},
+{
+    "paramName": "Вариант 2 attributes[index].isManualInput",
+    "paramType": "boolean",
+    "description": "Настроено ли на этот атрибут заполнение значениями не из справочника (ручной ввод) в блоках Автозаполнения конструктора",
+    "required": false,
+},
+{
+    "paramName": "Вариант 2 attributes[index].manualInputTargets[index]",
+    "paramType": "array[object]",
+    "description": "Массив атрибутов, значение которых зависит от заполнения данного атрибута при автозаполнении.\nОписываются в блоке `Автозаполнение` конструктора в массиве [[blocks.properties.mapping]].\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+    "required": false,
+},
+{
+    "paramName": "Вариант 2 attributes[index].manualInputTargets[index].attrId",
+    "paramType": "integer",
+    "description": "Идентификатор атрибута в ЕХД",
+    "required": false,
+},
+{
+    "paramName": "Вариант 2 attributes[index].manualInputTargets[index].isDependent",
+    "paramType": "boolean",
+    "description": "Является ли атрибут зависимым в рамках ручного ввода",
+    "required": false,
+},
+{
+    "paramName": "Вариант 2 attributes[index].manualInputSources[index]",
+    "paramType": "array[integer[int32]]",
+    "description": "Массив идентификаторов атрибутов, от значения которых зависит значение данного атрибута при Автозаполнении.\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+    "required": false,
+},
+{
     "paramName": "Вариант 2 attributes[index].isMultiple",
     "paramType": "boolean",
     "description": "Указывает, что атрибут может содержать несколько значений одновременно",
@@ -2613,12 +2733,6 @@ export const attributeOutput = [
     "description": "Минимальное количество элементов, которое должно быть добавлено в атрибут",
     "required": false,
 }, // CommonCatalogAttributeWithMultipleValues end
-{
-    "paramName": "Вариант 2 attributes[index].attribute",
-    "paramType": "integer",
-    "description": "Минимальное количество элементов, которое должно быть добавлено в атрибут",
-    "required": false,
-},
 {
   "paramName": "Вариант 2 attributes[index].attribute",
   "paramType": "object",

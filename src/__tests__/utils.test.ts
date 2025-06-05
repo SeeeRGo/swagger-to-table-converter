@@ -29,7 +29,7 @@ test('parses schema with anyOf property with multiple entries corretly', () => {
   // const actual = parseSchema(attributeInput, mockDataInput)
   // console.log('actual', actual);
   
-  expect(parseSchema(attributeInput, mockDataInput).slice(0,60)).toEqual(attributeOutput.slice(0,60))
+  expect(parseSchema(attributeInput, mockDataInput).slice(0)).toEqual(attributeOutput.slice(0))
 })
 
 test.todo('parses nested required in allOf refs correctly')
