@@ -2218,27 +2218,9 @@ export const attributeOutput = [
     "required": true,
 }, // StringFillingCatalogAttribute start
 {
-    "paramName": "Вариант 1 attributes[index]",
-    "paramType": "object",
-    "description": "Общая информация атрибута каталога заполнения",
-    "required": true,
-},
-{
-    "paramName": "Вариант 1 attributes[index]",
-    "paramType": "object",
-    "description": "Общая информация об атрибуте каталога",
-    "required": true,
-},
-{
     "paramName": "Вариант 1 attributes[index].attribute",
     "paramType": "object",
     "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
-    "required": true,
-},
-{
-    "paramName": "Вариант 1 attributes[index].attribute",
-    "paramType": "object",
-    "description": "Общая информация об атрибуте",
     "required": true,
 }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start
 {
@@ -2476,29 +2458,11 @@ export const attributeOutput = [
   "required": true,
 }, // DictFillingCatalogAttribute start
 {
-  "paramName": "Вариант 2 attributes[index]",
-  "paramType": "object",
-  "description": "Общая информация атрибута каталога заполнения",
-  "required": true,
-},
-{
-  "paramName": "Вариант 2 attributes[index]",
-  "paramType": "object",
-  "description": "Общая информация об атрибуте каталога",
-  "required": true,
-},
-{
     "paramName": "Вариант 2 attributes[index].attribute",
     "paramType": "object",
     "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
     "required": true,
 }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start CommonAttribute start DictionaryAttribute start
-{
-    "paramName": "Вариант 2 attributes[index].attribute",
-    "paramType": "object",
-    "description": "Общая информация об атрибуте",
-    "required": true,
-},
 {
     "paramName": "Вариант 2 attributes[index].attribute.id",
     "paramType": "integer[int32]",
@@ -2736,8 +2700,8 @@ export const attributeOutput = [
 {
   "paramName": "Вариант 2 attributes[index].attribute",
   "paramType": "object",
-  "description": "Информация об атрибуте ЕХД",
-  "required": true,
+  "description": "Справочный атрибут",
+  "required": false,
 }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start CommonAttribute start
 {
   "paramName": "Вариант 2 attributes[index].attribute.id",
@@ -2789,15 +2753,9 @@ export const attributeOutput = [
 },
 {
   "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
-  "paramType": "string",
-  "description": "Наименование типа атрибута",
-  "required": true,
-},
-{
-  "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
   "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
   "description": "Техническое наименование типа атрибута",
-  "required": false,
+  "required": true,
 },
 {
   "paramName": "Вариант 2 attributes[index].attribute.typeTag",
@@ -2808,6 +2766,12 @@ export const attributeOutput = [
 {
   "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
   "paramType": "array[object]",
+  "description": "Альтернативные названия атрибута",
+  "required": true,
+},
+{
+  "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
+  "paramType": "object",
   "description": "Альтернативные названия атрибута",
   "required": true,
 },
@@ -2874,7 +2838,7 @@ export const attributeOutput = [
 {
   "paramName": "Вариант 2 attributes[index].refColDict",
   "paramType": "object",
-  "description": "Атрибут справочника, который будет использоваться для сопоставления с объектом справочника при загрузке данных через сервис.",
+  "description": "Столбец списка элементов справочников.\nДополнительный столбец справочника.", // TODO Combine parent and nested descriptions somehow
   "required": true,
 },
 {
@@ -2898,7 +2862,7 @@ export const attributeOutput = [
 {
   "paramName": "Вариант 2 attributes[index].defaultColDict",
   "paramType": "object",
-  "description": "Атрибут справочника, который будет отображаться в каталоге.",
+  "description": "Столбец списка элементов справочников.\nДополнительный столбец справочника.",
   "required": true,
 },
 {
@@ -2914,9 +2878,9 @@ export const attributeOutput = [
   "required": true,
 },
 {
-  "paramName": "Вариант 2 attributes[index].defaultColDict.sort",
+  "paramName": "Вариант 2 attributes[index].sort",
   "paramType": "string[\nasc,\ndesc\n]",
-  "description": "Сортировка элементов справочника при заполнении атрибута",
+  "description": "Техническое название порядка сортировки:\n  - `asc` - по возрастанию;\n  - `desc` - по убыванию.",
   "required": true,
 },
 ]
@@ -3001,3 +2965,20 @@ export const requiredOutput = [
       "required": true,
     },
   ]
+
+export const propertyToParseParamTypeInput = {
+    description: 'Информация о справочнике в справочном атрибуте',
+    allOf: [
+      {
+        '$ref': 'dictionaries.yaml#/components/schemas/CommonDictionaryInfo'
+      }
+    ],
+    properties: {
+      parentId: {
+        description: 'Идентификатор справочника-родителя',
+        type: 'integer'
+      }
+    },
+    readOnly: true
+  }
+export const propertyToParseParamTypeOutput = 'object'
