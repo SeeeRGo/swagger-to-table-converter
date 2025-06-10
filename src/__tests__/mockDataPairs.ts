@@ -154,6 +154,7 @@ export const plainRefOutput: ParsedParam[] = [
   "description": "Категория объектов",
    "paramName": "",
    "paramType": "object",
+   "required": false,
   },
   {
     "paramName": "id",
@@ -204,6 +205,12 @@ export const refArrayOutput: ParsedParam[] = [
 
 export const refPropOutput: ParsedParam[] = [
   {
+    "description": "Настройки карты каталога заполнения",
+    "paramName": "",
+    "paramType": "object",
+    "required": false,
+  },
+  {
     "paramName": "hasGeo",
     "paramType": "boolean",
     "description": "Наличие геопривязки в каталоге",
@@ -213,6 +220,12 @@ export const refPropOutput: ParsedParam[] = [
     "paramName": "typeGeoTagIds[index]",
     "paramType": "array[string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]]",
     "description": "Массив строковых идентификаторов типов геометрии",
+    "required": false,
+  },
+  {
+    "paramName": "typeGeoTagIds[index]",
+    "paramType": "string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]",
+    "description": "Типы геометрии в geojson",
     "required": false,
   },
   {
@@ -270,6 +283,7 @@ export const allOfOutput: ParsedParam[] = [
     "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
      "paramName": "",
      "paramType": "object",
+     "required": false,
   },
   {
     "paramName": "id",
@@ -706,8 +720,8 @@ export const objectWithNestedOutput = [
     "required": false,
   },
   {
-    "paramName": "Вариант 1 map.typeGeoTagIds[index]",
-    "paramType": "array[string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]]",
+    "paramName": "map.typeGeoTagIds[index]",
+    "paramType": "string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]",
     "description": "Типы геометрии в geojson",
     "required": false,
   },
@@ -782,11 +796,18 @@ export const catalogspostPathInput = {
 }
 export const catalogsPostOutput = {
   "requests": {
+    "description": "",
     "schema": [
+        {
+            "paramName": "",
+            "paramType": "object",
+            "description": "Настройки каталога заполнения",
+            "required": false,
+        },        
         {
             "paramName": "generalInfo",
             "paramType": "object",
-            "description": "Настройки вкладки \"Общая информация\" каталога заполнения",
+            "description": "Общая информация каталога заполнения",
             "required": true,
         },
         {
@@ -841,12 +862,6 @@ export const catalogsPostOutput = {
             "paramName": "generalInfo.typeCatalog",
             "paramType": "object",
             "description": "Тип каталога",
-            "required": false,
-        },
-        {
-            "paramName": "generalInfo.typeCatalog",
-            "paramType": "object",
-            "description": "Тип каталога",
             "required": true,
         },
         {
@@ -865,12 +880,12 @@ export const catalogsPostOutput = {
             "paramName": "generalInfo.typeCatalogId",
             "paramType": "integer",
             "description": "Идентификатор типа каталога",
-            "required": true,
+            "required": false,
         },
         {
             "paramName": "generalInfo.thematicCategory",
             "paramType": "object",
-            "description": "Тематическая категория каталога",
+            "description": "Общая информация о тематической категории",
             "required": true,
         },
         {
@@ -889,11 +904,17 @@ export const catalogsPostOutput = {
             "paramName": "generalInfo.thematicCategoryId",
             "paramType": "integer",
             "description": "Идентификатор тематической категории каталога",
-            "required": true,
+            "required": false,
         },
         {
             "paramName": "generalInfo.objectCategories[index]",
             "paramType": "array[object]",
+            "description": "Категории объекта",
+            "required": true,
+        },
+        {
+            "paramName": "generalInfo.objectCategories[index]",
+            "paramType": "object",
             "description": "Категории объекта",
             "required": true,
         },
@@ -922,6 +943,12 @@ export const catalogsPostOutput = {
             "required": true,
         },
         {
+            "paramName": "generalInfo.oivs[index]",
+            "paramType": "object",
+            "description": "Поставщики информации каталога (ответственные ОИВы)",
+            "required": true,
+        },
+        {
             "paramName": "generalInfo.oivs[index].id",
             "paramType": "integer[int32]",
             "description": "Идентификатор ОИВа",
@@ -934,26 +961,32 @@ export const catalogsPostOutput = {
             "required": true,
         },
         {
-            "paramName": "generalInfo.oivsIds",
+            "paramName": "generalInfo.oivsIds[index]",
             "paramType": "array[integer]",
             "description": "Список идентификаторов поставщиков информации каталога (ответственные ОИВы)",
-            "required": true,
+            "required": false,
         },
         {
             "paramName": "generalInfo.accountingObject",
             "paramType": "string",
             "description": "Объект учёта",
-            "required": true,
+            "required": false,
         },
         {
             "paramName": "generalInfo.keywords",
             "paramType": "string",
             "description": "Ключевые слова",
-            "required": true,
+            "required": false,
         },
         {
             "paramName": "generalInfo.systemsConsumers[index]",
             "paramType": "array[object]",
+            "description": "Системы потребители данных каталога",
+            "required": false,
+        },
+        {
+            "paramName": "generalInfo.systemsConsumers[index]",
+            "paramType": "object",
             "description": "Системы потребители данных каталога",
             "required": false,
         },
@@ -970,7 +1003,7 @@ export const catalogsPostOutput = {
             "required": true,
         },
         {
-            "paramName": "generalInfo.systemsConsumersIds",
+            "paramName": "generalInfo.systemsConsumersIds[index]",
             "paramType": "array[integer]",
             "description": "Список идентификаторов систем потребителей данных",
             "required": false,
@@ -980,13 +1013,7 @@ export const catalogsPostOutput = {
             "paramType": "boolean",
             "description": "Признак \"Показывать удалённые объекты\"",
             "required": true,
-        },          
-        {
-            "paramName": "generalInfo.isShowDeleteObjects",
-            "paramType": "boolean",
-            "description": "Признак \"Показывать удалённые объекты\"",
-            "required": true,
-        },          
+        },       
         {
             "paramName": "generalInfo.periodUpdate",
             "paramType": "object",
@@ -995,7 +1022,7 @@ export const catalogsPostOutput = {
         },          
         {
             "paramName": "generalInfo.periodUpdate.tagId",
-            "paramType": "string[\ndaily,\nweekly\n,monthly\n,quarterly\n,yearly\n,minutely\n,hourly\n,numDays\n,calendarDays\n,multiple\n,withChanges\n,realTime\n]",
+            "paramType": "string[\ndaily,\nweekly,\nmonthly,\nquarterly,\nyearly,\nminutely,\nhourly,\nnumDays,\ncalendarDays,\nmultiple,\nwithChanges,\nrealTime\n]",
             "description": "Техническое название периодичности обновления",
             "required": true,
         },           
@@ -1050,7 +1077,7 @@ export const catalogsPostOutput = {
         {
             "paramName": "generalInfo.periodUpdate.multiple[index].dateStart",
             "paramType": "string[^(0[1-9]|[1-2]\\d|3[0-1])\\.(0[1-9]|1[0-2])$]",
-            "description": "Название периодичности обновления каталога",
+            "description": "Дата начала действия указанной периодичности. Используется формат DD.MM",
             "required": true,
         },
         {
@@ -1084,6 +1111,12 @@ export const catalogsPostOutput = {
             "required": false,
         },
         {
+            "paramName": "generalInfo.systemsSuppliers[index]",
+            "paramType": "object",
+            "description": "Системы-поставщики данных в каталог заполнения",
+            "required": false,
+        },
+        {
             "paramName": "generalInfo.systemsSuppliers[index].id",
             "paramType": "integer[int32]",
             "description": "Идентификатор информационной системы",
@@ -1096,7 +1129,7 @@ export const catalogsPostOutput = {
             "required": true,
         },
         {
-            "paramName": "generalInfo.systemsSuppliersIds",
+            "paramName": "generalInfo.systemsSuppliersIds[index]",
             "paramType": "array[integer]",
             "description": "Список идентификаторов систем поставщиков данных",
             "required": false,
@@ -1110,7 +1143,7 @@ export const catalogsPostOutput = {
         {
             "paramName": "generalInfo.backgroundCheckPeriodTagId",
             "paramType": "string[\ndaily,\nweekly,\nmonthly,\nquarterly,\nyearly\n]",
-            "description": "Строковый идентификатор периода фоновой проверки",
+            "description": "Техническое название периодичности обновления",
             "required": false,
         },
         {
@@ -1128,7 +1161,7 @@ export const catalogsPostOutput = {
         {
             "paramName": "generalInfo.backgroundCheckPeriod.tagId",
             "paramType": "string[\ndaily,\nweekly,\nmonthly,\nquarterly,\nyearly\n]",
-            "description": "Строковый идентификатор периода фоновой проверки",
+            "description": "Техническое название периодичности обновления",
             "required": false,
         },
         {
@@ -1156,13 +1189,25 @@ export const catalogsPostOutput = {
             "required": false,
         },
         {
+            "paramName": "generalInfo.outOivsBlockEditObjectsGUI[index]",
+            "paramType": "object",
+            "description": "Поставщики информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
+            "required": false,
+        },
+        {
             "paramName": "generalInfo.outOivsBlockEditObjectsGUI[index].id",
             "paramType": "integer[int32]",
             "description": "Идентификатор ОИВа",
             "required": true,
         },
         {
-            "paramName": "generalInfo.outOivsBlockEditObjectsGUI[index]",
+            "paramName": "generalInfo.outOivsBlockEditObjectsGUI[index].name",
+            "paramType": "string",
+            "description": "Наименование ОИВа",
+            "required": true,
+        },
+        {
+            "paramName": "generalInfo.outOivsIdsBlockEditObjectsGUI[index]",
             "paramType": "array[integer]",
             "description": "Список идентификаторов поставщиков информации, которым остаётся доступным редактирование содержания каталога при отмеченном свойстве \"Заблокировать редактирование данных (веб)\"",
             "required": false,
@@ -1205,42 +1250,36 @@ export const catalogsPostOutput = {
         },
         {
             "paramName": "attributes[index]",
-            "paramType": "array[object[Один из вариантов]]",
-            "description": "Настройки вкладки \"Атрибуты\" каталога заполнения",
-            "required": false,
-        },
-        {
-            "paramName": " Вариант 1 attributes[index]",
-            "paramType": " Вариант 1 attributes[index]",
-            "description": " Вариант 1 attributes[index]",
-            "required": false,
+            "paramType": "Один из вариантов",
+            "description": "Атрибут каталога заполнения",
+            "required": true,
         }, // StringFillingCatalogAttribute start
         {
-            "paramName": " Вариант 1 attributes[index]",
+            "paramName": "Вариант 1 attributes[index]",
             "paramType": "object",
             "description": "Строковый атрибут каталога заполнения",
-            "required": false,
+            "required": true,
         },
         {
-            "paramName": " Вариант 1 attributes[index].attribute",
+            "paramName": "Вариант 1 attributes[index].attribute",
             "paramType": "object",
-            "description": "Информация об атрибуте ЕХД",
+            "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
             "required": true,
         }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start
         {
-            "paramName": " Вариант 1 attributes[index].attribute.id",
+            "paramName": "Вариант 1 attributes[index].attribute.id",
             "paramType": "integer[int32]",
             "description": "Идентификатор атрибута",
             "required": true,
         },
         {
-            "paramName": " Вариант 1 attributes[index].attribute.techName",
+            "paramName": "Вариант 1 attributes[index].attribute.techName",
             "paramType": "string",
             "description": "Техническое наименование атрибута, не может иметь значение \"id\"",
             "required": true,
         },
         {
-            "paramName": " Вариант 1 attributes[index].attribute.rusName",
+            "paramName": "Вариант 1 attributes[index].attribute.rusName",
             "paramType": "string",
             "description": "Русскоязычное наименование атрибута, должно быть уникальным",
             "required": true,
@@ -1277,15 +1316,9 @@ export const catalogsPostOutput = {
         },
         {
             "paramName": "Вариант 1 attributes[index].attribute.type.typeTag",
-            "paramType": "string",
-            "description": "Наименование типа атрибута",
-            "required": true,
-        },
-        {
-            "paramName": "Вариант 1 attributes[index].attribute.type.typeTag",
             "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
             "description": "Техническое наименование типа атрибута",
-            "required": false,
+            "required": true,
         },
         {
             "paramName": "Вариант 1 attributes[index].attribute.typeTag",
@@ -1296,6 +1329,12 @@ export const catalogsPostOutput = {
         {
             "paramName": "Вариант 1 attributes[index].attribute.alterNames[index]",
             "paramType": "array[object]",
+            "description": "Альтернативные названия атрибута",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].attribute.alterNames[index]",
+            "paramType": "object",
             "description": "Альтернативные названия атрибута",
             "required": true,
         },
@@ -1390,6 +1429,12 @@ export const catalogsPostOutput = {
             "required": true,
         }, // CommonOivInfo start
         {
+            "paramName": "Вариант 1 attributes[index].oivs[index]",
+            "paramType": "object",
+            "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+            "required": true,
+        }, 
+        {
             "paramName": "Вариант 1 attributes[index].oivs[index].id",
             "paramType": "integer[int32]",
             "description": "Идентификатор ОИВа",
@@ -1402,7 +1447,7 @@ export const catalogsPostOutput = {
             "required": true,
         }, // CommonOivInfo end
         {
-            "paramName": "Вариант 1 attributes[index].oivsIds",
+            "paramName": "Вариант 1 attributes[index].oivsIds[index]",
             "paramType": "array[integer]",
             "description": "Список идентификаторов ОИВ, ответственных за значение, содержащееся в атрибуте",
             "required": true,
@@ -1432,7 +1477,7 @@ export const catalogsPostOutput = {
             "required": false,
         },
         {
-            "paramName": "Вариант 1 attributes[index].manualInputTargets[index].manualInputSources[index]",
+            "paramName": "Вариант 1 attributes[index].manualInputSources[index]",
             "paramType": "array[integer[int32]]",
             "description": "Массив идентификаторов атрибутов, от значения которых зависит значение данного атрибута при Автозаполнении.\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
             "required": false,
@@ -1444,6 +1489,66 @@ export const catalogsPostOutput = {
             "required": false,
         }, // CommonCatalogAttributeWithDefaultValue full
         {
+            "paramName": "Вариант 1 attributes[index].fieldMask",
+            "paramType": "string",
+            "description": "Маска ввода, которой должно соответствовать значение атрибута. Обозначения:\n  - X - любые буквы,\n  - 0 - любые цифры.",
+            "required": false,
+        }, // CommonCatalogAttributeWithFieldMask full
+        {
+            "paramName": "Вариант 1 attributes[index].searchIndexId",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор поискового индекса, которому должно соответствовать значение атрибута",
+            "required": false,
+        }, // CommonCatalogAttributeWithSearchIndex start
+        {
+            "paramName": "Вариант 1 attributes[index].searchIndex",
+            "paramType": "object",
+            "description": "Общая информация о поисковом индексе в списке поисковых индексов",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].searchIndex.id",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор поискового индекса",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].searchIndex.name",
+            "paramType": "string",
+            "description": "Наименование поискового индекса",
+            "required": true,
+        }, // CommonCatalogAttributeWithSearchIndex end 
+        {
+            "paramName": "Вариант 1 attributes[index].fieldRegexId",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор регулярного выражения, которому должно соответствовать значение атрибута",
+            "required": false,
+        }, // CommonCatalogAttributeWithFieldRegex start
+        {
+            "paramName": "Вариант 1 attributes[index].fieldRegex",
+            "paramType": "object",
+            "description": "Общая информация регулярного выражения",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].fieldRegex.id",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор регулярного выражения",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].fieldRegex.name",
+            "paramType": "string",
+            "description": "Название регулярного выражения",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 1 attributes[index].fieldRegex.value",
+            "paramType": "string",
+            "description": "Регулярное выражение",
+            "required": true,
+        }, // CommonCatalogAttributeWithFieldRegex end
+        {
             "paramName": "Вариант 1 attributes[index].maxLength",
             "paramType": "integer",
             "description": "Максимальная длина строкового значения",
@@ -1451,20 +1556,14 @@ export const catalogsPostOutput = {
         }, // StringFillingCatalogAttribute end
         {
           "paramName": "Вариант 2 attributes[index]",
-          "paramType": "Вариант 2 attributes[index]",
-          "description": "Вариант 2 attributes[index]",
-          "required": false,
+          "paramType": "object",
+          "description": "Справочный атрибут каталога заполнения",
+          "required": true,
         }, // DictFillingCatalogAttribute start
-        {
-          "paramName": "Вариант 2 attributes[index]",
-          "paramType": "Вариант 2 attributes[index]",
-          "description": "Вариант 2 attributes[index]",
-          "required": false,
-        },
         {
             "paramName": "Вариант 2 attributes[index].attribute",
             "paramType": "object",
-            "description": "Информация об атрибуте ЕХД",
+            "description": "Атрибут.\n\nСхема включает общие для всех типов атрибутов поля.",
             "required": true,
         }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start CommonAttribute start DictionaryAttribute start
         {
@@ -1517,15 +1616,9 @@ export const catalogsPostOutput = {
         },
         {
             "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
-            "paramType": "string",
-            "description": "Наименование типа атрибута",
-            "required": true,
-        },
-        {
-            "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
             "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
             "description": "Техническое наименование типа атрибута",
-            "required": false,
+            "required": true,
         },
         {
             "paramName": "Вариант 2 attributes[index].attribute.typeTag",
@@ -1536,6 +1629,12 @@ export const catalogsPostOutput = {
         {
             "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
             "paramType": "array[object]",
+            "description": "Альтернативные названия атрибута",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
+            "paramType": "object",
             "description": "Альтернативные названия атрибута",
             "required": true,
         },
@@ -1588,6 +1687,102 @@ export const catalogsPostOutput = {
             "required": true,
         }, // CommonFillingCatalogAttribute end // CommonCatalogAttribute end
         {
+            "paramName": "Вариант 2 attributes[index].isReq",
+            "paramType": "boolean",
+            "description": "Свойство обязательности атрибута",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].isUniq",
+            "paramType": "boolean",
+            "description": "Свойство уникальности значения атрибута",
+            "required": true,
+        }, 
+        {
+            "paramName": "Вариант 2 attributes[index].isUniqWithinParent",
+            "paramType": "boolean",
+            "description": "Признак, что уникальность значений атрибутов внутри табличного атрибута будет проверятся в рамках объекта-родителя.",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].isBanEdit",
+            "paramType": "boolean",
+            "description": "Свойство запрета на редактирование",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].isSystemModify",
+            "paramType": "boolean",
+            "description": "Свойство, что значение атрибута изменяется системой",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].objOperatingMode",
+            "paramType": "string[\ncreateObj,\nupdateObj,\ndeleteObj\n]",
+            "description": "Режим работы с объектом, при котором доступно изменение значений атрибута:\n  - `createObj` - только при создании,\n  - `updateObj` - при редактировании (в т.ч. создании),\n  - `deleteObj` - при удалении.",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].oivs[index]",
+            "paramType": "array[object]",
+            "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+            "required": true,
+        }, // CommonOivInfo start
+        {
+            "paramName": "Вариант 2 attributes[index].oivs[index]",
+            "paramType": "object",
+            "description": "Список ОИВ, ответственных за значение, содержащееся в атрибуте",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].oivs[index].id",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор ОИВа",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].oivs[index].name",
+            "paramType": "string",
+            "description": "Наименование ОИВа",
+            "required": true,
+        }, // CommonOivInfo end
+        {
+            "paramName": "Вариант 2 attributes[index].oivsIds[index]",
+            "paramType": "array[integer]",
+            "description": "Список идентификаторов ОИВ, ответственных за значение, содержащееся в атрибуте",
+            "required": true,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].isManualInput",
+            "paramType": "boolean",
+            "description": "Настроено ли на этот атрибут заполнение значениями не из справочника (ручной ввод) в блоках Автозаполнения конструктора",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].manualInputTargets[index]",
+            "paramType": "array[object]",
+            "description": "Массив атрибутов, значение которых зависит от заполнения данного атрибута при автозаполнении.\nОписываются в блоке `Автозаполнение` конструктора в массиве [[blocks.properties.mapping]].\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].manualInputTargets[index].attrId",
+            "paramType": "integer",
+            "description": "Идентификатор атрибута в ЕХД",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].manualInputTargets[index].isDependent",
+            "paramType": "boolean",
+            "description": "Является ли атрибут зависимым в рамках ручного ввода",
+            "required": false,
+        },
+        {
+            "paramName": "Вариант 2 attributes[index].manualInputSources[index]",
+            "paramType": "array[integer[int32]]",
+            "description": "Массив идентификаторов атрибутов, от значения которых зависит значение данного атрибута при Автозаполнении.\n\nПоле обязательное. Если атрибутов нет, то возвращается пустой массив.",
+            "required": false,
+        },
+        {
             "paramName": "Вариант 2 attributes[index].isMultiple",
             "paramType": "boolean",
             "description": "Указывает, что атрибут может содержать несколько значений одновременно",
@@ -1606,17 +1801,11 @@ export const catalogsPostOutput = {
             "required": false,
         }, // CommonCatalogAttributeWithMultipleValues end
         {
-            "paramName": "Вариант 2 attributes[index].attribute",
-            "paramType": "integer",
-            "description": "Минимальное количество элементов, которое должно быть добавлено в атрибут",
-            "required": false,
-        },
-        {
           "paramName": "Вариант 2 attributes[index].attribute",
           "paramType": "object",
-          "description": "Информация об атрибуте ЕХД",
-          "required": true,
-      }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start CommonAttribute start
+          "description": "Справочный атрибут",
+          "required": false,
+      }, // CommonFillingCatalogAttribute start CommonCatalogAttribute start CommonAttributeInfo start DictionaryAttribute start
       {
           "paramName": "Вариант 2 attributes[index].attribute.id",
           "paramType": "integer[int32]",
@@ -1667,15 +1856,9 @@ export const catalogsPostOutput = {
       },
       {
           "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
-          "paramType": "string",
-          "description": "Наименование типа атрибута",
-          "required": true,
-      },
-      {
-          "paramName": "Вариант 2 attributes[index].attribute.type.typeTag",
           "paramType": "string[\nSTRING,\nNUMBER,\nDATE,\nDICTIONARY,\nCATALOG,\nFLAG,\nFILE,\nLINK\n]",
           "description": "Техническое наименование типа атрибута",
-          "required": false,
+          "required": true,
       },
       {
           "paramName": "Вариант 2 attributes[index].attribute.typeTag",
@@ -1686,6 +1869,12 @@ export const catalogsPostOutput = {
       {
           "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
           "paramType": "array[object]",
+          "description": "Альтернативные названия атрибута",
+          "required": true,
+      },
+      {
+          "paramName": "Вариант 2 attributes[index].attribute.alterNames[index]",
+          "paramType": "object",
           "description": "Альтернативные названия атрибута",
           "required": true,
       },
@@ -1752,7 +1941,7 @@ export const catalogsPostOutput = {
       {
           "paramName": "Вариант 2 attributes[index].refColDict",
           "paramType": "object",
-          "description": "Атрибут справочника, который будет использоваться для сопоставления с объектом справочника при загрузке данных через сервис.",
+          "description": "Столбец списка элементов справочников.\nДополнительный столбец справочника.",
           "required": true,
       },
       {
@@ -1776,7 +1965,7 @@ export const catalogsPostOutput = {
       {
           "paramName": "Вариант 2 attributes[index].defaultColDict",
           "paramType": "object",
-          "description": "Атрибут справочника, который будет отображаться в каталоге.",
+          "description": "Столбец списка элементов справочников.\nДополнительный столбец справочника.",
           "required": true,
       },
       {
@@ -1792,15 +1981,15 @@ export const catalogsPostOutput = {
           "required": true,
       },
       {
-          "paramName": "Вариант 2 attributes[index].defaultColDict.sort",
+          "paramName": "Вариант 2 attributes[index].sort",
           "paramType": "string[\nasc,\ndesc\n]",
-          "description": "Сортировка элементов справочника при заполнении атрибута",
+          "description": "Техническое название порядка сортировки:\n  - `asc` - по возрастанию;\n  - `desc` - по убыванию.",
           "required": true,
       },
       {
           "paramName": "meta",
           "paramType": "object",
-          "description": "Настройки вкладки \"Метаданные\" каталога заполнения",
+          "description": "Метаданные каталога заполнения",
           "required": false,
       }, // FillingCatalogMetadata start CommonCatalogMetadata start
       {
@@ -1834,6 +2023,12 @@ export const catalogsPostOutput = {
           "required": false,
       }, // ConstructorPackageData start
       {
+          "paramName": "constructor[index]",
+          "paramType": "object",
+          "description": "Настройки конструктора процессов. Представляет собой массив пакетов.",
+          "required": false,
+      },
+      {
           "paramName": "constructor[index].tomlFormat",
           "paramType": "string",
           "description": "Настройка одного пакета конструктора процессов, описанная пользователем в формате TOML.\nПередаётся в качестве строки с экранированием символов.",
@@ -1842,7 +2037,7 @@ export const catalogsPostOutput = {
       {
           "paramName": "constructor[index].jsonFormat",
           "paramType": "object",
-          "description": "Настройка одного пакета конструктора процессов, преобразованная из формата TOML в JSON.\nНеобходима для обработки на стороне клиента для реализации доп. функций, помогающих пользователю при создании настройки.",
+          "description": "Пакет конструктора процессов",
           "required": true,
       }, // ConstructorPackage start ConstructorPackageCommonInfo start
       {
@@ -1865,7 +2060,7 @@ export const catalogsPostOutput = {
       },
       {
           "paramName": "constructor[index].jsonFormat.event",
-          "paramType": "string[\ncreate,\change,\ndelete\n]",
+          "paramType": "string[\ncreate,\nchange,\ndelete\n]",
           "description": "Событие, при котором запускается процесс, описанный в конструкторе. Может принимать значения:\n  - change - изменение объекта, включая создание\n  - create - создание объекта,\n  - delete - удаление объекта.",
           "required": true,
       },
@@ -1919,7 +2114,7 @@ export const catalogsPostOutput = {
       },
       {
           "paramName": "constructor[index].jsonFormat.blocks[index].properties",
-          "paramType": "object",
+          "paramType": "Один из вариантов",
           "description": "Набор дополнительных свойств блока, зависящих от типа блока.",
           "required": true,
       },
@@ -1927,7 +2122,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 1 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"Пакет\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockPackage start
       {
           "paramName": "Вариант 1 constructor[index].jsonFormat.blocks[index].properties.packTechName",
@@ -1939,7 +2134,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 2 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"Условие\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockCondition start
       {
           "paramName": "Вариант 2 constructor[index].jsonFormat.blocks[index].properties.condition",
@@ -1957,7 +2152,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 3 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"Уведомление\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockNotice start
       {
           "paramName": "Вариант 3 constructor[index].jsonFormat.blocks[index].properties.message",
@@ -1969,7 +2164,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 4 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"E-mail\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockEmail start
       {
           "paramName": "Вариант 4 constructor[index].jsonFormat.blocks[index].properties.message",
@@ -1987,7 +2182,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 5 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"Автоизменение\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockAutochange start
       {
           "paramName": "Вариант 5 constructor[index].jsonFormat.blocks[index].properties.condition",
@@ -2023,7 +2218,7 @@ export const catalogsPostOutput = {
           "paramName": "Вариант 6 constructor[index].jsonFormat.blocks[index].properties",
           "paramType": "object",
           "description": "Настройки для блока \"Автозаполнение\"",
-          "required": false,
+          "required": true,
       }, // ConstructorBlockAutofill start
       {
           "paramName": "Вариант 6 constructor[index].jsonFormat.blocks[index].properties.refValue",
@@ -2149,6 +2344,12 @@ export const catalogsPostOutput = {
           "paramName": "map.typeGeoTagIds[index]",
           "paramType": "array[string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]]",
           "description": "Массив строковых идентификаторов типов геометрии",
+          "required": false,
+      },
+      {
+          "paramName": "map.typeGeoTagIds[index]",
+          "paramType": "string[\nPoint,\nMultiPoint,\nMultiLineString,\nMultiPolygon\n]",
+          "description": "Типы геометрии в geojson",
           "required": false,
       },
       {
