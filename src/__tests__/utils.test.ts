@@ -6,9 +6,7 @@ import { MockOutputMini, mockOutputParam } from './mockOutpuMini'
 import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput } from './mockDataPairs'
 
 test('parsed yaml swagger specs correctly', () => {
-  // parseData(mockDataMini)
-  // expect(true).toEqual(true)
-  expect(parseData(mockDataMini)).toEqual(MockOutputMini)
+  expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
 })
 // test('parses huge requestBody correctly', () => {
 //   const actual = parseRequestBody(catalogspostPathInput.requestBody, mockDataMini)

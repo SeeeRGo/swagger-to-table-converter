@@ -2,7 +2,7 @@ export const MockOutputMini = [
   {
     "path": "/catalogs/search",
     "method": "post",
-    "methodDesc": "Поиск по списку каталогов заполнения",
+    "methodDesc": "Возвращает список неудалённых каталогов, где по каждому каталогу содержится информация необходимая для отображения в разделах `Данные по ...`\n\nМетод позволяет выполнять сортировку, фильтрацию, текстовый поиск и пагинацию. Подробнее см. параметры запроса.\n\nДля фильтрации используется тело запроса.",
     "responses": {
         "description": "Успешный ответ.\nПри отсутствии элементов, удовлетворяющих условиям запроса, возвращается пустой массив.\nЕсли переданы несуществующие идентификаторы категории, ОИВ, системы-потребителя, то также возвращается пустой массив.",
         "schema": []
@@ -50,14 +50,14 @@ export const MockOutputMini = [
         {
             "paramName": "statusSigning",
             "paramIn": "query",
-            "paramType": "string[\nsigned,\nneverSigned,\nhasChange,\narchive\n]",
+            "paramType": "array[string[\nsigned,\nneverSigned,\nhasChange,\narchive\n]]",
             "description": "Статус подписания каталога. Может принимать следующие значения:\n  - `signed` - подписанный, изменения отсутствуют. Каталог имеет этот статус при выполнении условия:\n    statusSignObjects = signed И statusSignMetadata = signed\n  - `neverSigned` - ни разу не подписан. Каталог имеет этот статус при выполнении условия:\n    dateLastSign=null И statusSignObjects != archive\n  - `hasChange` - подписанный, имеются изменения. Каталог имеет этот статус при выполнении условия:\n    dateLastSign = {value} И (statusSignObjects = unsigned ИЛИ statusSignMetadata = unsigned)\n  - `archive` - в архиве. Каталог имеет этот статус при выполнении условия:\n    statusSignObjects = archive И statusSignMetadata = archive",
             "required": false,
         },
         {
             "paramName": "planSigning",
             "paramIn": "query",
-            "paramType": "string[\nok,\nless3Day,\nexpired\n]",
+            "paramType": "array[string[\nok,\nless3Day,\nexpired\n]]",
             "description": "Статус просрочки подписания каталога. Может принимать следующие значения:\n  - `ok` - срок планового подписания не нарушен. Включает каталоги, для которых dateNextUpdate строго больше текущей даты ИЛИ является null.\n  - `less3Day` - до планового подписания менее 3-х дней. Вклячает каталоги, у которых dateNextUpdate меньше или равна текущей даты + 3 дня.\n  - `expired` - плановое подписание просрочено. Включает каталоги, для которых dateNextUpdate строго меньше текущей даты.",
             "required": false,
         }
