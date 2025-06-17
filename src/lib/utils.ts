@@ -242,20 +242,26 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
   }
 }
 export const parseResponse = (response: OpenAPIV3_1.ResponsesObject, data: OpenAPIV3_1.Document): ParsedResponse => {
-  if (response['200'] && 'content' in response['200']) {
+  if (response['200'] && 'content' in response['200'] && response['200'].content && "application/json" in response['200'].content && "schema" in response['200'].content["application/json"]) {
     return {
-      description: response['200'].description ?? '',
-      schema: parseSchema(response['200'].content, data, {})
+      description: response['200'].description ?? 'Нет описания ответа 200 кода',
+      schema: parseSchema(response['200'].content["application/json"]?.schema, data, {})
     }
   }
-  if (response['201'] && 'content' in response['201']) {
+  if (response['201'] && 'content' in response['201'] && response['201'].content && "application/json" in response['201'].content && "schema" in response['201'].content["application/json"]) {
     return {
-      description: response['201'].description ?? '',
-      schema: parseSchema(response['201'].content, data, {})
+      description: response['201'].description ?? 'Нет описания ответа 201 кода',
+      schema: parseSchema(response['201'].content["application/json"].schema, data, {})
+    }
+  }
+  if (response['400'] && 'content' in response['400'] && response['400'].content && "application/json" in response['400'].content && "schema" in response['400'].content["application/json"]) {
+    return {
+      description: response['400'].description ?? 'Нет описания ответа 400 кода',
+      schema: parseSchema(response['400'].content["application/json"].schema, data, {})
     }
   }
   return {
-    description: '',
+    description: 'В схеме ответов нет кода 200 или 201 или 400',
     schema: []
   }
 }

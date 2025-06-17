@@ -8,6 +8,17 @@ import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInpu
 test('parsed yaml swagger specs correctly', () => {
   expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
 })
+
+test.todo('parse application/json request body correctly')
+test.todo('parse text/plain request body correctly')
+test.todo('parse required request body correctly')
+test.todo('parse ref request body correctly')
+test.todo('parse 200 response application/json correctly')
+test.todo('parse 201 response application/json correctly')
+test.todo('parse 400 response application/json correctly')
+test.todo('parse ref response correctly')
+test.todo('parse text/plain response correctly')
+test.todo('parse response with multiple possible codes correctly')
 // test('parses huge requestBody correctly', () => {
 //   const actual = parseRequestBody(catalogspostPathInput.requestBody, mockDataMini)
 //   expect(actual).toEqual(catalogsPostOutput.requests)
