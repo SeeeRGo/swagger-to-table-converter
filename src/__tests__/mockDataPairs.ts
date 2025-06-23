@@ -3183,3 +3183,608 @@ export const propertyToParseParamTypeInput = {
     readOnly: true
   }
 export const propertyToParseParamTypeOutput = 'object'
+
+export const multipleResponseCodesInput = {
+    "get": {
+        "tags": [
+            "catalogs"
+        ],
+        "summary": "Получение настроек условной уникальности каталога заполнения",
+        "description": "Возвращает настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов  представленном в форматах TOML.",
+        "parameters": [
+            {
+                "$ref": "#/components/parameters/catalogIdPathParam"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Успешный ответ. Если условие уникальности не настроено, то возвращается пустая строка",
+                "content": {
+                    "text/plain": {
+                        "schema": {
+                            "description": "Настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов.",
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Пример": {
+                                "$ref": "#/components/examples/FillingCatalogConditionalUniqResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "404": {
+                "$ref": "#/components/responses/FillingCatalogNotFoundResponse"
+            }
+        }
+    }
+}
+
+export const multipleResponseCodesOutput = []
+
+export const plainTextRequestBodyInput = {
+    "required": true,
+    "content": {
+        "text/plain": {
+            "schema": {
+                "type": "string"
+            },
+            "examples": {
+                "Пример": {
+                    "value": "containsInList(attr.OrgTypeName, (895132643)) and equals(attr.OKFSCode, 13))"
+                }
+            }
+        }
+    }
+}
+
+export const plainTextRequestBodyOutput = {
+    schema: [
+        {
+            "paramName": "plain_text_body",
+            "paramType": "string",
+            "description": "No description in primitive scema description",
+            "required": false,
+        },
+    ],
+    required: true,
+    description: ''
+    }
+
+export const refRequestRecursiveBodyInput = {
+    "required": true,
+    "content": {
+        "application/json": {
+            "schema": {
+                "$ref": "#/components/schemas/SystemPublicationSettingsInHistVersion"
+            },
+            "examples": {
+                "Пример тела запроса": {
+                    "$ref": "#/components/examples/SystemPublicationSettingsInHistVersionRequest"
+                }
+            }
+        }
+    }
+}
+
+export const refRequestRecursiveBodyOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+
+export const jsonRequestBodyInput = {
+    "description": "Пример тела запроса с фильтрами по списку каталогов, в которых используется каталог заполнения",
+    "content": {
+        "application/json": {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "filters": {
+                        "type": "array",
+                        "items": {
+                            "allOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/BasicFilter"
+                                },
+                                {
+                                    "properties": {
+                                        "attribute": {
+                                            "enum": [
+                                                "id",
+                                                "fullName",
+                                                "attributeRusName",
+                                                "attributeEnName"
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "examples": {
+                "Пример": {
+                    "$ref": "#/components/examples/FillingCatalogCatalogsSearchRequest"
+                }
+            }
+        }
+    }
+}
+
+export const jsonRequestBodyOutput = {
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "filters[index]",
+            paramType: "array[object]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "filters[index]",
+            paramType: "object",
+            description: "Объект базового фильтра для запросов с фильтрацией по столбцам таблиц",
+            required: false,
+        },
+        {
+            paramName: "filters[index].attribute",
+            paramType: "string",
+            description: "Техническое наименование столбца, по которому производится сортировка или фильтрация.\n\nДля атрибутов каталога передается в следующем формате:\n  - \"field_{attrId}\" для каталога заполнения\n  - \"field_{catalogAttrId}\" для каталога публикации\n      - attrId - идентификатор атрибута в ЕХД\n      - catalogAttrId - идентификатор атрибута каталога",
+            required: true,
+        },
+        {
+            paramName: "filters[index].operator",
+            paramType: "string[\nempty,\nnotEmpty,\ncontains,\ninEnum,\nequals,\ngreaterThan,\ngreaterOrEqualsThan,\nlessThan,\nlessOrEqualsThan\n]",
+            description: "Техническое название оператора базовой фильтрации",
+            required: true,
+        },
+        {
+            paramName: "filters[index].value",
+            paramType: "Один из вариантов",
+            description: "Значение для сравнения со значением атрибута при применении оператора",
+            required: false,
+        },
+        {
+            paramName: "Вариант 1 filters[index].value",
+            paramType: "string",
+            description: "Значение для фильтрации по строковому столбцу или дате",
+            required: false,
+        },
+        {
+            paramName: "Вариант 2 filters[index].value",
+            paramType: "integer",
+            description: "Значение для фильтрации по столбцу с целыми числами",
+            required: false,
+        },
+        {
+            paramName: "Вариант 3 filters[index].value",
+            paramType: "number",
+            description: "Значение для фильтрации по столбцу с дробными числами",
+            required: false,
+        },
+    ],
+    required: false,
+    description: 'Пример тела запроса с фильтрами по списку каталогов, в которых используется каталог заполнения'
+}
+export const plainRefRequestBodyInput = {
+    "$ref": "#/components/requestBodies/publicationCatalogListRequestBody"
+}
+export const plainRefRequestBodyOutput = {
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "",
+            required: false,
+        },
+                {
+            paramName: "filters[index]",
+            paramType: "array[object]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "filters[index]",
+            paramType: "object",
+            description: "Объект фильтра по списку каталогов для запросов с фильтрацией по столбцам таблиц",
+            required: false,
+        },
+        {
+            paramName: "filters[index].attribute",
+            paramType: "string",
+            description: "Техническое название атрибута (столбца), по которому производится фильтрация.\nСовпадает с названием поля объекта, который передается в теле ответа.",
+            required: true,
+        },
+        {
+            paramName: "filters[index].operator",
+            paramType: "string[\nempty,\nnotEmpty,\ncontains,\ninEnum,\nequals,\ngreaterThan,\ngreaterOrEqualsThan,\nlessThan,\nlessOrEqualsThan,\ninIds\n]",
+            description: "Техническое название оператора для фильтрации по списку каталогов",
+            required: true,
+        },
+        {
+            paramName: "filters[index].value",
+            paramType: "Один из вариантов",
+            description: "Значение для сравнения со значением атрибута при применении оператора",
+            required: false,
+        },
+        {
+            paramName: "Вариант 1 filters[index].value",
+            paramType: "string",
+            description: "Значение для фильтрации по строковому столбцу или дате",
+            required: false,
+        },
+        {
+            paramName: "Вариант 2 filters[index].value",
+            paramType: "integer",
+            description: "Значение для фильтрации по столбцу с целыми числами",
+            required: false,
+        },
+        {
+            paramName: "Вариант 3 filters[index].value",
+            paramType: "number",
+            description: "Значение для фильтрации по столбцу с дробными числами",
+            required: false,
+        },
+        {
+            paramName: "Вариант 4 filters[index].value",
+            paramType: "array[integer]",
+            description: "Значение для фильтрации по идентификаторам с оператором `inIds`",
+            required: false,
+        },
+        {
+            paramName: "filters[index].attribute",
+            paramType: "string[\nid,\nfullName,\nresponsiblePerson,\ncountActiveObjects,\ncountObjects,\ndateNextUpdate,\nsourceCatalogId,\nthematicCategory,\noivs,\nperiodUpdate,\nsystemsConsumers,\n]",
+            description: "Техническое название атрибута (столбца), по которому производится фильтрация.\nСовпадает с названием поля объекта, который передается в теле ответа.",
+            required: true,
+        },
+    ],
+    required: false,
+    description: 'Пример тела запроса для поиска по списку каталогов публикации'
+}
+
+export const response200jsonInput = {
+    "description": "Успешный ответ",
+    "content": {
+        "application/json": {
+            "schema": {
+                "$ref": "_common.yaml#/components/schemas/OkResponse"
+            },
+            "examples": {
+                "Пример": {
+                    "$ref": "#/components/examples/CatalogDeletedResponse"
+                }
+            }
+        }
+    }
+}
+export const response200jsonOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+
+export const response400jsonInput = {
+    "description": "Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.",
+    "content": {
+        "application/json": {
+            "schema": {
+                "oneOf": [
+                    {
+                        "$ref": "_common.yaml#/components/schemas/BadRequestError"
+                    }
+                ]
+            },
+            "examples": {
+                "Каталог находится в процессе импорта": {
+                    "$ref": "#/components/examples/CatalogInImportCantBeDeletedError"
+                },
+                "Каталог используется в конструкторе проверок другого каталога заполнения": {
+                    "$ref": "#/components/examples/CatalogInCatalogPackagesCantBeDeletedError"
+                },
+                "Каталог используется в настройках уникальностей другого каталога заполнения": {
+                    "$ref": "#/components/examples/CatalogInCatalogUniqCantBeDeletedError"
+                },
+                "Каталог используется в ссылочном атрибуте другого каталога заполнения": {
+                    "$ref": "#/components/examples/CatalogInCatalogAttributesCantBeDeletedError"
+                },
+                "Каталог используется в настройках ограничения выборки каталога публикации": {
+                    "$ref": "#/components/examples/CatalogInPublCatalogConditionsCantBeDeletedError"
+                },
+                "На основе каталога создан справочник": {
+                    "$ref": "#/components/examples/CatalogInDictionaryCantBeDeletedError"
+                }
+            }
+        }
+    }
+}
+export const response201jsonOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+export const response201jsonInput = {
+                      "description": "Успешный ответ",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "_common.yaml#/components/schemas/CreatedResponse"
+                              },
+                              "examples": {
+                                  "Пример": {
+                                      "$ref": "#/components/examples/CatalogCreatedResponse"
+                                  }
+                              }
+                          }
+                      }
+                  }
+export const response400jsonOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+
+export const responseMultiCodeInput = {
+    "200": {
+        "description": "Успешный ответ",
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "_common.yaml#/components/schemas/OkResponse"
+                },
+                "examples": {
+                    "Пример": {
+                        "$ref": "#/components/examples/CatalogDeletedResponse"
+                    }
+                }
+            }
+        }
+    },
+    "400": {
+        "description": "Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.",
+        "content": {
+            "application/json": {
+                "schema": {
+                    "oneOf": [
+                        {
+                            "$ref": "_common.yaml#/components/schemas/BadRequestError"
+                        }
+                    ]
+                },
+                "examples": {
+                    "Каталог находится в процессе импорта": {
+                        "$ref": "#/components/examples/CatalogInImportCantBeDeletedError"
+                    },
+                    "Каталог используется в конструкторе проверок другого каталога заполнения": {
+                        "$ref": "#/components/examples/CatalogInCatalogPackagesCantBeDeletedError"
+                    },
+                    "Каталог используется в настройках уникальностей другого каталога заполнения": {
+                        "$ref": "#/components/examples/CatalogInCatalogUniqCantBeDeletedError"
+                    },
+                    "Каталог используется в ссылочном атрибуте другого каталога заполнения": {
+                        "$ref": "#/components/examples/CatalogInCatalogAttributesCantBeDeletedError"
+                    },
+                    "Каталог используется в настройках ограничения выборки каталога публикации": {
+                        "$ref": "#/components/examples/CatalogInPublCatalogConditionsCantBeDeletedError"
+                    },
+                    "На основе каталога создан справочник": {
+                        "$ref": "#/components/examples/CatalogInDictionaryCantBeDeletedError"
+                    }
+                }
+            }
+        }
+    },
+}
+export const responseMultiCodeOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+export const responsePlainTextInput = {
+    "200": {
+        "description": "Успешный ответ. Если условие уникальности не настроено, то возвращается пустая строка",
+        "content": {
+            "text/plain": {
+                "schema": {
+                    "description": "Настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов.",
+                    "type": "string"
+                },
+                "examples": {
+                    "Пример": {
+                        "$ref": "#/components/examples/FillingCatalogConditionalUniqResponse"
+                    }
+                }
+            }
+        }
+    }
+}
+export const responsePlainTextOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+
+export const responseRefInput = {
+    "201": {
+        "description": "Успешный ответ",
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "_common.yaml#/components/schemas/CreatedResponse"
+                },
+                "examples": {
+                    "Пример": {
+                        "$ref": "catalogs.yaml#/components/examples/CatalogCreatedResponse"
+                    }
+                }
+            }
+        }
+    },
+    "400": {
+        "$ref": "#/components/responses/PublicationCatalogBadRequestPostResponse"
+    },
+    "404": {
+        "$ref": "#/components/responses/PublicationCatalogNotFoundResponse"
+    }
+}
+export const responseRefOutput = {
+    schema: [],
+    required: true,
+    description: ''
+}
+        //   "CreatedResponse": {
+        //       "type": "object",
+        //       "description": "Успешное создание объекта.",
+        //       "allOf": [
+        //           {
+        //               "$ref": "#/components/schemas/ApiResponse"
+        //           },
+        //           {
+        //               "properties": {
+        //                   "code": {
+        //                       "enum": [
+        //                           201
+        //                       ]
+        //                   },
+        //                   "messageType": {
+        //                       "enum": [
+        //                           "Created"
+        //                       ]
+        //                   }
+        //               }
+        //           }
+        //       ]
+        //   },
+// {
+//                   "201": {
+//                       "description": "Успешный ответ",
+//                       "content": {
+//                           "application/json": {
+//                               "schema": {
+//                                   "$ref": "_common.yaml#/components/schemas/CreatedResponse"
+//                               },
+//                               "examples": {
+//                                   "Пример": {
+//                                       "$ref": "#/components/examples/CatalogCreatedResponse"
+//                                   }
+//                               }
+//                           }
+//                       }
+//                   },
+//                   "400": {
+//                       "$ref": "#/components/responses/FillingCatalogBadRequestErrors"
+//                   },
+//                   "404": {
+//                       "$ref": "#/components/responses/FillingCatalogEntitiesNotFoundError"
+//                   }
+//               }
+            //   "responses": {
+            //       "200": {
+            //           "description": "Успешный ответ",
+            //           "content": {
+            //               "application/json": {
+            //                   "schema": {
+            //                       "$ref": "_common.yaml#/components/schemas/OkResponse"
+            //                   },
+            //                   "examples": {
+            //                       "Пример": {
+            //                           "$ref": "#/components/examples/CatalogDeletedResponse"
+            //                       }
+            //                   }
+            //               }
+            //           }
+            //       },
+            //       "400": {
+            //           "description": "Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.",
+            //           "content": {
+            //               "application/json": {
+            //                   "schema": {
+            //                       "oneOf": [
+            //                           {
+            //                               "$ref": "_common.yaml#/components/schemas/BadRequestError"
+            //                           }
+            //                       ]
+            //                   },
+            //                   "examples": {
+            //                       "Каталог находится в процессе импорта": {
+            //                           "$ref": "#/components/examples/CatalogInImportCantBeDeletedError"
+            //                       },
+            //                       "Каталог используется в конструкторе проверок другого каталога заполнения": {
+            //                           "$ref": "#/components/examples/CatalogInCatalogPackagesCantBeDeletedError"
+            //                       },
+            //                       "Каталог используется в настройках уникальностей другого каталога заполнения": {
+            //                           "$ref": "#/components/examples/CatalogInCatalogUniqCantBeDeletedError"
+            //                       },
+            //                       "Каталог используется в ссылочном атрибуте другого каталога заполнения": {
+            //                           "$ref": "#/components/examples/CatalogInCatalogAttributesCantBeDeletedError"
+            //                       },
+            //                       "Каталог используется в настройках ограничения выборки каталога публикации": {
+            //                           "$ref": "#/components/examples/CatalogInPublCatalogConditionsCantBeDeletedError"
+            //                       },
+            //                       "На основе каталога создан справочник": {
+            //                           "$ref": "#/components/examples/CatalogInDictionaryCantBeDeletedError"
+            //                       }
+            //                   }
+            //               }
+            //           }
+            //       },
+            //   }
+        //   "ApiResponse": {
+        //       "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+        //       "type": "object",
+        //       "readOnly": true,
+        //       "properties": {
+        //           "id": {
+        //               "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "code": {
+        //               "description": "HTTP-код ошибки",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "messageType": {
+        //               "description": "Тип ответа",
+        //               "type": "string"
+        //           },
+        //           "message": {
+        //               "description": "Текст ответа",
+        //               "type": "string"
+        //           }
+        //       },
+        //       "required": [
+        //           "code",
+        //           "messageType",
+        //           "message"
+        //       ]
+        //   },
+        //   "OkResponse": {
+        //       "type": "object",
+        //       "description": "Успешный ответ на запрос.",
+        //       "allOf": [
+        //           {
+        //               "$ref": "#/components/schemas/ApiResponse"
+        //           },
+        //           {
+        //               "properties": {
+        //                   "code": {
+        //                       "enum": [
+        //                           200
+        //                       ]
+        //                   },
+        //                   "messageType": {
+        //                       "enum": [
+        //                           "Ok"
+        //                       ]
+        //                   }
+        //               }
+        //           }
+        //       ]
+        //   },

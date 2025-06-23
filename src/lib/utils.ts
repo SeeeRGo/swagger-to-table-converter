@@ -39,6 +39,7 @@ export type ParsedNestedSchema = {
 
 type ParsedRequestBody = {
   schema: ParsedParam[],
+  required: boolean,
   description: string
 }
 
@@ -171,6 +172,7 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
     paramName: parentParamName,
     paramType: parsePropertyType(schema, data, {parentParamType}),
     description: schema.description ?? `Описание enum'а без описания`,
+    required: !!schema.required
   }]
   if (schema.allOf) {    
     return parseAllOf(schema.allOf, data, {parentParamName, parentParamRequired, depth, parentParamDescription: schema.description})
@@ -188,7 +190,8 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
     const parsedPrimitive = [{
       paramName: parentParamName,
       paramType: parsePropertyType(schema, data, {parentParamType}),
-      description: schema.description ?? parentParamDescription ?? 'No description in primitive scema description'
+      description: schema.description ?? parentParamDescription ?? 'No description in primitive scema description',
+      required: !!schema.required
     }]
     
     return parsedPrimitive
@@ -233,11 +236,20 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
   if (requestBody?.content && 'application/json' in requestBody.content) {
     return {
       schema: parseSchema(requestBody.content['application/json'].schema, data, {}),
+      required: !!requestBody.required,
       description: requestBody.content['application/json'].example?.description ?? ''
+    }
+  }
+  if (requestBody?.content && 'text/plain' in requestBody.content) {
+    return {
+      schema: parseSchema(requestBody.content['text/plain'].schema, data, { parentParamName: 'plain_text_body'}),
+      required: !!requestBody.required,
+      description: requestBody.content['text/plain'].example?.description ?? ''
     }
   }
   return {
     schema: [],
+    required: false,
     description: ''
   }
 }

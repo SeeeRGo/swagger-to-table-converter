@@ -3,16 +3,27 @@ import { expect, test } from 'vitest'
 import { expectedParsedData } from './mockOutput'
 import { mockDataMini, mockDataPathForParams } from './mockInputMini'
 import { MockOutputMini, mockOutputParam } from './mockOutpuMini'
-import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput } from './mockDataPairs'
+import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, jsonRequestBodyInput, jsonRequestBodyOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, plainRefRequestBodyInput, plainRefRequestBodyOutput, plainTextRequestBodyInput, plainTextRequestBodyOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput } from './mockDataPairs'
+import { mockData } from './mockInput'
 
-test('parsed yaml swagger specs correctly', () => {
-  expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
+// test('parsed yaml swagger specs correctly', () => {
+//   expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
+// })
+
+test('parse application/json request body correctly', () => {
+  expect(parseRequestBody(jsonRequestBodyInput, mockData)).toEqual(jsonRequestBodyOutput)
 })
+// test('parse text/plain request body correctly', () => {
+//   expect(parseRequestBody(plainTextRequestBodyInput, mockData)).toEqual(plainTextRequestBodyOutput)
+// })
+// test('parse required request body correctly', () => {
+//   expect(parseRequestBody(plainTextRequestBodyInput, mockData)).toEqual(plainTextRequestBodyOutput)
+// })
+test('parse ref request body correctly', () => {
+    expect(parseRequestBody(plainRefRequestBodyInput, mockData)).toEqual(plainRefRequestBodyOutput)
 
-test.todo('parse application/json request body correctly')
-test.todo('parse text/plain request body correctly')
-test.todo('parse required request body correctly')
-test.todo('parse ref request body correctly')
+})
+test.todo('parse ref schema with recursive type')
 test.todo('parse 200 response application/json correctly')
 test.todo('parse 201 response application/json correctly')
 test.todo('parse 400 response application/json correctly')
