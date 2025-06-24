@@ -3220,8 +3220,6 @@ export const multipleResponseCodesInput = {
     }
 }
 
-export const multipleResponseCodesOutput = []
-
 export const plainTextRequestBodyInput = {
     "required": true,
     "content": {
@@ -3272,7 +3270,144 @@ export const refRequestRecursiveBodyOutput = {
     required: true,
     description: ''
 }
-
+        //   "AttributePublicationSettings": {
+        //       "description": "Настройки публикации атрибута для системы",
+        //       "type": "object",
+        //       "allOf": [
+        //           {
+        //               "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+        //           }
+        //       ]
+        //   },
+        //   "CommonAttributePublicationSettings": {
+        //       "description": "Общие настройки публикации атрибута для систем",
+        //       "type": "object",
+        //       "properties": {
+        //           "attrId": {
+        //               "description": "Идентификатор атрибута",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "order": {
+        //               "description": "Порядковый номер атрибута для системы",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "isVisible": {
+        //               "description": "Является ли атрибут видимым для системы",
+        //               "type": "boolean"
+        //           },
+        //           "isMain": {
+        //               "description": "Является ли атрибут главным для системы",
+        //               "type": "boolean"
+        //           },
+        //           "systemAttributeId": {
+        //               "description": "Идентификатор системного атрибута, сопоставленного с атрибутом каталога",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "attributeGroupId": {
+        //               "description": "Идентификатор группы атрибутов, сопоставленной с атрибутом каталога",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "childCatalogId": {
+        //               "description": "Идентификатор вложенного каталога.\n\nПри создании передается отрицательный идентификатор, уникальный в пределах запроса, который совпадает в идентифкиатором, указанном в поле `attributes` для табличных атрибутов.\n\nУказывается только для табличных атрибутов.",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "attributes": {
+        //               "description": "Атрибуты, входящие в табличный атрибут",
+        //               "type": "array",
+        //               "items": {
+        //                   "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+        //               }
+        //           }
+        //       },
+        //       "required": [
+        //           "attrId",
+        //           "order",
+        //           "isVisible",
+        //           "isMain"
+        //       ]
+        //   },
+        //   "CommonSystemPublicationSettings": {
+        //       "description": "Общие настройки публикации для системы",
+        //       "type": "object",
+        //       "properties": {
+        //           "systemId": {
+        //               "description": "Идентификатор системы",
+        //               "type": "integer",
+        //               "format": "int32"
+        //           },
+        //           "catalogRusName": {
+        //               "description": "Русскоязычное полное наименование каталога для системы",
+        //               "type": "string"
+        //           },
+        //           "catalogEnName": {
+        //               "description": "Англоязычное полное наименование каталога для системы",
+        //               "type": "string"
+        //           },
+        //           "catalogRusShortName": {
+        //               "description": "Русскоязычное краткое наименование каталога для системы",
+        //               "type": "string"
+        //           },
+        //           "catalogEnShortName": {
+        //               "description": "Англоязычное краткое наименование каталога для системы",
+        //               "type": "string"
+        //           },
+        //           "catalogTechName": {
+        //               "description": "Техническое наименование каталога для системы",
+        //               "type": "string"
+        //           },
+        //           "attributeSettings": {
+        //               "description": "Настройки публикации атрибутов",
+        //               "type": "array",
+        //               "items": {
+        //                   "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+        //               },
+        //               "minItems": 1
+        //           }
+        //       },
+        //       "required": [
+        //           "systemId",
+        //           "attributeSettings"
+        //       ]
+        //   },
+        //   "SystemPublicationSettings": {
+        //       "description": "Настройки публкиации для системы",
+        //       "type": "object",
+        //       "allOf": [
+        //           {
+        //               "$ref": "#/components/schemas/CommonSystemPublicationSettings"
+        //           },
+        //           {
+        //               "properties": {
+        //                   "attributeSettings": {
+        //                       "items": {
+        //                           "$ref": "#/components/schemas/AttributePublicationSettings"
+        //                       }
+        //                   }
+        //               }
+        //           }
+        //       ]
+        //   },
+        //   "SystemPublicationSettingsInHistVersion": {
+        //       "type": "object",
+        //       "properties": {
+        //           "systemsConsumersIds": {
+        //               "description": "Список идентификаторов систем потребителей данных",
+        //               "type": "array",
+        //               "items": {
+        //                   "type": "integer"
+        //               },
+        //               "writeOnly": true
+        //           },
+        //           "systemPublicationSettings": {
+        //               "$ref": "#/components/schemas/SystemPublicationSettings"
+        //           }
+        //       }
+        //   },
 export const jsonRequestBodyInput = {
     "description": "Пример тела запроса с фильтрами по списку каталогов, в которых используется каталог заполнения",
     "content": {
@@ -3384,7 +3519,7 @@ export const plainRefRequestBodyOutput = {
             description: "",
             required: false,
         },
-                {
+        {
             paramName: "filters[index]",
             paramType: "array[object]",
             description: "",
@@ -3465,9 +3600,51 @@ export const response200jsonInput = {
     }
 }
 export const response200jsonOutput = {
-    schema: [],
-    required: true,
-    description: ''
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            required: false,
+        },
+        {
+            paramName: "id",
+            paramType: "integer[int32]",
+            description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            required: false,
+        },
+        {
+            paramName: "code",
+            paramType: "integer[int32]",
+            description: "HTTP-код ошибки",
+            required: true,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string",
+            description: "Тип ответа",
+            required: true,
+        },
+        {
+            paramName: "message",
+            paramType: "string",
+            description: "Текст ответа",
+            required: true,
+        },
+        {
+            paramName: "code",
+            paramType: "number[\n200\n]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string[\nOk\n]",
+            description: "",
+            required: false,
+        },
+    ],
+    description: 'Успешный ответ'
 }
 
 export const response400jsonInput = {
@@ -3504,32 +3681,117 @@ export const response400jsonInput = {
         }
     }
 }
-export const response201jsonOutput = {
-    schema: [],
-    required: true,
-    description: ''
-}
-export const response201jsonInput = {
-                      "description": "Успешный ответ",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "_common.yaml#/components/schemas/CreatedResponse"
-                              },
-                              "examples": {
-                                  "Пример": {
-                                      "$ref": "#/components/examples/CatalogCreatedResponse"
-                                  }
-                              }
-                          }
-                      }
-                  }
 export const response400jsonOutput = {
-    schema: [],
-    required: true,
-    description: ''
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            required: false,
+        },
+        {
+            paramName: "id",
+            paramType: "integer[int32]",
+            description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            required: false,
+        },
+        {
+            paramName: "code",
+            paramType: "integer[int32]",
+            description: "HTTP-код ошибки",
+            required: true,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string",
+            description: "Тип ответа",
+            required: true,
+        },
+        {
+            paramName: "message",
+            paramType: "string",
+            description: "Текст ответа",
+            required: true,
+        },
+        {
+            paramName: "code",
+            paramType: "number[\n400\n]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string[\nBad request\n]",
+            description: "",
+            required: false,
+        },
+    ],
+    description: 'Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.'
 }
 
+export const response201jsonInput = {
+    "description": "Успешный ответ",
+    "content": {
+        "application/json": {
+            "schema": {
+                "$ref": "_common.yaml#/components/schemas/CreatedResponse"
+            },
+            "examples": {
+                "Пример": {
+                    "$ref": "#/components/examples/CatalogCreatedResponse"
+                }
+            }
+        }
+    }
+}
+export const response201jsonOutput = {
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            required: false,
+        },
+        {
+            paramName: "id",
+            paramType: "integer[int32]",
+            description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            required: false,
+        },
+        {
+            paramName: "code",
+            paramType: "integer[int32]",
+            description: "HTTP-код ошибки",
+            required: true,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string",
+            description: "Тип ответа",
+            required: true,
+        },
+        {
+            paramName: "message",
+            paramType: "string",
+            description: "Текст ответа",
+            required: true,
+        },
+        {
+            paramName: "code",
+            paramType: "number[\n201\n]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string[\nCreated\n]",
+            description: "",
+            required: false,
+        },
+    ],
+    required: false,
+    description: 'Успешное создание объекта.'
+}
 export const responseMultiCodeInput = {
     "200": {
         "description": "Успешный ответ",
@@ -3582,9 +3844,100 @@ export const responseMultiCodeInput = {
     },
 }
 export const responseMultiCodeOutput = {
-    schema: [],
-    required: true,
-    description: ''
+    "200": {
+        schema: [
+            {
+                paramName: "",
+                paramType: "object",
+                description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+                required: false,
+            },
+            {
+                paramName: "id",
+                paramType: "integer[int32]",
+                description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+                required: false,
+            },
+            {
+                paramName: "code",
+                paramType: "integer[int32]",
+                description: "HTTP-код ошибки",
+                required: true,
+            },
+            {
+                paramName: "messageType",
+                paramType: "string",
+                description: "Тип ответа",
+                required: true,
+            },
+            {
+                paramName: "message",
+                paramType: "string",
+                description: "Текст ответа",
+                required: true,
+            },
+            {
+                paramName: "code",
+                paramType: "number[\n200\n]",
+                description: "",
+                required: false,
+            },
+            {
+                paramName: "messageType",
+                paramType: "string[\nOk\n]",
+                description: "",
+                required: false,
+            },
+        ],
+        description: 'Успешный ответ'
+    },
+    "400": {
+        schema: [
+            {
+                paramName: "",
+                paramType: "object",
+                description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+                required: false,
+            },
+            {
+                paramName: "id",
+                paramType: "integer[int32]",
+                description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+                required: false,
+            },
+            {
+                paramName: "code",
+                paramType: "integer[int32]",
+                description: "HTTP-код ошибки",
+                required: true,
+            },
+            {
+                paramName: "messageType",
+                paramType: "string",
+                description: "Тип ответа",
+                required: true,
+            },
+            {
+                paramName: "message",
+                paramType: "string",
+                description: "Текст ответа",
+                required: true,
+            },
+            {
+                paramName: "code",
+                paramType: "number[\n400\n]",
+                description: "",
+                required: false,
+            },
+            {
+                paramName: "messageType",
+                paramType: "string[\nBad request\n]",
+                description: "",
+                required: false,
+            },
+        ],
+        description: 'Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.'
+    }
 }
 export const responsePlainTextInput = {
     "200": {
@@ -3605,186 +3958,66 @@ export const responsePlainTextInput = {
     }
 }
 export const responsePlainTextOutput = {
-    schema: [],
-    required: true,
-    description: ''
+    schema: [
+        {
+            paramName: "plain_text_response",
+            paramType: "string",
+            description: "Настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов.",
+            required: false,
+        },
+    ],
+    description: 'Успешный ответ. Если условие уникальности не настроено, то возвращается пустая строка'
 }
 
 export const responseRefInput = {
-    "201": {
-        "description": "Успешный ответ",
-        "content": {
-            "application/json": {
-                "schema": {
-                    "$ref": "_common.yaml#/components/schemas/CreatedResponse"
-                },
-                "examples": {
-                    "Пример": {
-                        "$ref": "catalogs.yaml#/components/examples/CatalogCreatedResponse"
-                    }
-                }
-            }
-        }
-    },
     "400": {
-        "$ref": "#/components/responses/PublicationCatalogBadRequestPostResponse"
+        "$ref": "_common.yaml#/components/schemas/BadRequestError"
     },
-    "404": {
-        "$ref": "#/components/responses/PublicationCatalogNotFoundResponse"
-    }
 }
 export const responseRefOutput = {
-    schema: [],
-    required: true,
+    schema: [
+        {
+            paramName: "",
+            paramType: "object",
+            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            required: false,
+        },
+        {
+            paramName: "id",
+            paramType: "integer[int32]",
+            description: "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
+            required: false,
+        },
+        {
+            paramName: "code",
+            paramType: "integer[int32]",
+            description: "HTTP-код ошибки",
+            required: true,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string",
+            description: "Тип ответа",
+            required: true,
+        },
+        {
+            paramName: "message",
+            paramType: "string",
+            description: "Текст ответа",
+            required: true,
+        },
+        {
+            paramName: "code",
+            paramType: "number[\n400\n]",
+            description: "",
+            required: false,
+        },
+        {
+            paramName: "messageType",
+            paramType: "string[\nBad request\n]",
+            description: "",
+            required: false,
+        },
+    ],
     description: ''
 }
-        //   "CreatedResponse": {
-        //       "type": "object",
-        //       "description": "Успешное создание объекта.",
-        //       "allOf": [
-        //           {
-        //               "$ref": "#/components/schemas/ApiResponse"
-        //           },
-        //           {
-        //               "properties": {
-        //                   "code": {
-        //                       "enum": [
-        //                           201
-        //                       ]
-        //                   },
-        //                   "messageType": {
-        //                       "enum": [
-        //                           "Created"
-        //                       ]
-        //                   }
-        //               }
-        //           }
-        //       ]
-        //   },
-// {
-//                   "201": {
-//                       "description": "Успешный ответ",
-//                       "content": {
-//                           "application/json": {
-//                               "schema": {
-//                                   "$ref": "_common.yaml#/components/schemas/CreatedResponse"
-//                               },
-//                               "examples": {
-//                                   "Пример": {
-//                                       "$ref": "#/components/examples/CatalogCreatedResponse"
-//                                   }
-//                               }
-//                           }
-//                       }
-//                   },
-//                   "400": {
-//                       "$ref": "#/components/responses/FillingCatalogBadRequestErrors"
-//                   },
-//                   "404": {
-//                       "$ref": "#/components/responses/FillingCatalogEntitiesNotFoundError"
-//                   }
-//               }
-            //   "responses": {
-            //       "200": {
-            //           "description": "Успешный ответ",
-            //           "content": {
-            //               "application/json": {
-            //                   "schema": {
-            //                       "$ref": "_common.yaml#/components/schemas/OkResponse"
-            //                   },
-            //                   "examples": {
-            //                       "Пример": {
-            //                           "$ref": "#/components/examples/CatalogDeletedResponse"
-            //                       }
-            //                   }
-            //               }
-            //           }
-            //       },
-            //       "400": {
-            //           "description": "Ошибка построения запроса или целостности переданных данных.\nОшибка может быть в параметре, заголовке или полях тела запроса.\nВ зависимости от этого текст ошибки может отличаться.\n\n### Возможные ошибки бизнес-логики:\n  - Каталог находится в процессе импорта;\n  - Один или несколько из переданных каталогов используются в конструкторе проверок других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках уникальности других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в ссылочных атрибутах других каталогов заполнения;\n  - Один или несколько из переданных каталогов используются в настройках ограничения выборки каталогов публикации;\n  - На основе одиного или нескольких из переданных каталогов созданы справочники.",
-            //           "content": {
-            //               "application/json": {
-            //                   "schema": {
-            //                       "oneOf": [
-            //                           {
-            //                               "$ref": "_common.yaml#/components/schemas/BadRequestError"
-            //                           }
-            //                       ]
-            //                   },
-            //                   "examples": {
-            //                       "Каталог находится в процессе импорта": {
-            //                           "$ref": "#/components/examples/CatalogInImportCantBeDeletedError"
-            //                       },
-            //                       "Каталог используется в конструкторе проверок другого каталога заполнения": {
-            //                           "$ref": "#/components/examples/CatalogInCatalogPackagesCantBeDeletedError"
-            //                       },
-            //                       "Каталог используется в настройках уникальностей другого каталога заполнения": {
-            //                           "$ref": "#/components/examples/CatalogInCatalogUniqCantBeDeletedError"
-            //                       },
-            //                       "Каталог используется в ссылочном атрибуте другого каталога заполнения": {
-            //                           "$ref": "#/components/examples/CatalogInCatalogAttributesCantBeDeletedError"
-            //                       },
-            //                       "Каталог используется в настройках ограничения выборки каталога публикации": {
-            //                           "$ref": "#/components/examples/CatalogInPublCatalogConditionsCantBeDeletedError"
-            //                       },
-            //                       "На основе каталога создан справочник": {
-            //                           "$ref": "#/components/examples/CatalogInDictionaryCantBeDeletedError"
-            //                       }
-            //                   }
-            //               }
-            //           }
-            //       },
-            //   }
-        //   "ApiResponse": {
-        //       "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
-        //       "type": "object",
-        //       "readOnly": true,
-        //       "properties": {
-        //           "id": {
-        //               "description": "Идентифкатор ресурса, для которого передан ответ\n\nВозможные варианты использования:\n  - Идентификатор созданного ресурса в POST-запросе;\n  - Идентификатор ресурса, для которого возвращена ошибка.",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "code": {
-        //               "description": "HTTP-код ошибки",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "messageType": {
-        //               "description": "Тип ответа",
-        //               "type": "string"
-        //           },
-        //           "message": {
-        //               "description": "Текст ответа",
-        //               "type": "string"
-        //           }
-        //       },
-        //       "required": [
-        //           "code",
-        //           "messageType",
-        //           "message"
-        //       ]
-        //   },
-        //   "OkResponse": {
-        //       "type": "object",
-        //       "description": "Успешный ответ на запрос.",
-        //       "allOf": [
-        //           {
-        //               "$ref": "#/components/schemas/ApiResponse"
-        //           },
-        //           {
-        //               "properties": {
-        //                   "code": {
-        //                       "enum": [
-        //                           200
-        //                       ]
-        //                   },
-        //                   "messageType": {
-        //                       "enum": [
-        //                           "Ok"
-        //                       ]
-        //                   }
-        //               }
-        //           }
-        //       ]
-        //   },
