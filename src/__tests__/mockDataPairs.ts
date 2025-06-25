@@ -671,6 +671,7 @@ export const requestBodyPlainInput = {
 
 export const requestBodyPlainOutput = {
   description: '',
+  required: false,
   schema: [
     {
       "paramName": "constructor[index]",
@@ -797,6 +798,7 @@ export const catalogspostPathInput = {
 export const catalogsPostOutput = {
   "requests": {
     "description": "",
+    required: false,
     "schema": [
         {
             "paramName": "",
@@ -3241,7 +3243,7 @@ export const plainTextRequestBodyOutput = {
         {
             "paramName": "plain_text_body",
             "paramType": "string",
-            "description": "No description in primitive scema description",
+            "description": undefined,
             "required": false,
         },
     ],
@@ -3264,150 +3266,46 @@ export const refRequestRecursiveBodyInput = {
         }
     }
 }
-
-export const refRequestRecursiveBodyOutput = {
-    schema: [],
-    required: true,
-    description: ''
+export const refRequestBodyRecursiveInput = {
+    "$ref": "#/components/requestBodies/catalogListRequestBody"
 }
-        //   "AttributePublicationSettings": {
-        //       "description": "Настройки публикации атрибута для системы",
-        //       "type": "object",
-        //       "allOf": [
-        //           {
-        //               "$ref": "#/components/schemas/CommonAttributePublicationSettings"
-        //           }
-        //       ]
-        //   },
-        //   "CommonAttributePublicationSettings": {
-        //       "description": "Общие настройки публикации атрибута для систем",
-        //       "type": "object",
-        //       "properties": {
-        //           "attrId": {
-        //               "description": "Идентификатор атрибута",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "order": {
-        //               "description": "Порядковый номер атрибута для системы",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "isVisible": {
-        //               "description": "Является ли атрибут видимым для системы",
-        //               "type": "boolean"
-        //           },
-        //           "isMain": {
-        //               "description": "Является ли атрибут главным для системы",
-        //               "type": "boolean"
-        //           },
-        //           "systemAttributeId": {
-        //               "description": "Идентификатор системного атрибута, сопоставленного с атрибутом каталога",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "attributeGroupId": {
-        //               "description": "Идентификатор группы атрибутов, сопоставленной с атрибутом каталога",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "childCatalogId": {
-        //               "description": "Идентификатор вложенного каталога.\n\nПри создании передается отрицательный идентификатор, уникальный в пределах запроса, который совпадает в идентифкиатором, указанном в поле `attributes` для табличных атрибутов.\n\nУказывается только для табличных атрибутов.",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "attributes": {
-        //               "description": "Атрибуты, входящие в табличный атрибут",
-        //               "type": "array",
-        //               "items": {
-        //                   "$ref": "#/components/schemas/CommonAttributePublicationSettings"
-        //               }
-        //           }
-        //       },
-        //       "required": [
-        //           "attrId",
-        //           "order",
-        //           "isVisible",
-        //           "isMain"
-        //       ]
-        //   },
-        //   "CommonSystemPublicationSettings": {
-        //       "description": "Общие настройки публикации для системы",
-        //       "type": "object",
-        //       "properties": {
-        //           "systemId": {
-        //               "description": "Идентификатор системы",
-        //               "type": "integer",
-        //               "format": "int32"
-        //           },
-        //           "catalogRusName": {
-        //               "description": "Русскоязычное полное наименование каталога для системы",
-        //               "type": "string"
-        //           },
-        //           "catalogEnName": {
-        //               "description": "Англоязычное полное наименование каталога для системы",
-        //               "type": "string"
-        //           },
-        //           "catalogRusShortName": {
-        //               "description": "Русскоязычное краткое наименование каталога для системы",
-        //               "type": "string"
-        //           },
-        //           "catalogEnShortName": {
-        //               "description": "Англоязычное краткое наименование каталога для системы",
-        //               "type": "string"
-        //           },
-        //           "catalogTechName": {
-        //               "description": "Техническое наименование каталога для системы",
-        //               "type": "string"
-        //           },
-        //           "attributeSettings": {
-        //               "description": "Настройки публикации атрибутов",
-        //               "type": "array",
-        //               "items": {
-        //                   "$ref": "#/components/schemas/CommonAttributePublicationSettings"
-        //               },
-        //               "minItems": 1
-        //           }
-        //       },
-        //       "required": [
-        //           "systemId",
-        //           "attributeSettings"
-        //       ]
-        //   },
-        //   "SystemPublicationSettings": {
-        //       "description": "Настройки публкиации для системы",
-        //       "type": "object",
-        //       "allOf": [
-        //           {
-        //               "$ref": "#/components/schemas/CommonSystemPublicationSettings"
-        //           },
-        //           {
-        //               "properties": {
-        //                   "attributeSettings": {
-        //                       "items": {
-        //                           "$ref": "#/components/schemas/AttributePublicationSettings"
-        //                       }
-        //                   }
-        //               }
-        //           }
-        //       ]
-        //   },
-        //   "SystemPublicationSettingsInHistVersion": {
-        //       "type": "object",
-        //       "properties": {
-        //           "systemsConsumersIds": {
-        //               "description": "Список идентификаторов систем потребителей данных",
-        //               "type": "array",
-        //               "items": {
-        //                   "type": "integer"
-        //               },
-        //               "writeOnly": true
-        //           },
-        //           "systemPublicationSettings": {
-        //               "$ref": "#/components/schemas/SystemPublicationSettings"
-        //           }
-        //       }
-        //   },
+export const refRequestBodyRecursiveOutput = {
+    schema: [
+        {
+            "paramName": "attrId",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор атрибута",
+            "required": true,
+        },
+        {
+            "paramName": "attributes[index]",
+            "paramType": "array[object]",
+            "description": "Атрибуты, входящие в табличный атрибут",
+            "required": false,
+        },
+        {
+            "paramName": "attributes[index]",
+            "paramType": "object",
+            "description": "Общие настройки публикации атрибута для систем",
+            "required": false,
+        },
+        {
+            "paramName": "attributes[index].attrId",
+            "paramType": "integer[int32]",
+            "description": "Идентификатор атрибута",
+            "required": true,
+        },
+        {
+            "paramName": "attributes[index].attributes[index]",
+            "paramType": "recursive[array[object]]",
+            "description": "Атрибуты, входящие в табличный атрибут",
+            "required": false,
+        },
+    ],
+    required: false,
+    description: 'Общие настройки публикации атрибута для систем'
+}
+
 export const jsonRequestBodyInput = {
     "description": "Пример тела запроса с фильтрами по списку каталогов, в которых используется каталог заполнения",
     "content": {
@@ -3450,12 +3348,6 @@ export const jsonRequestBodyInput = {
 
 export const jsonRequestBodyOutput = {
     schema: [
-        {
-            paramName: "",
-            paramType: "object",
-            description: "",
-            required: false,
-        },
         {
             paramName: "filters[index]",
             paramType: "array[object]",
@@ -3504,6 +3396,12 @@ export const jsonRequestBodyOutput = {
             description: "Значение для фильтрации по столбцу с дробными числами",
             required: false,
         },
+        {
+            description: "",
+            paramName: "filters[index].attribute",
+            paramType: "string[\nid,\nfullName,\nattributeRusName,\nattributeEnName\n]",
+            required: false,
+        },
     ],
     required: false,
     description: 'Пример тела запроса с фильтрами по списку каталогов, в которых используется каталог заполнения'
@@ -3512,13 +3410,7 @@ export const plainRefRequestBodyInput = {
     "$ref": "#/components/requestBodies/publicationCatalogListRequestBody"
 }
 export const plainRefRequestBodyOutput = {
-    schema: [
-        {
-            paramName: "",
-            paramType: "object",
-            description: "",
-            required: false,
-        },
+    schema: [ 
         {
             paramName: "filters[index]",
             paramType: "array[object]",
@@ -3552,32 +3444,32 @@ export const plainRefRequestBodyOutput = {
         {
             paramName: "Вариант 1 filters[index].value",
             paramType: "string",
-            description: "Значение для фильтрации по строковому столбцу или дате",
+            description: "Значение для фильтрации по строковому атрибуту или дате",
             required: false,
         },
         {
             paramName: "Вариант 2 filters[index].value",
             paramType: "integer",
-            description: "Значение для фильтрации по столбцу с целыми числами",
+            description: "Значение для фильтрации по целому числу",
             required: false,
         },
         {
             paramName: "Вариант 3 filters[index].value",
             paramType: "number",
-            description: "Значение для фильтрации по столбцу с дробными числами",
+            description: "Значение для фильтрации по дробному числу",
             required: false,
         },
         {
-            paramName: "Вариант 4 filters[index].value",
+            paramName: "Вариант 4 filters[index].value[index]",
             paramType: "array[integer]",
             description: "Значение для фильтрации по идентификаторам с оператором `inIds`",
             required: false,
         },
         {
             paramName: "filters[index].attribute",
-            paramType: "string[\nid,\nfullName,\nresponsiblePerson,\ncountActiveObjects,\ncountObjects,\ndateNextUpdate,\nsourceCatalogId,\nthematicCategory,\noivs,\nperiodUpdate,\nsystemsConsumers,\n]",
-            description: "Техническое название атрибута (столбца), по которому производится фильтрация.\nСовпадает с названием поля объекта, который передается в теле ответа.",
-            required: true,
+            paramType: "string[\nid,\nfullName,\nresponsiblePerson,\ncountActiveObjects,\ncountObjects,\ndateNextUpdate,\nsourceCatalogId,\nthematicCategory,\noivs,\nperiodUpdate,\nsystemsConsumers\n]",
+            description: "",
+            required: false,
         },
     ],
     required: false,
@@ -3599,12 +3491,13 @@ export const response200jsonInput = {
         }
     }
 }
+
 export const response200jsonOutput = {
     schema: [
         {
             paramName: "",
             paramType: "object",
-            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            description: "Успешный ответ на запрос.",
             required: false,
         },
         {
@@ -3681,12 +3574,13 @@ export const response400jsonInput = {
         }
     }
 }
+
 export const response400jsonOutput = {
     schema: [
         {
             paramName: "",
             paramType: "object",
-            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            description: "Ошибка построения запроса или целостности переданных данных.",
             required: false,
         },
         {
@@ -3749,7 +3643,7 @@ export const response201jsonOutput = {
         {
             paramName: "",
             paramType: "object",
-            description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+            description: "Успешное создание объекта.",
             required: false,
         },
         {
@@ -3789,8 +3683,7 @@ export const response201jsonOutput = {
             required: false,
         },
     ],
-    required: false,
-    description: 'Успешное создание объекта.'
+    description: 'Успешный ответ'
 }
 export const responseMultiCodeInput = {
     "200": {
@@ -3849,7 +3742,7 @@ export const responseMultiCodeOutput = {
             {
                 paramName: "",
                 paramType: "object",
-                description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+                description: "Успешный ответ на запрос.",
                 required: false,
             },
             {
@@ -3891,12 +3784,16 @@ export const responseMultiCodeOutput = {
         ],
         description: 'Успешный ответ'
     },
+    "201": {
+        description: 'В схеме ответов нет кода 201',
+        schema: []
+    },
     "400": {
         schema: [
             {
                 paramName: "",
                 paramType: "object",
-                description: "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
+                description: "Ошибка построения запроса или целостности переданных данных.",
                 required: false,
             },
             {
@@ -3940,18 +3837,16 @@ export const responseMultiCodeOutput = {
     }
 }
 export const responsePlainTextInput = {
-    "200": {
-        "description": "Успешный ответ. Если условие уникальности не настроено, то возвращается пустая строка",
-        "content": {
-            "text/plain": {
-                "schema": {
-                    "description": "Настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов.",
-                    "type": "string"
-                },
-                "examples": {
-                    "Пример": {
-                        "$ref": "#/components/examples/FillingCatalogConditionalUniqResponse"
-                    }
+    "description": "Успешный ответ. Если условие уникальности не настроено, то возвращается пустая строка",
+    "content": {
+        "text/plain": {
+            "schema": {
+                "description": "Настройки условной уникальности в виде строки с условием, составленным по правилам условий в конструкторе процессов.",
+                "type": "string"
+            },
+            "examples": {
+                "Пример": {
+                    "$ref": "#/components/examples/FillingCatalogConditionalUniqResponse"
                 }
             }
         }
@@ -3970,9 +3865,7 @@ export const responsePlainTextOutput = {
 }
 
 export const responseRefInput = {
-    "400": {
-        "$ref": "_common.yaml#/components/schemas/BadRequestError"
-    },
+    "$ref": "_common.yaml#/components/schemas/BadRequestError"
 }
 export const responseRefOutput = {
     schema: [
@@ -4019,5 +3912,5 @@ export const responseRefOutput = {
             required: false,
         },
     ],
-    description: ''
+    description: 'Ошибка построения запроса или целостности переданных данных.'
 }

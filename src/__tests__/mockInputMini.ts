@@ -19544,3 +19544,35 @@ export const mockDataPathForParams = {
         "/catalogs/search": mockDataMini.paths["/catalogs/search"]
     }
 }
+
+export const mockDataOnlyRecursive = {
+"components": {
+    "CommonAttributePublicationSettings": {
+        "description": "Общие настройки публикации атрибута для систем",
+        "type": "object",
+        "properties": {
+            "attrId": {
+                "description": "Идентификатор атрибута",
+                "type": "integer",
+                "format": "int32"
+            },
+            "attributes": {
+                "description": "Атрибуты, входящие в табличный атрибут",
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+                }
+            }
+        },
+        "required": [
+            "attrId",
+        ]
+    },
+},
+  "openapi": "3.0.3",
+  "info": {
+      "title": "Описание внутреннего API для ЕХД 2.0",
+      "description": "Описание методов для работы со сборными каталогами",
+      "version": "1.0.0"
+  }
+}
