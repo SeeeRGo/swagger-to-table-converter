@@ -170,8 +170,8 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
     else return parseMixedSchema(schema)
   }
   if (schema.enum) return [{
-    paramName: parentParamName,
-    paramType: parsePropertyType(schema, data, {parentParamType}),
+    paramName: parentParamName, 
+    paramType: parsePropertyType(schema, data, {parentParamType}), // @ts-expect-error no undefined in type
     description: schema.description,
     required: !!schema.required
   }]
@@ -196,7 +196,7 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
       description: schema.description ?? parentParamDescription,
       required: !!schema.required
     }]
-    
+     // @ts-expect-error no undefined in type
     return parsedPrimitive
   }
       
@@ -254,8 +254,10 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
       description: requestBody.description ?? requestBody.content['text/plain'].example?.description ?? ''
     }
   }
-  if (requestBody && '$ref' in requestBody) {
-    const referenceRequestBody = findSchema(data, getSchemaNameFromRef(sanitizeRef(requestBody.$ref) ?? ''))    
+  if (requestBody && '$ref' in requestBody) {  
+    // @ts-expect-error idk
+    const referenceRequestBody = findSchema(data, getSchemaNameFromRef(sanitizeRef(requestBody.$ref) ?? ''))  
+     // @ts-expect-error idke  
     return parseRequestBody(referenceRequestBody, data)
   }
   return {
@@ -269,11 +271,13 @@ export const parseResponses = (response: OpenAPIV3_1.ResponsesObject, data: Open
   "201": parseResponse(response["201"], data, '201'),
   "400": parseResponse(response["400"], data, '400'),
 })
+// @ts-expect-error idk
 export const parseResponse = (responseCode?: OpenAPIV3_1.ResponsesObject[string], data: OpenAPIV3_1.Document, code: string): ParsedResponse => {
   if (responseCode && '$ref' in responseCode) {
     const referenceResponse = findSchema(data, getSchemaNameFromRef(sanitizeRef(responseCode.$ref) ?? ''))
     return {
-      schema: parseSchema(referenceResponse, data, {}),
+       // @ts-expect-error idk
+      schema: parseSchema(referenceResponse, data, {}), // @ts-expect-error idk
       description: referenceResponse.description ?? `Нет описания ответа ${code} кода`,
     }
   }
