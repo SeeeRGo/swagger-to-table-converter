@@ -28,7 +28,7 @@ type ParsingSchemaOptions = {
   parentParamRequired?: string[]
   ignoreParentParam?: boolean
   parentParamDescription?: string
-  parentParamRef?: string
+  parentParamRef?: string[]
   depth?: number
 }
 
@@ -69,6 +69,7 @@ const findSchema = (data: OpenAPIV3_1.Document, schemaName?: string) => {
     ...(data.components?.schemas ?? {}),
     ...(data.components?.parameters ?? {}),
     ...(data.components?.requestBodies ?? {}),
+    ...(data.components?.responses ?? {}),
   }
   const schemaKey = Object.keys(schemas).find((key) => key === schemaName)
 
@@ -103,12 +104,13 @@ export const parseParam = (param: OpenAPIV3_1.ParameterObject | OpenAPIV3_1.Refe
     description: `param - ${param}`
   }]
   if ('$ref' in param) {
-    if (parentParamRef && param.$ref === parentParamRef) return []
+    if (parentParamRef && parentParamRef?.includes(param.$ref)) return []
     const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(param?.$ref) ?? ''))
     if (typeof referenceSchema === 'object' && 'in' in referenceSchema) {
       return parseParam(referenceSchema, data, { parentParamName, parentParamType, parentParamRef })
     }
     if (typeof referenceSchema === 'object' && 'content' in referenceSchema) {
+      // @ts-expect-error response and request objects are the same for my purposes
       return parseRequestBody(referenceSchema, data).schema
     }
 
@@ -118,7 +120,7 @@ export const parseParam = (param: OpenAPIV3_1.ParameterObject | OpenAPIV3_1.Refe
 
   if ('schema' in param) {
     if (param.schema && ('$ref' in param.schema || 'allOf' in param.schema || 'oneOf' in param.schema || param.schema.type === 'array')) {
-      const parsedSchema = parseSchema(param.schema, data, { parentParamName, parentParamType, parentParamDescription })
+      const parsedSchema = parseSchema(param.schema, data, { parentParamName, parentParamType, parentParamDescription, parentParamRef })
 
       return [{
         paramName: param.name,
@@ -207,7 +209,9 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
 }
 
 export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document, { parentParamName = '', parentParamType = '', parentParamRequired, ignoreParentParam, depth = 0, parentParamDescription, parentParamRef }: ParsingSchemaOptions): ParsedParam[] => {
-  if (parentParamRef && ref.$ref === parentParamRef) return []
+  // console.log('parentParamRef', parentParamRef, 'ref.$ref', ref.$ref);
+  
+  if (parentParamRef && parentParamRef?.includes(ref.$ref)) return []
   const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(ref.$ref) ?? ''))
 
   if (referenceSchema && typeof referenceSchema !== 'boolean' && 'content' in referenceSchema) return []
@@ -219,7 +223,7 @@ export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3
         paramIn: referenceSchema.in,
         description: referenceSchema?.description ?? 'No description for ref description',
       },
-      ...parseParam(referenceSchema, data, { parentParamName, parentParamType, parentParamRef: ref.$ref })
+      ...parseParam(referenceSchema, data, { parentParamName, parentParamType, parentParamRef: [...(parentParamRef ?? []), ref.$ref] })
     ]
   }
   const isPrimitiveSchema = typeof referenceSchema === 'object' && 'type' in referenceSchema && (referenceSchema.type === 'string' || referenceSchema.type === 'integer' || referenceSchema.type === 'boolean' || referenceSchema.type === 'number')
@@ -232,7 +236,7 @@ export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3
   }]
   return [
     ...parentParamArr,
-    ...parseSchema(referenceSchema, data, { parentParamName, parentParamType, parentParamRequired, depth: depth + 1, parentParamDescription: ref.description ?? parentParamDescription, parentParamRef: ref.$ref })
+    ...parseSchema(referenceSchema, data, { parentParamName, parentParamType, parentParamRequired, depth: depth + 1, parentParamDescription: ref.description ?? parentParamDescription, parentParamRef: [...(parentParamRef ?? []), ref.$ref] })
   ]
 }
 
@@ -335,7 +339,7 @@ export const parseArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject, data: Op
         }
 
       } else if (typeof referenceSchema === 'object' && 'oneOf' in referenceSchema && referenceSchema.oneOf) {
-        itemsType = parseOneOf({ oneOf: referenceSchema.oneOf, description: referenceSchema.description }, data, {}).at(0)?.paramType ?? 'unparsedOneOf'
+        itemsType = parseOneOf({ oneOf: referenceSchema.oneOf, description: referenceSchema.description }, data, { parentParamRef }).at(0)?.paramType ?? 'unparsedOneOf'
       }
     } else if ('type' in schema.items && typeof schema.items.type === 'string') {
 
@@ -450,7 +454,7 @@ export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceOb
     const parsedOneOf = parseOneOf({
       oneOf: property.oneOf ?? [],
       description: property.description
-    }, data, { parentParamName: parentParamName + name, parentParamType, parentParamRequired: required ?? [] }).map((oneOf, i) => {
+    }, data, { parentParamName: parentParamName + name, parentParamType, parentParamRequired: required ?? [], parentParamRef }).map((oneOf, i) => {
       if (oneOf.paramName.endsWith(name) || oneOf.paramName.endsWith(`${name}[index]`)) {
         return {
           ...oneOf,

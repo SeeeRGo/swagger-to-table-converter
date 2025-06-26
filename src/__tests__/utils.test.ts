@@ -119,3 +119,5 @@ test('correctly parses nested non-required properties when parent property is re
 test('parses ref schema with array with oneOf type correctly', () => {
   expect(parseRefSchema(refPropInput, mockDataInput, {})).toEqual(refPropOutput)
 })
+
+test.todo('parses refs with circular multi-step dependency correctly')
