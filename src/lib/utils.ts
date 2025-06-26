@@ -268,9 +268,9 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
   }
 }
 export const parseResponses = (response: OpenAPIV3_1.ResponsesObject, data: OpenAPIV3_1.Document) => ({
-  "200": parseResponse(response["200"], data, '200'),
-  "201": parseResponse(response["201"], data, '201'),
-  "400": parseResponse(response["400"], data, '400'),
+  "200": parseResponse((response ?? {})["200"], data, '200'),
+  "201": parseResponse((response ?? {})["201"], data, '201'),
+  "400": parseResponse((response ?? {})["400"], data, '400'),
 })
 // @ts-expect-error idk
 export const parseResponse = (responseCode?: OpenAPIV3_1.ResponsesObject[string], data: OpenAPIV3_1.Document, code: string): ParsedResponse => {
