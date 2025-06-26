@@ -221,7 +221,7 @@ export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3
         paramName: parentParamName,
         paramType: parsePropertyType(referenceSchema.schema, data, {parentParamType}),
         paramIn: referenceSchema.in,
-        description: referenceSchema.description ?? 'No description for ref description',
+        description: referenceSchema?.description ?? 'No description for ref description',
       },
       ...parseParam(referenceSchema, data, {parentParamName, parentParamType})
     ]
@@ -245,14 +245,14 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
     return {
       schema: parseSchema(requestBody.content['application/json'].schema, data, {}),
       required: !!requestBody.required,
-      description: requestBody.description ?? requestBody.content['application/json'].example?.description ?? ''
+      description: requestBody?.description ?? requestBody.content['application/json'].example?.description ?? ''
     }
   }
   if (requestBody?.content && 'text/plain' in requestBody.content) {
     return {
       schema: parseSchema(requestBody.content['text/plain'].schema, data, { parentParamName: 'plain_text_body'}),
       required: !!requestBody.required,
-      description: requestBody.description ?? requestBody.content['text/plain'].example?.description ?? ''
+      description: requestBody?.description ?? requestBody.content['text/plain'].example?.description ?? ''
     }
   }
   if (requestBody && '$ref' in requestBody) {  
@@ -281,18 +281,18 @@ export const parseResponse = (responseCode?: OpenAPIV3_1.ResponsesObject[string]
     return {
        // @ts-expect-error idk
       schema: parseSchema(referenceResponse, data, {}), // @ts-expect-error idk
-      description: referenceResponse.description ?? `Нет описания ответа ${code} кода`,
+      description: referenceResponse?.description ?? `Нет описания ответа ${code} кода`,
     }
   }
   if (responseCode && 'content' in responseCode && responseCode.content && "application/json" in responseCode.content && "schema" in responseCode.content["application/json"]) {
     return {
-      description: responseCode.description ?? `Нет описания ответа ${code} кода`,
+      description: responseCode?.description ?? `Нет описания ответа ${code} кода`,
       schema: parseSchema(responseCode.content["application/json"]?.schema, data, {})
     }
   }
   if (responseCode && 'content' in responseCode && responseCode.content && "text/plain" in responseCode.content && "schema" in responseCode.content["text/plain"]) {
     return {
-      description: responseCode.description ?? `Нет описания ответа ${code} кода`,
+      description: responseCode?.description ?? `Нет описания ответа ${code} кода`,
       schema: parseSchema(responseCode.content["text/plain"]?.schema, data, { parentParamName: 'plain_text_response' })
     }
   }
