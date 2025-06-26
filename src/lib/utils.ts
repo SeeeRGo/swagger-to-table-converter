@@ -102,6 +102,12 @@ export const parseParam = (param: OpenAPIV3_1.ParameterObject | OpenAPIV3_1.Refe
     description: `param - ${param}`
   }]
   if ('$ref' in param) {
+    const repNums = parentParamName.split('.').reduce((acc, el) => {
+      const currentRepetitions = acc[el] ?? 0
+      acc[el] = currentRepetitions + 1
+      return acc
+    }, {} as Record<string, number>)
+    if (Object.values(repNums ?? {}).reduce((max, num) => num > max ? num : max, 0) > 1) return []
     const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(param?.$ref) ?? ''))
     if (typeof referenceSchema === 'object' && 'in' in referenceSchema) {
       return parseParam(referenceSchema, data, {parentParamName, parentParamType})
