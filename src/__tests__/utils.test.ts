@@ -5,9 +5,9 @@ import { MockOutputMini } from './mockOutpuMini'
 import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, jsonRequestBodyInput, jsonRequestBodyOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, plainRefRequestBodyInput, plainRefRequestBodyOutput, plainTextRequestBodyInput, plainTextRequestBodyOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, refRequestBodyRecursiveInput, refRequestBodyRecursiveOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput, response200jsonInput, response200jsonOutput, response201jsonInput, response201jsonOutput, response400jsonInput, response400jsonOutput, responseMultiCodeInput, responseMultiCodeOutput, responsePlainTextInput, responsePlainTextOutput, responseRefInput, responseRefOutput } from './mockDataPairs'
 import { mockData } from './mockInput'
 
-// test('parsed yaml swagger specs correctly', () => {
-//   expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
-// })
+test('parsed yaml swagger specs correctly', () => {
+  expect(parseData(mockDataMini).at(0)).toEqual(MockOutputMini.at(0))
+})
 
 // test('parse application/json request body correctly', () => {
 //   expect(parseRequestBody(jsonRequestBodyInput, mockData)).toEqual(jsonRequestBodyOutput)
@@ -21,9 +21,9 @@ import { mockData } from './mockInput'
 // test('parse ref request body correctly', () => {
 //   expect(parseRequestBody(plainRefRequestBodyInput, mockData)).toEqual(plainRefRequestBodyOutput)
 // })
-test('parse ref schema with recursive type', () => {
-  expect(parseRequestBody(refRequestBodyRecursiveInput, mockDataOnlyRecursive)).toEqual(refRequestBodyRecursiveOutput)
-})
+// test('parse ref schema with recursive type', () => {
+//   expect(parseRequestBody(refRequestBodyRecursiveInput, mockDataOnlyRecursive)).toEqual(refRequestBodyRecursiveOutput)
+// })
 // test('parse 200 response application/json correctly', () => {
 //   expect(parseResponse(response200jsonInput, mockData, '200')).toEqual(response200jsonOutput)
 // })

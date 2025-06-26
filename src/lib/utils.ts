@@ -179,9 +179,7 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
     return parseAllOf(schema.allOf, data, {parentParamName, parentParamRequired, depth, parentParamDescription: schema.description})
   }
   if (schema.anyOf) return parseAnyOf({anyOf: schema.anyOf, description: schema.description}, data, {parentParamName})
-  if (schema.oneOf) {
-    console.log('schema.oneOf', schema.oneOf);
-    
+  if (schema.oneOf) {    
     const parsedOneOf = parseOneOf({
       oneOf: schema.oneOf,
       description: schema.description
@@ -207,7 +205,12 @@ export const parseSchema = (schema: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.Sc
 }
 
 export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3_1.Document, {parentParamName = '', parentParamType = '', parentParamRequired, ignoreParentParam, depth = 0, parentParamDescription}: ParsingSchemaOptions): ParsedParam[] => {
-  console.log('ref', ref);
+  const repNums = parentParamName.split('.').reduce((acc, el) => {
+    const currentRepetitions = acc[el] ?? 0
+    acc[el] = currentRepetitions + 1
+    return acc
+  }, {} as Record<string, number>)
+  if (Object.values(repNums ?? {}).reduce((max, num) => num > max ? num : max, 0) > 1) return []
   
   const referenceSchema = findSchema(data, getSchemaNameFromRef(sanitizeRef(ref.$ref) ?? ''))
   
@@ -237,9 +240,7 @@ export const parseRefSchema = (ref: OpenAPIV3_1.ReferenceObject, data: OpenAPIV3
   ]
 }
 
-export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, data: OpenAPIV3_1.Document): ParsedRequestBody => {
-  console.log('requestBody', requestBody);
-  
+export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, data: OpenAPIV3_1.Document): ParsedRequestBody => {  
   if (requestBody?.content && 'application/json' in requestBody.content) {
     return {
       schema: parseSchema(requestBody.content['application/json'].schema, data, {}),
@@ -257,7 +258,7 @@ export const parseRequestBody = (requestBody: OpenAPIV3_1.RequestBodyObject, dat
   if (requestBody && '$ref' in requestBody) {  
     // @ts-expect-error idk
     const referenceRequestBody = findSchema(data, getSchemaNameFromRef(sanitizeRef(requestBody.$ref) ?? ''))  
-     // @ts-expect-error idke  
+     // @ts-expect-error idke
     return parseRequestBody(referenceRequestBody, data)
   }
   return {
@@ -275,6 +276,8 @@ export const parseResponses = (response: OpenAPIV3_1.ResponsesObject, data: Open
 export const parseResponse = (responseCode?: OpenAPIV3_1.ResponsesObject[string], data: OpenAPIV3_1.Document, code: string): ParsedResponse => {
   if (responseCode && '$ref' in responseCode) {
     const referenceResponse = findSchema(data, getSchemaNameFromRef(sanitizeRef(responseCode.$ref) ?? ''))
+    console.log('referenceResponse', responseCode.$ref, referenceResponse);
+    
     return {
        // @ts-expect-error idk
       schema: parseSchema(referenceResponse, data, {}), // @ts-expect-error idk
@@ -350,7 +353,6 @@ export const parseArraySchema = (schema: OpenAPIV3_1.ArraySchemaObject, data: Op
   }
   
   const itemsSchema = parseSchema(items, data, {parentParamName: `${parentParamName}[index]`, parentParamType: isObjectSchema(schema.items, data) ? '' : 'array', parentParamRequired: required, parentParamDescription: schema.description })  
-  // console.log('itemsSchema', itemsSchema);
   
   const parentParam: ParsedParam[] = typeof schema.items === 'object' && (isObjectSchema(schema.items, data)) ? [{
     paramName: `${parentParamName}[index]`,
@@ -373,7 +375,6 @@ export const parseMixedSchema = (schema: OpenAPIV3_1.MixedSchemaObject): ParsedP
 }
 
 export const parseNestedParam = (name: string, property: OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject, required:  OpenAPIV3_1.NonArraySchemaObject['required'] = [], data: OpenAPIV3_1.Document, {parentParamName = '', parentParamType = '', depth = 0, parentParamDescription}: ParsingSchemaOptions): ParsedParam[] => {
-  // console.log(name, property, 'required', required);
 
   if (property === undefined) return [{
     paramName: name,

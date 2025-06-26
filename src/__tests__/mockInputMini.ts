@@ -19547,27 +19547,46 @@ export const mockDataPathForParams = {
 
 export const mockDataOnlyRecursive = {
 "components": {
-    "CommonAttributePublicationSettings": {
-        "description": "Общие настройки публикации атрибута для систем",
-        "type": "object",
-        "properties": {
-            "attrId": {
-                "description": "Идентификатор атрибута",
-                "type": "integer",
-                "format": "int32"
-            },
-            "attributes": {
-                "description": "Атрибуты, входящие в табличный атрибут",
-                "type": "array",
-                "items": {
-                    "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+    "schemas": {
+        "CommonAttributePublicationSettings": {
+            "description": "Общие настройки публикации атрибута для систем",
+            "type": "object",
+            "properties": {
+                "attrId": {
+                    "description": "Идентификатор атрибута",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "attributes": {
+                    "description": "Атрибуты, входящие в табличный атрибут",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+                    }
                 }
-            }
+            },
+            "required": [
+                "attrId",
+            ]
         },
-        "required": [
-            "attrId",
-        ]
     },
+    "requestBodies": {
+        "catalogListRequestBody": {
+              "description": "Пример тела запроса с информацией о категории объектов.",
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "$ref": "#/components/schemas/CommonAttributePublicationSettings"
+                      },
+                      "examples": {
+                          "Пример": {
+                              "$ref": "#/components/examples/ObjectCategoryRequest"
+                          }
+                      }
+                  }
+              }
+          },
+    }
 },
   "openapi": "3.0.3",
   "info": {

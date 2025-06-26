@@ -3272,6 +3272,12 @@ export const refRequestBodyRecursiveInput = {
 export const refRequestBodyRecursiveOutput = {
     schema: [
         {
+            "paramName": "",
+            "paramType": "object",
+            "description": "Общие настройки публикации атрибута для систем",
+            "required": false,
+        },
+        {
             "paramName": "attrId",
             "paramType": "integer[int32]",
             "description": "Идентификатор атрибута",
@@ -3286,7 +3292,7 @@ export const refRequestBodyRecursiveOutput = {
         {
             "paramName": "attributes[index]",
             "paramType": "object",
-            "description": "Общие настройки публикации атрибута для систем",
+            "description": "Атрибуты, входящие в табличный атрибут",
             "required": false,
         },
         {
@@ -3297,13 +3303,13 @@ export const refRequestBodyRecursiveOutput = {
         },
         {
             "paramName": "attributes[index].attributes[index]",
-            "paramType": "recursive[array[object]]",
+            "paramType": "array[object]",
             "description": "Атрибуты, входящие в табличный атрибут",
             "required": false,
         },
     ],
     required: false,
-    description: 'Общие настройки публикации атрибута для систем'
+    description: 'Пример тела запроса с информацией о категории объектов.'
 }
 
 export const jsonRequestBodyInput = {

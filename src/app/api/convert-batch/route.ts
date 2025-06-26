@@ -29,6 +29,10 @@ export async function POST(request: Request) {
         ...(acc.components?.requestBodies ?? {}),
         ...(schema.components?.requestBodies ?? {})
       },
+      responses: {
+        ...(acc.components?.responses ?? {}),
+        ...(schema.components?.responses ?? {})
+      },
     }
     acc.paths = {
       ...(acc.paths ?? {}),
