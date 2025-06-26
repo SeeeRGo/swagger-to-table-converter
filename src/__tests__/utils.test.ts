@@ -2,7 +2,7 @@ import { parseData, parsePropertyType, parseParam, parseSchema, parseArraySchema
 import { expect, test } from 'vitest'
 import { mockDataMini, mockDataOnlyRecursive, mockDataPathForParams } from './mockInputMini'
 import { MockOutputMini } from './mockOutpuMini'
-import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, jsonRequestBodyInput, jsonRequestBodyOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, plainRefRequestBodyInput, plainRefRequestBodyOutput, plainTextRequestBodyInput, plainTextRequestBodyOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, refRequestBodyRecursiveInput, refRequestBodyRecursiveOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput, response200jsonInput, response200jsonOutput, response201jsonInput, response201jsonOutput, response400jsonInput, response400jsonOutput, responseMultiCodeInput, responseMultiCodeOutput, responsePlainTextInput, responsePlainTextOutput, responseRefInput, responseRefOutput } from './mockDataPairs'
+import { allOfInput, allOfOutput, arrayPropTypeExpectedOutput, arrayPropTypeInput, attributeInput, attributeOutput, catalogsPostOutput, catalogspostPathInput, inputParamsInput, inputParamsOutput, jsonRequestBodyInput, jsonRequestBodyOutput, mockDataForEnumParsingExpectedOutput1, mockDataForEnumParsingExpectedOutput2, mockDataForEnumParsingExpectedOutput3, mockDataForEnumParsingExpectedOutput4, mockDataForEnumParsingInput1, mockDataForEnumParsingInput2, mockDataForEnumParsingInput3, mockDataForEnumParsingInput4, mockDataForObjectParsingJustProperties, mockDataInput, mockOutputForObjectParsingJustProperties, nestedRequiredInput, nestedRequiredOutput, objectWithNestedInput, objectWithNestedOutput, oneOfNoRefInput, oneOfNoRefOutput, plainParamInput, plainParamOutput, plainRefInput, plainRefOutput, plainRefRequestBodyInput, plainRefRequestBodyOutput, plainTextRequestBodyInput, plainTextRequestBodyOutput, propertyToParseParamTypeInput, propertyToParseParamTypeOutput, recursiveAllOfInput, recursiveAllOfOutput, refParamInput, refParamOutput, refPropInput, refPropOutput, refRequestBodyRecursiveInput, refRequestBodyRecursiveOutput, requestBodyPlainInput, requestBodyPlainOutput, requiredInput, requiredOutput, response200jsonInput, response200jsonOutput, response201jsonInput, response201jsonOutput, response400jsonInput, response400jsonOutput, responseMultiCodeInput, responseMultiCodeOutput, responsePlainTextInput, responsePlainTextOutput, responseRefInput, responseRefOutput } from './mockDataPairs'
 import { mockData } from './mockInput'
 
 test('parsed yaml swagger specs correctly', () => {
@@ -74,7 +74,6 @@ test('parses input param correctly', () => {
   expect(parseParameters(inputParamsInput, mockDataInput, {})).toEqual(inputParamsOutput)
 })
 
-
 test('parses object schema with nested properties', () => {
   expect(parseSchema(objectWithNestedInput, mockDataInput, {})).toEqual(objectWithNestedOutput)
 })
@@ -107,6 +106,10 @@ test('parses plain ref schema', () => {
 
 test('parses allOf ref schema', () => {
   expect(parseSchema(allOfInput, mockDataInput)).toEqual(allOfOutput)
+})
+
+test('parses allOf ref recursive schema', () => {
+  expect(parseSchema(recursiveAllOfInput, mockDataInput)).toEqual(recursiveAllOfOutput)
 })
 
 test('correctly parses nested non-required properties when parent property is required', () => {

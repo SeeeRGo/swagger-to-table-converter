@@ -278,6 +278,7 @@ export const allOfInput = {
   ]
 }
 
+
 export const allOfOutput: ParsedParam[] = [
   {
     "description": "Ответ на запрос в API\nИспользуется для описания ошибок и базовых ответов (Ok, Created и пр.)",
@@ -321,6 +322,40 @@ export const allOfOutput: ParsedParam[] = [
     "description": "",
     "required": false,
   },
+]
+
+export const recursiveAllOfInput = {
+    "allOf": [
+        {
+            "$ref": "catalogObjects.yaml#/components/schemas/OkCatalogObjectResponse"
+        }
+    ],
+    "properties": {
+        "responseAction": {
+            "$ref": "#/components/schemas/CatalogObjectResponseActionTagIdEnum"
+        }
+    }
+}
+
+export const recursiveAllOfOutput = [
+    {
+     "description": "",
+     "paramName": "",
+     "paramType": "object",
+     "required": false,
+   },
+   {
+     "description": "Тип действия с объектом, к которому относится возвращаемый ответ:\n  - `save` - сохранение без подписания;\n  - `subscribe` - сохранение с подписанием объекта;\n  - `deleted` - удаление объекта (возвращается для новых объектов при физическом удалении из системы).",
+     "paramName": "responseAction",
+     "paramType": "string[\nsave,\nsubscribe,\ndelete\n]",
+     "required": false,
+   },
+   {
+     "description": "Тип действия с объектом, к которому относится возвращаемый ответ:\n  - `save` - сохранение без подписания;\n  - `subscribe` - сохранение с подписанием объекта;\n  - `deleted` - удаление объекта (возвращается для новых объектов при физическом удалении из системы).",
+     "paramName": "responseAction",
+     "paramType": "string[\nsave,\nsubscribe,\ndelete\n]",
+     "required": false,
+   },
 ]
 
 export const plainParamInput = {
@@ -3285,24 +3320,6 @@ export const refRequestBodyRecursiveOutput = {
         },
         {
             "paramName": "attributes[index]",
-            "paramType": "array[object]",
-            "description": "Атрибуты, входящие в табличный атрибут",
-            "required": false,
-        },
-        {
-            "paramName": "attributes[index]",
-            "paramType": "object",
-            "description": "Атрибуты, входящие в табличный атрибут",
-            "required": false,
-        },
-        {
-            "paramName": "attributes[index].attrId",
-            "paramType": "integer[int32]",
-            "description": "Идентификатор атрибута",
-            "required": true,
-        },
-        {
-            "paramName": "attributes[index].attributes[index]",
             "paramType": "array[object]",
             "description": "Атрибуты, входящие в табличный атрибут",
             "required": false,
