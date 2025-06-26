@@ -19214,7 +19214,1009 @@ export const mockData = {
                   }
               }
           }
-      }
+      },
+              "responses": {
+            "ThematicCategoryBadRequestPostOrPutResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Тематическая категория с переданным наиеменованием `name` уже существует;\n  - Тематическая категория с переданным наиеменованием `enName` уже существует;\n  - В русскоязычном наиеменовании тематической категории `name`  переданы запрещенные символы;\n  - В англоязычном наиеменовании тематической категории `enName` переданы запрещенные символы;\n  - При передаче статуса `Опубликована` не передано англоязычное наименование тематической категории (поле `enName`)\n  - При передаче статуса `Опубликована` не передан идентификатор файла иконки категории (поле `fileId`)\n  - Передан недопустимый формат файла иконки категории. ",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/WrongFormatError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/MissingParamsError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/OutOfScopeError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальное название тематической категории": {
+                                "$ref": "#/components/examples/ThematicCategoryNameNotUniqueError"
+                            },
+                            "В русскоязычном или англоязычном названиях тематической категории присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/ThematicCategoryBadNameError"
+                            },
+                            "Не переданы обязательные для публикации поля": {
+                                "$ref": "#/components/examples/ThematicCategoryNotFoundEnNameOrFieldId"
+                            },
+                            "Передан не допустимый формат файла иконки категории": {
+                                "$ref": "#/components/examples/ThematicCategoryNotSvgError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ThematicCategoryDeletedErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Одна или несколько из переданных тематических категорий используются в каталогах заполнения;\n  - Одна или несколько из переданных тематических категорий используются в каталогах публикации.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/ResourceCannotBeDeletedError"
+                        },
+                        "examples": {
+                            "Тематическая категория используется в каталоге заполнения": {
+                                "$ref": "#/components/examples/ThematicCategoryIsUsedInCatalogsError"
+                            },
+                            "Тематическая категория используется в каталоге публикации": {
+                                "$ref": "#/components/examples/ThematicCategoryIsUsedInPublicationCatalogsError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ThematicCategoryNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id тематической категории не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id тематической категории": {
+                                "$ref": "#/components/examples/ThematicCategoryNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "OivNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id ОИВа не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id ОИВа": {
+                                "$ref": "#/components/examples/OivNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "SystemNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id системы не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id тематической категории": {
+                                "$ref": "#/components/examples/SystemNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "CatalogNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "#/components/examples/CatalogNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "FillingCatalogNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога заполнения не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "#/components/examples/FillingCatalogNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "FillingCatalogEntitiesNotFoundError": {
+                "description": "### Возможные ошибки бизнес-логики при создании и изменении каталога:\n  - Передан несуществующий id вида каталога;\n  - Передан несуществующий id типа каталога;\n  - Передан несуществующий id тематической категории;\n  - Передан несуществующий id ОИВа;\n  - Передан несуществующий id системы;\n  - Передан несуществующий id атрибута;\n  - Передан id альтернативного названия атрибута, не найденный в атрибуте;\n  - Несуществующее регулярное выражение;\n  - Несуществующий поисковый индекс;\n  - Несуществующий refCatalogId;\n  - Несуществующий refAttrId в каталоге refCatalogId;\n  - Передан несуществующий столбец справочника;\n\n### Ошибки бизнес-логики при ИЗМЕНЕНИИ каталога:\n  - Не существует каталога с переданным идентификатором.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id вида каталога": {
+                                "$ref": "#/components/examples/CatalogKindNotFoundError"
+                            },
+                            "Несуществующий id типа каталога": {
+                                "$ref": "#/components/examples/CatalogTypeNotFoundError"
+                            },
+                            "Несуществующий id тематической категории": {
+                                "$ref": "thematicCategories.yaml#/components/examples/ThematicCategoryNotFoundError"
+                            },
+                            "Несуществующий id ОИВа": {
+                                "$ref": "oivs.yaml#/components/examples/OivNotFoundError"
+                            },
+                            "Несуществующий id системы": {
+                                "$ref": "systems.yaml#/components/examples/SystemNotFoundError"
+                            },
+                            "Несуществующий id атрибута": {
+                                "$ref": "attributes.yaml#/components/examples/AttributeNotFoundError"
+                            },
+                            "Альтернативное название не найдено в атрибуте": {
+                                "$ref": "attributes.yaml#/components/examples/AttributeAlterNameNotFoundError"
+                            },
+                            "Несуществующее регулярное выражение": {
+                                "$ref": "regexps.yaml#/components/examples/RegularExpressionNotFoundError"
+                            },
+                            "Несуществующий поисковый индекс": {
+                                "$ref": "searchIndexes.yaml#/components/examples/SearchIndexNotFoundError"
+                            },
+                            "Несуществующий refCatalogId": {
+                                "$ref": "#/components/examples/RefCatalogNotFoundError"
+                            },
+                            "Несуществующий refAttrId в каталоге refCatalogId": {
+                                "$ref": "#/components/examples/RefAttrNotFoundError"
+                            },
+                            "Несуществующий colDictTechName в справочнике": {
+                                "$ref": "#/components/examples/ColDictTechNameNotFoundError"
+                            },
+                            "Каталога не существует": {
+                                "$ref": "#/components/examples/FillingCatalogNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "FillingCatalogBadRequestErrors": {
+                "description": "### Ошибки бизнес-логики при создании и изменении каталога:\n  - Неуникальная комбинация полного и технологического наименования каталога;\n  - Не заполнен период фоновой проверки;\n  - Email ответственного не прошел проверку на соответствие регулярному выражению;\n  - Список атрибутов каталога содержит неуникальные techName атрибутов;\n  - Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту или вложенному атрибуту;\n  - Минимальное кол-во элементов множественного атрибута больше максимального кол-ва элементов;\n  - Множественный атрибут имеет свойство \"Обязательный\", но минимальное кол-во элементов равно 0;\n  - Некорректный parentDictAttrId;\n  - Некорректно указано свойство isUniqWithinParent.\n  - Настройки конструктора не прошли проверку валидации;\n  - Условие условной уникальности не прошло проверку валидации;\n  - Настройки групповой уникальности не прошли проверку валидации;\n  - Не заполнены обязательные поля при наличии геопривязки;\n  - Типы геометрии Точка и Мультиточка не могут быть выбраны одновременно;\n  - Признак isNotReqGeoForService может принимать значение true, только при обязательности геопривязки.\n\n### Ошибки бизнес-логики при ИЗМЕНЕНИИ каталога:\n  - Каталог находится в процессе подписания;\n  - Попытка удалить атрибут каталога, который используется в справочнике, синхронизированном с каталогом;\n  - Каталог находится в процессе импорта;\n  - Для каталога запущен процесс удаления всех объектов;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/BadRequestError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/WrongFormatError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/MissingParamsError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальная комбинация полного и технологического наименования каталога": {
+                                "$ref": "#/components/examples/CatalogNotUniqueNameError"
+                            },
+                            "Не заполнен период фоновой проверки": {
+                                "$ref": "#/components/examples/backgroundCheckPeriodTagIdBadRequestError"
+                            },
+                            "Email ответственного не прошел проверку на соответствие регулярному выражению": {
+                                "$ref": "#/components/examples/InvalidRespPersonEmail"
+                            },
+                            "Список атрибутов каталога содержит неуникальные techName атрибутов": {
+                                "$ref": "#/components/examples/NotUniqTechNameAttributeInCatalogError"
+                            },
+                            "Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту": {
+                                "$ref": "#/components/examples/MultipleMainAttributesInCatalogError"
+                            },
+                            "Минимальное кол-во элементов множественного атрибута больше максимального": {
+                                "$ref": "#/components/examples/WrongMixMaxAttributeError"
+                            },
+                            "Минимальное кол-во элементов обязательного атрибута = 0": {
+                                "$ref": "#/components/examples/ZeroMinInRequiredAttributeError"
+                            },
+                            "Некорректный parentDictAttrId": {
+                                "$ref": "#/components/examples/IncorrectParentDictAttrIdError"
+                            },
+                            "Некорректно указано свойство isUniqWithinParent": {
+                                "$ref": "#/components/examples/WrongUniqWithinParent"
+                            },
+                            "Настройки конструктора не прошли проверку валидации": {
+                                "$ref": "#/components/examples/ConstructorValidationError"
+                            },
+                            "Условие условной уникальности не прошло проверку валидации": {
+                                "$ref": "#/components/examples/ConditionalUniqValidationError"
+                            },
+                            "Настройки групповой уникальности не прошли проверку валидации": {
+                                "$ref": "#/components/examples/GroupUniqValidationError"
+                            },
+                            "Не заполнены обязательные поля при наличии геопривязки": {
+                                "$ref": "#/components/examples/MissingMapFieldsError"
+                            },
+                            "Типы геометрии Точка и Мультиточка не могут быть выбраны одновременно": {
+                                "$ref": "#/components/examples/IncorrectGeoTypeArrayError"
+                            },
+                            "Признак isNotReqGeoForService может принимать значение true, только при обязательности геопривязки": {
+                                "$ref": "#/components/examples/isNotReqGeoForServiceBadRequestError"
+                            },
+                            "Каталог находится в процессе подписания": {
+                                "$ref": "#/components/examples/SignedCatalogCannotBeEditedError"
+                            },
+                            "Атрибут каталога привязан к справочнику и не может быть удален": {
+                                "$ref": "#/components/examples/AttributeConnectedToDictionaryError"
+                            },
+                            "Каталог находится в процессе импорта": {
+                                "$ref": "#/components/examples/CatalogInImportCantBeEditedError"
+                            },
+                            "Для каталога запущен процесс удаления всех объектов": {
+                                "$ref": "#/components/examples/CatalogInDeletionCantBeEditedError"
+                            }
+                        }
+                    }
+                }
+            },
+            "AttributeGroupBadRequestResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Группа атрибутов с переданным названием `name` уже существует;\n  - В названии группы атрибутов переданы запрещенные символы.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/OutOfScopeError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальное название группы атрибутов": {
+                                "$ref": "#/components/examples/AttributeGroupNameNotUniqueError"
+                            },
+                            "В названии группы атрибутов присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/AttributeGroupBadNameError"
+                            }
+                        }
+                    }
+                }
+            },
+            "RegularExpressionNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id регулярного выражения не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id регулярного выражения": {
+                                "$ref": "#/components/examples/RegularExpressionNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "SearchIndexNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id поискового индекса не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "SearchIndexBadRequestResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Поисковый индекс с переданным наиеменованием `name` уже существует;\n  - Поисковый индекс с переданным техническим наиеменованием `techName` уже существует;\n  - В русскоязычном наиеменовании поискового индекса `name`  переданы запрещенные символы;\n  - В техническом наиеменовании поискового индекса `techName` переданы запрещенные символы;\n  - Поисковый индекс с переданной комбинацией справочника и столбца справочника уже существует;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/WrongFormatError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальное русскоязычное название поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexNameNotUniqueError"
+                            },
+                            "Неуникальное техническое название поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexTechNameNotUniqueError"
+                            },
+                            "В русскоязычном названии поискового индекса присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/SearchIndexBadNameError"
+                            },
+                            "В техническом названии поискового индекса присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/SearchIndexBadTechNameError"
+                            },
+                            "Неуникальная комбинация справочника и столбца справочника": {
+                                "$ref": "#/components/examples/SearchIndexDictAndColDictNotUniqueError"
+                            }
+                        }
+                    }
+                }
+            },
+            "SearchIndexBadRequestPutResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Поисковый индекс с переданным наиеменованием `name` уже существует;\n  - Поисковый индекс с переданным техническим наиеменованием `techName` уже существует;\n  - В русскоязычном наиеменовании поискового индекса `name`  переданы запрещенные символы;\n  - В техническом наиеменовании поискового индекса `techName` переданы запрещенные символы;\n  - Переданны измененные параметры идентификатора справочника и/или наименования столбца справочника, по которому(ым) настроен поисковый индекс ",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/WrongFormatError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальное русскоязычное название поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexNameNotUniqueError"
+                            },
+                            "Неуникальное техническое название поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexTechNameNotUniqueError"
+                            },
+                            "В русскоязычном названии поискового индекса присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/SearchIndexBadNameError"
+                            },
+                            "В техническом названии поискового индекса присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/SearchIndexBadTechNameError"
+                            },
+                            "Измененная комбинация справочника и столбца справочника": {
+                                "$ref": "#/components/examples/SearchIndexDictAndColDictChangeError"
+                            }
+                        }
+                    }
+                }
+            },
+            "SearchIndexesNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Один или несколько из переданных поисковых индексов не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id поискового индекса": {
+                                "$ref": "#/components/examples/SearchIndexNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ObjectCategoryNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id категории объектов не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id категории объектов": {
+                                "$ref": "#/components/examples/ObjectCategoryNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ObjectCategoryBadRequestResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Категория объектов с переданным названием `name` уже существует;\n  - В русскоязычном названии категории объектов переданы запрещенные символы;\n  - В англоязычном названии категории объектов переданы запрещенные символы.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/OutOfScopeError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальное название категории объектов": {
+                                "$ref": "#/components/examples/ObjectCategoryNameNotUniqueError"
+                            },
+                            "В русскоязычном названии категории объектов присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/ObjectCategoryBadRusNameError"
+                            },
+                            "В англоязычном названии категории объектов присутствуют запрещенные символы": {
+                                "$ref": "#/components/examples/ObjectCategoryBadEnNameError"
+                            }
+                        }
+                    }
+                }
+            },
+            "DictionaryNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id справочника не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id справочника": {
+                                "$ref": "#/components/examples/DictionaryNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "DictionaryNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id справочника не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id справочника": {
+                                "$ref": "#/components/examples/DictionaryNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ExportNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id экспорта не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id экспорта": {
+                                "$ref": "#/components/examples/ExportNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogBadRequestPostResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Передана комбинация полного и технического наименований, которая уже используется в другом каталоге;\n  - Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту или вложенному атрибуту;\n  - Email ответственного не прошел проверку на соответствие регулярному выражению;\n  - Ограничение выборки не проходит валидацию;\n  - В SEF URL используются запрещенные символы;\n  - Видимость (поле `isVisible`) для атрибутов global_id, Дата подписания и Признак удаления в настройках публикации для системы не может быть передана со значением `false`;\n  - Не заполнены обязательные поля при наличии геопривязки;\n  - Типы геометрии Точка и Мультиточка не могут быть выбраны одновременно;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/BadRequestError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальная комбинация полного и технологического наименования каталога": {
+                                "$ref": "#/components/examples/PublicationCatalogNotUniqueNameError"
+                            },
+                            "Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту": {
+                                "$ref": "catalogs.yaml#/components/examples/MultipleMainAttributesInCatalogError"
+                            },
+                            "Email ответственного не прошел проверку на соответствие регулярному выражению": {
+                                "$ref": "catalogs.yaml#/components/examples/InvalidRespPersonEmail"
+                            },
+                            "В идентификационном номере используются запрещенные символы": {
+                                "$ref": "#/components/examples/IdentNumberFormatError"
+                            },
+                            "В SEF URL используются запрещенные символы": {
+                                "$ref": "#/components/examples/SefUrlFormatError"
+                            },
+                            "Ограничение выборки не прошло валидацию": {
+                                "$ref": "#/components/examples/PublicationConditionsValidationError"
+                            },
+                            "Системный атрибут должен быть видимым в настройках публикации": {
+                                "$ref": "#/components/examples/PublicationSettingsSystemAttributeShouldBeVisibleError"
+                            },
+                            "Не заполнены обязательные поля при наличии геопривязки": {
+                                "$ref": "#/components/examples/PublicationCatalogMissingMapFieldsError"
+                            },
+                            "Типы геометрии Точка и Мультиточка не могут быть выбраны одновременно": {
+                                "$ref": "catalogs.yaml#/components/examples/IncorrectGeoTypeArrayError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogBadRequestPutResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Передана комбинация полного и технического наименований, которая уже используется в другом каталоге;\n  - Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту или вложенному атрибуту;\n  - Email ответственного не прошел проверку на соответствие регулярному выражению;\n  - Передан измененный атрибут, который синхронизируется с каталогом заполнения;\n  - Передан измененный идентификатор каталога заполнения;\n  - В SEF URL используются запрещенные символы;\n  - Ограничение выборки не проходит валидацию;\n  - Видимость (поле `isVisible`) для атрибутов global_id, Дата подписания и Признак удаления в настройках публикации для системы не может быть передана со значением `false`.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/UniqueValueError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/BadRequestError"
+                                },
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/ResourceCannotBeEditedError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Неуникальная комбинация полного и технологического наименования каталога": {
+                                "$ref": "#/components/examples/PublicationCatalogNotUniqueNameError"
+                            },
+                            "Свойство \"Главный атрибут\" присвоено более чем 1 атрибуту": {
+                                "$ref": "catalogs.yaml#/components/examples/MultipleMainAttributesInCatalogError"
+                            },
+                            "Email ответственного не прошел проверку на соответствие регулярному выражению": {
+                                "$ref": "catalogs.yaml#/components/examples/InvalidRespPersonEmail"
+                            },
+                            "Попытка изменить синхронизируемый атрибут": {
+                                "$ref": "#/components/examples/SyncedPropertyChangedError"
+                            },
+                            "Попытка изменить связанный каталог заполнения": {
+                                "$ref": "#/components/examples/FillingCatalogChangedError"
+                            },
+                            "В идентификационном номере используются запрещенные символы": {
+                                "$ref": "#/components/examples/IdentNumberFormatError"
+                            },
+                            "В SEF URL используются запрещенные символы": {
+                                "$ref": "#/components/examples/SefUrlFormatError"
+                            },
+                            "Ограничение выборки не прошло валидацию": {
+                                "$ref": "#/components/examples/PublicationConditionsValidationError"
+                            },
+                            "Системный атрибут должен быть видимым в настройках публикации": {
+                                "$ref": "#/components/examples/PublicationSettingsSystemAttributeShouldBeVisibleError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Передан несуществующий id вида каталога;\n  - Передан несуществующий id типа каталога;\n  - Передан несуществующий id тематической категории;\n  - Передан несуществующий id ОИВа;\n  - Передан несуществующий id системы;\n  - Передан id системы, которая не добавлена в каталог в качетсве потребителя;\n  - Передан несуществующий id атрибута;\n  - Передан несуществующий в каталоге заполнения id атрибута;\n  - Передан id альтернативного названия атрибута, не найденный в атрибуте;\n  - Передан несуществующий столбец справочника;\n  - Передан несуществующий id каталога;\n  - Передан несуществующий id системного атрибута;\n  - Передан несуществующий id группы атрибутов;\n  - Передан несуществующий id рубрикатора (для yandex).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id вида каталога": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogKindNotFoundError"
+                            },
+                            "Несуществующий id типа каталога": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogTypeNotFoundError"
+                            },
+                            "Несуществующий id тематической категории": {
+                                "$ref": "thematicCategories.yaml#/components/examples/ThematicCategoryNotFoundError"
+                            },
+                            "Несуществующий id ОИВа": {
+                                "$ref": "oivs.yaml#/components/examples/OivNotFoundError"
+                            },
+                            "Несуществующий id системы": {
+                                "$ref": "systems.yaml#/components/examples/SystemNotFoundError"
+                            },
+                            "Несуществующий в каталоге публикации id системы": {
+                                "$ref": "#/components/examples/SystemNotFoundInPublicationCatalogError"
+                            },
+                            "Несуществующий id атрибута": {
+                                "$ref": "attributes.yaml#/components/examples/AttributeNotFoundError"
+                            },
+                            "Несуществующий в каталоге заполнения id атрибута": {
+                                "$ref": "#/components/examples/AttributeNotFoundInFillingCatalogError"
+                            },
+                            "Альтернативное название не найдено в атрибуте": {
+                                "$ref": "attributes.yaml#/components/examples/AttributeAlterNameNotFoundError"
+                            },
+                            "Несуществующий столбец справочника": {
+                                "$ref": "dictionaries.yaml#/components/examples/DictionaryColumnNotFoundError"
+                            },
+                            "Несуществующий id каталога": {
+                                "$ref": "#/components/examples/PublicationCatalogNotFoundError"
+                            },
+                            "Несуществующий id системного атрибута": {
+                                "$ref": "attributes.yaml#/components/examples/SystemAttributeNotFoundError"
+                            },
+                            "Несуществующий id группы атрибутов": {
+                                "$ref": "attributes.yaml#/components/examples/AttributeGroupNotFoundError"
+                            },
+                            "Несуществующий id рубрикатора (для yandex)": {
+                                "$ref": "#/components/examples/RubricatorNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogIdNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога публикации не существует;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога публикации": {
+                                "$ref": "#/components/examples/PublicationCatalogNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogOrVersionNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога публикации не существует;\n  - Указанной версии каталога публикации не существует;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога публикации": {
+                                "$ref": "#/components/examples/PublicationCatalogNotFoundError"
+                            },
+                            "Несуществующий версия каталога публикации": {
+                                "$ref": "#/components/examples/PublicationCatalogVersionNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogAccessNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога публикации не существует;\n  - Передан несуществующий id системы;\n  - Передан id системы, которая не добавлена в каталог в качетсве потребителя;",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога публикации": {
+                                "$ref": "#/components/examples/PublicationCatalogNotFoundError"
+                            },
+                            "Несуществующий id системы": {
+                                "$ref": "systems.yaml#/components/examples/SystemNotFoundError"
+                            },
+                            "Несуществующий в каталоге публикации id системы": {
+                                "$ref": "#/components/examples/SystemNotFoundInPublicationCatalogError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationCatalogReleaseNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога публикации не существует;\n  - Не найдены опубликованные объекты для формирования релиза",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Запрошенный id каталога публикации не существует": {
+                                "$ref": "#/components/examples/PublicationCatalogNotFoundError"
+                            },
+                            "Не найдены опубликованные объекты для формирования релиза": {
+                                "$ref": "#/components/examples/PublicationCatalogReleaseNotFoundDataErrorResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "CatalogGroupNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Не существует группы каталогов с указанным идентификатором.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Не существует группы каталогов с указанным идентификатором": {
+                                "$ref": "#/components/examples/CatalogGroupNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PublicationObjectSearchNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога не существует;\n  - Переданный в фильтре или сортировке атрибут `attribute` не существует в корневом или вложенном каталоге;\n  - id вложенного каталога `childCatalogId`, переданный в фильтре, не существует в корневом каталоге.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogNotFoundError"
+                            },
+                            "Атрибут фильтра или сортировки не существует в каталоге": {
+                                "$ref": "_common.yaml#/components/examples/FilterSortingAttributeNotFoundError"
+                            },
+                            "Вложенный каталог не найден в каталоге": {
+                                "$ref": "catalogs.yaml#/components/examples/ChildCatalogNotFoundInCatalogError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ChildPublicationObjectSearchNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный объект (вложенный, родительский, корневой) не существует в переданном каталоге (вложенном, родительском, корневом);\n  - Запрошенный каталог (вложенный или родительский) не входит в (родительский или корневой) каталог;\n  - Запрошенный объект (вложенный или родительский) не входит в (родительский или корневой) объект;\n  - Переданный в фильтре или сортировке атрибут `attribute` не существует в корневом каталоге.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Объект не найден в соответствующей каталоге": {
+                                "$ref": "catalogObjects.yaml#/components/examples/CatalogObjectNotFoundError"
+                            },
+                            "Вложенный каталог не найден в каталоге": {
+                                "$ref": "catalogs.yaml#/components/examples/ChildCatalogNotFoundInCatalogError"
+                            },
+                            "Вложенный объект не входит в родительский объект": {
+                                "$ref": "catalogObjects.yaml#/components/examples/ChildObjectNotFoundInObjectError"
+                            },
+                            "Атрибут фильтра или сортировки не существует в каталоге": {
+                                "$ref": "_common.yaml#/components/examples/FilterSortingAttributeNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "CatalogObjectSearchNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога не существует;\n  - Переданный в фильтре или сортировке атрибут `attribute` не существует в корневом или вложенном каталоге;\n  - id вложенного каталога `childCatalogId`, переданный в фильтре, не существует;\n  - id вложенного каталога `childCatalogId`, переданный в фильтре, не существует в корневом каталоге.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogNotFoundError"
+                            },
+                            "Атрибут фильтра или сортировки не существует в каталоге": {
+                                "$ref": "_common.yaml#/components/examples/FilterSortingAttributeNotFoundError"
+                            },
+                            "Несуществующий id вложенного каталога в фильтре": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogNotFoundError"
+                            },
+                            "Вложенный каталог не найден в каталоге": {
+                                "$ref": "catalogs.yaml#/components/examples/ChildCatalogNotFoundInCatalogError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ChildCatalogObjectSearchNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога (в т.ч. родительского и корневого) не существует;\n  - Запрошенный объект (вложенный, родительский, корневой) не существует в переданном каталоге (вложенном, родительском, корневом);\n  - Запрошенный каталог (вложенный или родительский) не входит в (родительский или корневой) каталог;\n  - Запрошенный объект (вложенный или родительский) не входит в (родительский или корневой) объект;\n  - Переданный в фильтре или сортировке атрибут `attribute` не существует в корневом каталоге.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogNotFoundError"
+                            },
+                            "Объект не найден в соответствующей каталоге": {
+                                "$ref": "#/components/examples/CatalogObjectNotFoundError"
+                            },
+                            "Вложенный каталог не найден в каталоге": {
+                                "$ref": "catalogs.yaml#/components/examples/ChildCatalogNotFoundInCatalogError"
+                            },
+                            "Вложенный объект не входит в родительский объект": {
+                                "$ref": "#/components/examples/ChildObjectNotFoundInObjectError"
+                            },
+                            "Атрибут фильтра или сортировки не существует в каталоге": {
+                                "$ref": "_common.yaml#/components/examples/FilterSortingAttributeNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "PushsubNotFound": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Не существует подписки с указанным идентификатором.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Пример": {
+                                "$ref": "#/components/examples/PushsubNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "FileNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный Uuid файла не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий Uuid файла": {
+                                "$ref": "#/components/examples/FileNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "LocksNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога не существует;\n  - Запрошенный id пользователя, установавливающего блокировку не существует;\n  - Запрошенный id системы, установавливающей блокировку не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Каталога не существует": {
+                                "$ref": "catalogs.yaml#/components/examples/CatalogNotFoundError"
+                            },
+                            "Пользователя не существует": {
+                                "$ref": "users.yaml#/components/examples/UserNotFoundError"
+                            },
+                            "Системы не существует": {
+                                "$ref": "systems.yaml#/components/examples/SystemNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "LockNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id блокировки не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id блокировки": {
+                                "$ref": "#/components/examples/LockNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "CatalogNotFoundErrorResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id каталога не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id каталога": {
+                                "$ref": "#/components/examples/CatalogIdNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "DictionaryForbiddenResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Доступ к запрошенным справочникам запрещен.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/ForbiddenError"
+                        },
+                        "examples": {
+                            "Запрещен доступ к справочникам с указанными id": {
+                                "$ref": "#/components/examples/DictionaryForbiddenErrorResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "CatalogForbiddenResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Доступ к запрошенному каталогу запрещен.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/ForbiddenError"
+                        },
+                        "examples": {
+                            "Запрещен доступ к каталогу с указанными id": {
+                                "$ref": "#/components/examples/CatalogForbiddenErrorResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "UnauthorizedErrorResponse": {
+                "description": "- Ошибка аутентификации и/или авторизации",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/UnauthorizedError"
+                        },
+                        "examples": {
+                            "Неверный токен": {
+                                "$ref": "#/components/examples/UnauthorizedErrorResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "RequestNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id запроса не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id запроса": {
+                                "$ref": "#/components/examples/RequestNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "ExportFileNotFoundResponse": {
+                "description": "### Возможные ошибки бизнес-логики:\n  - Запрошенный id файла экспорта не существует.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/NotFoundError"
+                        },
+                        "examples": {
+                            "Несуществующий id файла": {
+                                "$ref": "#/components/examples/ExportFileNotFoundError"
+                            }
+                        }
+                    }
+                }
+            },
+            "AccumulatedCatalogNotFound": {
+                "description": "Сборный каталог не найден.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "_common.yaml#/components/schemas/NotFoundError"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "Пример": {
+                                "$ref": "#/components/examples/AccumulatedCatalogNotFoundError"
+                            }
+                        }
+                    }
+                }
+            }
+        }
   },
   "paths": {
       "/Общие ошибки API": {
