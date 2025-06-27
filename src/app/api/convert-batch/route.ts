@@ -60,6 +60,6 @@ export async function POST(request: Request) {
   console.log('created buffer');
   
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-  console.log('created blob');
+  console.log('created blob', blob.size);
   return new Response(blob)
 }
