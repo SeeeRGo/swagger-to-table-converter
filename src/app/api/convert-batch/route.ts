@@ -53,13 +53,13 @@ export async function POST(request: Request) {
       children: convertToDocxContent(parsedData)
     }]
   })
-  try {
-    const buffer = await Packer.toBuffer(doc)
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-    return new Response(blob)
-  } catch (e) {
-    console.error('error packing', e);
-  }
+  // try {
+  //   const buffer = await Packer.toBuffer(doc)
+  //   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+  //   return new Response(blob)
+  // } catch (e) {
+  //   console.error('error packing', e);
+  // }
     const emptyDoc = new Document({
     sections: [{
       properties: {},
