@@ -53,8 +53,20 @@ export async function POST(request: Request) {
       children: convertToDocxContent(parsedData)
     }]
   })
-
-  const buffer = await Packer.toBuffer(doc)
-  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-  return new Response(blob)
+  try {
+    const buffer = await Packer.toBuffer(doc)
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    return new Response(blob)
+  } catch (e) {
+    console.error('error packing', e);
+  }
+    const emptyDoc = new Document({
+    sections: [{
+      properties: {},
+      children: []
+    }]
+  })
+    const emptyBuffer = await Packer.toBuffer(emptyDoc)
+    const emptyBlob = new Blob([emptyBuffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    return new Response(emptyBlob)
 }
