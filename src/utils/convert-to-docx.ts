@@ -8,7 +8,7 @@ type ParsedResponse =  ElementType<ParsedData>['responses'][keyof ParsedResponse
 type ParsedRequest =  ElementType<ParsedData>['requests']
 const parseInputParams = (params: InputParams) => params.map(parseParamForInputParam)
 const parseResponse = (response: ParsedResponse, code: string): (Paragraph | Table)[] => {
-  return [
+  return response.schema.length ? [
     new Paragraph({}),
     new Paragraph({
       text: `Описание ответа код - ${code}`,
@@ -60,7 +60,7 @@ const parseResponse = (response: ParsedResponse, code: string): (Paragraph | Tab
       ],
     }),
     new Paragraph({})
-  ]
+  ] : []
 }
 const parseParamForInputParam = (param: ParsedParam) => new TableRow({
   children: [
@@ -372,7 +372,9 @@ export function convertToDocxContent(
           heading: 'Heading5'
         })
       )
-      paragraphs.push(parseResponses(item.responses))
+      parseResponses(item.responses).forEach(param => {
+        paragraphs.push(param)
+      })
       paragraphs.push(new Paragraph({}))
   })
   return paragraphs as Paragraph[]

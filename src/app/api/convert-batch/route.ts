@@ -46,7 +46,6 @@ export async function POST(request: Request) {
   })
   // return Response.json(aggregatedRes)
   const parsedData = parseData(aggregatedRes)      
-  console.log('parsed data');
   
   const doc = new Document({
     sections: [{
@@ -54,12 +53,8 @@ export async function POST(request: Request) {
       children: convertToDocxContent(parsedData)
     }]
   })
-  console.log('created doc');
 
   const buffer = await Packer.toBuffer(doc)
-  console.log('created buffer');
-  
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-  console.log('created blob', blob.size);
   return new Response(blob)
 }
