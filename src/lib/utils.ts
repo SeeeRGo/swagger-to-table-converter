@@ -11,8 +11,6 @@ export enum InputParamType {
   PATH = 'path',
 }
 
-// const notBoolean = <T>(value: T): value is Exclude<T, boolean> => typeof value !== 'boolean'
-const isParameter = (value: boolean | OpenAPIV3_1.MixedSchemaObject | OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ArraySchemaObject | OpenAPIV3_1.ParameterObject): value is OpenAPIV3_1.ParameterObject => typeof value !== 'boolean' && 'in' in value
 type NonMixedSchema = OpenAPIV3_1.NonArraySchemaObject | OpenAPIV3_1.ReferenceObject
 export type ParsedParam = {
   description: string
